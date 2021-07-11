@@ -1,18 +1,15 @@
 import os
 
-from difflib import get_close_matches
-
 from discord.ext import commands
 from dotenv import load_dotenv
 from poker import get_players, get_random_cards
 from poker import send_card_msg, three_middle_card_msg
-from help import command_list
+from bot_help import command_list, guess_command
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
 bot = commands.Bot(command_prefix='$')
 @bot.command(name='hello')
-
 async def nine_nine(ctx):
     channel = bot.get_channel(ctx.channel.id)
     message_id = channel.last_message_id
@@ -31,10 +28,6 @@ async def poker(ctx):
 @bot.event
 async def on_message(message):
   await bot.process_commands(message)
-  if message.content.replace('$','') not in command_list:
-    similar_commands = get_close_matches(message.content, command_list)
-    try: 
-      await message.channel.send(f"Syntax: ${similar_commands[0]}")
-    except: pass
+  await guess_command(bot, message)
 
 bot.run(TOKEN)
