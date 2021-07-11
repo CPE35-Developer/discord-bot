@@ -8,6 +8,7 @@ from src.utils.utils import guess_command
 
 from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import show_middle_card
+from src.poker.poker import who_win
 from src.poker.user_action import loop_pass_bet_fold
 
 from src.audio.audio import voice, disconnect
@@ -39,6 +40,9 @@ async def poker(ctx):
     await show_middle_card(middle_cards, ctx, False, False)
     players_status = await loop_pass_bet_fold(
         players, player_cards, middle_cards, bot, ctx
+    )
+    winner = await who_win(
+        middle_cards, ctx, player_cards, players, players_status
     )
 
 @bot.command(name='voice')
