@@ -5,7 +5,7 @@ def best_card_ofone(card: List[str]):
     from line 8 to 16
     choose 5 from 7 card
     '''
-    best=[[]]
+    best=[]
     for i in range(len(card)):
         for j in range(len(card)):
             if i < j:
@@ -22,7 +22,6 @@ def best_card_ofone(card: List[str]):
     val=[]
     for i in range(len(best)):
         val.append(value(best[i]))
-    val.pop(0)
     val.sort()
     val.reverse()
     #return is priority(int), howwin(str), dataforsort(list), cards in you hand that u shold choose(list)#
