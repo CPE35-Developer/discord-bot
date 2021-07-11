@@ -115,7 +115,9 @@ def value(use: List[str]):
     #onepair
     #twopair
     #threeofkind
+    
     #fourofkind
+
     dupcard2=[]
     skip=0
     for j in range(len(use)):
