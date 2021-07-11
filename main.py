@@ -33,7 +33,7 @@ async def poker(ctx):
     print(player_cards)
     await send_card_msg(players, player_cards)
     await three_middle_card_msg(middle_cards, ctx)
-    players_left, player_cards_left = loop_pass_bet_fold(
+    players_left, player_cards_left = await loop_pass_bet_fold(
         players, player_cards, bot, ctx
     )
 
