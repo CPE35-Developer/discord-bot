@@ -1,10 +1,10 @@
 from difflib import SequenceMatcher
 
-commands = ['$hello', '$poker', '$say']
+commands = ['$hello', '$poker', '$voice', '$disconnect']
 
 async def guess_command(client, message):
     similar_commands = []
-    if (message.content.startswith('$')) & (message.content not in commands):
+    if (message.content.startswith('$')) & (message.content.split()[0] not in commands):
         print(f'{message.author}: {message.content}')
         for command in commands:
             similar_ratio = SequenceMatcher(None, message.content, command).ratio()
