@@ -35,7 +35,7 @@ async def get_players(client, ctx):
             players.append(msg.author)
             players = list(set(players))
             await ctx.send(f"ตอนนี้มี {' '.join([str(member) for member in players])} เป็นผู้เล่น ({len(players)} คน)")
-            #print(players)
+            print(players)
 
         elif (msg.content.lower() == "y") & (msg.author in players):
             await ctx.send(f"เองอยู่ในเกมแล้วไอเปรด {msg.author}")
