@@ -3,10 +3,11 @@ import os
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from src.poker.welcome import get_players
+from src.utils.party import get_players
+from src.utils.utils import guess_command
+
 from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import three_middle_card_msg, loop_pass_bet_fold
-from src.poker.help import command_list
 
 load_dotenv()
 
