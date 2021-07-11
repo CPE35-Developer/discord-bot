@@ -62,7 +62,7 @@ def value(use: List[str]):
     and check it flower because only flush, straight flush and royal straight flush that use flower
     '''
     dic={ #change str to int easily
-        ":a:":1,
+        ":a:":14,
         ":two:":2,
         ":three:":3,
         ":four:":4,
@@ -153,7 +153,7 @@ def value(use: List[str]):
     #staright
     if(len(use)==5 and use[0]==use[1]-1 and use[1]==use[2]-1 and use[2]==use[3]-1 and use[3]==use[4]-1):
         straight=use[4]
-    elif(len(use)==5 and use[0]==1 and use[1]==10 and use[2]==11 and use[3]==12  and use[4]==13):
+    elif(len(use)==5 and use[0]==10 and use[1]==11 and use[2]==12 and use[3]==13  and use[4]==14):
         straight=1
         royal=1
 
