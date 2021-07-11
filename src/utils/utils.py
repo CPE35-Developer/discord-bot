@@ -1,6 +1,6 @@
 from difflib import SequenceMatcher
 
-commands = ['$hello', '$poker']
+commands = ['$hello', '$poker', '$yee']
 
 async def guess_command(client, message):
     similar_commands = []

@@ -9,6 +9,8 @@ from src.utils.utils import guess_command
 from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import three_middle_card_msg, loop_pass_bet_fold
 
+from src.audio.audio import play
+
 load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
@@ -36,10 +38,13 @@ async def poker(ctx):
         players, player_cards, bot, ctx
     )
 
+@bot.command(name='yee')
+async def yee(ctx):
+    await play.yee(bot, ctx)
 
 @bot.event
 async def on_message(message):
-  await bot.process_commands(message)
-  await guess_command(bot, message)
+    await bot.process_commands(message)
+    await guess_command(bot, message)
 
 bot.run(TOKEN)
