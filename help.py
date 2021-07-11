@@ -1,1 +1,0 @@
-command_list = ['hello','poker']
