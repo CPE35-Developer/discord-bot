@@ -232,6 +232,7 @@ def value(use: List[str]):
             highcard=14
         return [highcard,'highcard',use,use]
         #tie pass
+        
 '''
 winner([[CardInHand1,name1],[CardInHand2,name2],[CardInHand3,name3],[CardInHand4,name4],...])
 print(winner([[":two: 0",":two: 0",":two: 0",":three: 0",":three: 0",":three: 0",":eight: 0","ixq1"],[":two: 0",":three: 0",":four: 1",":five: 0",":six: 0",":seven: 0",":eight: 0","ixq2"],[":two: 0",":three: 0",":four: 1",":five: 0",":six: 0",":seven: 0",":eight: 0","ixq3"]]))
