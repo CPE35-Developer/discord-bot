@@ -35,7 +35,7 @@ async def get_players(client, ctx):
             players.append(msg.author)
             players = list(set(players))
             await ctx.send(f"ตอนนี้มี {' '.join([str(member) for member in players])} เป็นผู้เล่น ({len(players)} คน)")
-            print(players)
+            #print(players)
 
         elif (msg.content.lower() == "y") & (msg.author in players):
             await ctx.send(f"เองอยู่ในเกมแล้วไอเปรด {msg.author}")
@@ -105,7 +105,7 @@ async def send_card_msg(players, player_cards: List[Tuple[int, int]]):
         first_card_number, first_card_suit = first_card.split(' ')
         second_card = DECKS_OF_CARDS[player_cards[idx][1]]
         second_card_number, second_card_suit = second_card.split(' ')
-        msg = f'คุณได้ไพ่\n {first_card}  |  {second_card}'
+        msg = f'คุณได้ไพ่\n {first_card}   {second_card}'
 
         await player.send(msg)
 
@@ -115,6 +115,6 @@ async def three_middle_card_msg(middle_cards: List[int], ctx):
     second_card_msg = DECKS_OF_CARDS[middle_cards[1]]
     third_card_msg = DECKS_OF_CARDS[middle_cards[2]]
 
-    msg = f'เปิดไพ่\n {first_card_msg}  |  {second_card_msg}  |  {third_card_msg}'
+    msg = f'เปิดไพ่\n {first_card_msg}   {second_card_msg}   {third_card_msg}'
 
     await ctx.send(msg)
