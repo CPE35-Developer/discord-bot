@@ -52,10 +52,10 @@ async def show_middle_card(middle_cards: List[int], ctx, show_four: bool, show_f
 
     if show_four:
         four_card_msg = DECKS_OF_CARDS[middle_cards[3]]
-        msg += four_card_msg
+        msg += '  ' + four_card_msg
     if show_five:
         five_card_msg = DECKS_OF_CARDS[middle_cards[4]]
-        msg += ' ' + five_card_msg
+        msg += '  ' + five_card_msg
 
     await ctx.send(msg)
 
