@@ -45,7 +45,7 @@ def winner(win: List[List[str]]):
     #return naame,howwin and card that use
     #return [player[0][1],player[0][0][1],player[0][0][3]]
     return playwerwin
-
+    
 '''
 value(args)  args is set of cards (5card only)
 return priotity, typeofwin and somedata when tie
