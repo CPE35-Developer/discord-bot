@@ -10,7 +10,8 @@ from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import show_middle_card
 from src.poker.user_action import loop_pass_bet_fold
 
-from src.audio.audio import say
+from src.audio.audio import voice, disconnect
+from src.audio.tts import repeat
 
 load_dotenv()
 
@@ -40,11 +41,17 @@ async def poker(ctx):
         players, player_cards, middle_cards, bot, ctx
     )
 
+@bot.command(name='voice')
+async def audio_say(ctx, sound=None):
+    await voice(bot, ctx, sound)
 
-@bot.command(name='say')
-async def say_sound(ctx, sound):
-    await say(bot, ctx, sound)
+@bot.command(name='repeat')
+async def audio_repeat(ctx,* , text):
+    await repeat(bot, ctx, text = text)
 
+@bot.command(name='disconnect')
+async def audio_disconnect(ctx):
+    await disconnect(ctx)
 
 @bot.event
 async def on_message(message):
