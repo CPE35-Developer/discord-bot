@@ -58,7 +58,7 @@ async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ct
                 if not msg_bet_content.isnumeric():
                     await ctx.send(f'โปรดใช้ตัวเลข')
                     continue
-                print(msg_bet_content, max_current_bet)
+
                 if int(msg_bet_content) < max_current_bet:
                     await ctx.send(f'โปรดเดิมพันให้สูงกว่าหรือเท่ากับ {max_current_bet}')
                     continue
@@ -69,9 +69,7 @@ async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ct
 
                 break
 
-        print(f'{idx_player} COUNT : {count_fold} {len(players)}')
         if count_fold == len(players)-1:
-            print(' GAME END PLZ ')
             return True
 
 
@@ -100,4 +98,3 @@ async def loop_pass_bet_fold(players, player_cards: List[Tuple[int, int]], middl
             await show_middle_card(middle_cards, ctx, True, True)
 
     return players_status
-
