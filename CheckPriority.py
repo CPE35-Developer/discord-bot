@@ -20,7 +20,6 @@ def best_card_ofone(card: List[str]):
     by priority_value
     '''
     val=[]
-    ################################################## Why have none?
     for i in range(len(best)):
         val.append(value(best[i]))
     val.pop(0)
@@ -35,17 +34,24 @@ def winner(win: List[List[str]]):
     for i in range (len(win)):
         name = win[i][-1]
         win[i].pop(-1)
-        player.append([best_card_ofone(win[i]),name])
+        tem=best_card_ofone(win[i])
+        tem.append(name)
+        player.append(tem)
     player.sort()
     player.reverse()
     playerwin=[]
-    for i in range len(player):
-        if(player[0][0][3]==player[i][0][3]):
+    for i in range (len(player)):
+        if(player[0][3]==player[i][3]):
             playerwin.append(player[i])
+
+    #delete some data for sort that not necessary
+    for i in range (len(playerwin)):
+        playerwin[i].pop(2)
+
     #return naame,howwin and card that use
     #return [player[0][1],player[0][0][1],player[0][0][3]]
-    return playwerwin
-    
+    return playerwin
+
 '''
 value(args)  args is set of cards (5card only)
 return priotity, typeofwin and somedata when tie
@@ -57,7 +63,7 @@ def value(use: List[str]):
     and check it flower because only flush, straight flush and royal straight flush that use flower
     '''
     dic={ #change str to int easily
-        ":one:":1,
+        ":a:":1,
         ":two:":2,
         ":three:":3,
         ":four:":4,
@@ -66,7 +72,7 @@ def value(use: List[str]):
         ":seven:":7,
         ":eight:":8,
         ":nine:":9,
-        ":ten:":10,
+        "::one::zero::":10,
         ":regional_indicator_j:":11,
         ":regional_indicator_q:":12,
         ":regional_indicator_k:":13,
@@ -112,18 +118,23 @@ def value(use: List[str]):
     #threeofkind
     #fourofkind
     dupcard2=[]
+    skip=0
     for j in range(len(use)):
+        if(skip!=0):
+            skip-=1
+            continue
         #fourofkind
         if(j+3<len(use) and use[j]==use[j+1]==use[j+2]==use[j+3]):
             fourofkind=use[j]
-
+            skip+=3
         #threeofkind
         elif(j+2<len(use) and use[j]==use[j+1]==use[j+2]):
             threeofkind=use[j]
-
+            skip+=2
         #twopair and onepair
         elif(j+1<len(use) and use[j]==use[j+1]):
             dupcard2.append(use[j])
+            skip+=1
 
     if(len(dupcard2)==2):
         twopair.append(dupcard2[0])
@@ -222,6 +233,7 @@ def value(use: List[str]):
         return [highcard,'highcard',use,use]
         #tie pass
 '''
-winner([["2 0","3 0","4 0","5 0","6 0","7 0","8 0","ixq1"],["2 0","3 0","4 0","5 0","6 0","7 0","8 0","ixq2"],["2 0","3 0","4 0","5 0","6 0","7 0","8 0","ixq3"]])
-print() -> ['ixq3', 'straightflush', [4, 5, 6, 7, 8]]
+winner([[CardInHand1,name1],[CardInHand2,name2],[CardInHand3,name3],[CardInHand4,name4],...])
+print(winner([[":two: 0",":two: 0",":two: 0",":three: 0",":three: 0",":three: 0",":eight: 0","ixq1"],[":two: 0",":three: 0",":four: 1",":five: 0",":six: 0",":seven: 0",":eight: 0","ixq2"],[":two: 0",":three: 0",":four: 1",":five: 0",":six: 0",":seven: 0",":eight: 0","ixq3"]]))
+print -> [[10000003.0, 'fullhouse', [2, 2, 3, 3, 3], 'ixq1']]
 '''
