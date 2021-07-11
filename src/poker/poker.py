@@ -111,3 +111,22 @@ async def loop_pass_bet_fold(players, player_cards: List[Tuple[int, int]], clien
                     break
 
     return players_left, players_card_left
+
+
+def change_cardsidx_to_str(middle_card: List[int],player_cards: List[Tuple[int,int]],player: List[str]) -> List[List[str]]:
+    deck=DECKS_OF_CARDS
+    all_card_and_name=[]
+    middle=[]
+
+    for i in middle_card:
+        middle.append(deck[i])
+
+    for i in range(len(player)):
+        tem=middle
+        tem.append(deck[player_cards[i][0]])
+        tem.append(deck[player_cards[i][1]])
+        tem.append(player[i])
+        all_card_and_name.append(tem)
+
+    return all_card_and_name
+
