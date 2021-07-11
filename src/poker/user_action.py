@@ -3,7 +3,7 @@ from typing import List, Tuple
 from .poker import show_middle_card
 
 
-async def summary_phase(players, play_time, players_status: list[str], ctx):
+async def summary_phase(players, play_time, players_status: List[str], ctx):
     msg = ''
     for player, status in zip(players, players_status):
         if status == 'f':
@@ -100,3 +100,4 @@ async def loop_pass_bet_fold(players, player_cards: List[Tuple[int, int]], middl
             await show_middle_card(middle_cards, ctx, True, True)
 
     return players_status
+

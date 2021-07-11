@@ -1,5 +1,6 @@
 from typing import List, Tuple
 from random import sample, shuffle
+from poker.CheckPriority import winner
 
 DECKS_OF_CARDS = [
     ':two: :clubs:', ':two: :diamonds:', ':two: :heart:', ':two: :spades:',
@@ -60,7 +61,7 @@ async def show_middle_card(middle_cards: List[int], ctx, show_four: bool, show_f
     await ctx.send(msg)
 
 
-def change_cardsidx_to_str(middle_card: List[int], player_cards: List[Tuple[int, int]], player: List[str]) -> List[List[str]]:
+async def who_win(middle_card: List[int],ctx, player_cards: List[Tuple[int, int]], players: List[str], player_status: List[str]) -> List[List[str]]:
     deck = DECKS_OF_CARDS
     all_card_and_name = []
     middle = []
@@ -68,11 +69,22 @@ def change_cardsidx_to_str(middle_card: List[int], player_cards: List[Tuple[int,
     for i in middle_card:
         middle.append(deck[i])
 
-    for i in range(len(player)):
-        tem = middle
-        tem.append(deck[player_cards[i][0]])
-        tem.append(deck[player_cards[i][1]])
-        tem.append(player[i])
-        all_card_and_name.append(tem)
+    for i in range(len(players)):
+        if(player_status[i]!='f'):
+            tmp = middle.copy()
+            tmp.append(deck[player_cards[i][0]])
+            tmp.append(deck[player_cards[i][1]])
+            tmp.append(players[i])
+            all_card_and_name.append(tmp)
 
-    return all_card_and_name
+    win=winner(all_card_and_name)
+
+    msg = f'ผู้ชนะมี {len(win)} คน คือ ' 
+    for i in win:
+        msg += win[i][3] + ' โดยถือไพ่ ' + str(win[i][2]) + ' คือระดับ ' + win[i][1] + ','
+
+    msg=msg[0:-1]
+    await ctx.send(msg)
+    return win
+    # [[PriorityValue, CardPower, CardInHand, PlayerName],[PriorityValue, CardPower, CardInHand, PlayerName],[PriorityValue, CardPower, CardInHand, PlayerName],...]
+    #len() is how many player tie

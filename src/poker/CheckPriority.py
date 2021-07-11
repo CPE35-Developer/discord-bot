@@ -33,9 +33,9 @@ def winner(win: List[List[str]]):
     for i in range (len(win)):
         name = win[i][-1]
         win[i].pop(-1)
-        tem=best_card_ofone(win[i])
-        tem.append(name)
-        player.append(tem)
+        tmp=best_card_ofone(win[i])
+        tmp.append(name)
+        player.append(tmp)
     player.sort()
     player.reverse()
     playerwin=[]
