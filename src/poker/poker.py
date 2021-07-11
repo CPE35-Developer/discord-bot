@@ -17,21 +17,6 @@ DECKS_OF_CARDS = [
     ':a: :clubs:', ':a: :diamonds:', ':a: :heart:', ':a: :spades:'
 ]
 
-def get_random_cards(players) -> Tuple[List[Tuple[int, int]], List[int]]:
-    number_to_gen = len(players)*2 + 5
-    range_cards = list(range(0, len(DECKS_OF_CARDS)))
-    shuffle(range_cards)
-    random_numbers = sample(range_cards, number_to_gen)
-    middle_cards = random_numbers[-5:]
-    player_cards = random_numbers[:-5]
-
-    player_pair_cards = []
-    for idx in range(0, len(player_cards), 2):
-        pair_cards = tuple((player_cards[idx], player_cards[idx+1]))
-        player_pair_cards.append(pair_cards)
-
-    return (player_pair_cards, middle_cards)
-
 
 def get_random_cards(players) -> Tuple[List[Tuple[int, int]], List[int]]:
     number_to_gen = len(players)*2 + 5
@@ -68,3 +53,61 @@ async def three_middle_card_msg(middle_cards: List[int], ctx):
     msg = f'เปิดไพ่\n {first_card_msg}   {second_card_msg}   {third_card_msg}'
 
     await ctx.send(msg)
+
+
+async def loop_pass_bet_fold(players, player_cards: List[Tuple[int, int]], client, ctx):
+    players_left = players.copy()
+    players_card_left = player_cards.copy()
+    max_current_bet = -1
+
+    def check_pbf(msg):
+        return msg.author == player and msg.channel == ctx.channel and \
+            msg.content.lower() in ["p", "b", "f"]
+
+    def check_bet(msg_bet):
+        return msg_bet.author == msg_author and msg_bet.author in players_left
+
+    players_status = []
+    await ctx.send('เข้าสู่ขั้นตอนการ bet\nพิม P หรือ p เพื่อผ่าน\nB หรือ b เพื่อลงแต้มเพิ่ม\nF หรือ f เพื่อหมอบ')
+
+    for play_time in range(2, 5):
+        global player
+        for idx_player, player in enumerate(players_left):
+            global msg_author
+            await ctx.send(f'คุณ {str(player)} โปรดเลือก P/B/F')
+            msg = await client.wait_for('message', check=check_pbf)
+            msg_content = msg.content.lower()
+            msg_author = msg.author
+
+            if msg_content == 'f':  # หมอบ
+                players_left.pop(idx_player)
+                players_card_left.pop(idx_player)
+
+                # I DONT KNOW
+                # if len(players_status) < idx_player:
+                # players_status.pop(idx_player)
+
+            elif msg_content == 'p':
+                players_status[idx_player] = 'p'
+
+            elif msg_content == 'b':
+                while True:
+                    await ctx.send(f'คุณ {str(player)} โปรดเดิมพัน')
+
+                    msg_bet = await client.wait_for('message', check=check_bet)
+
+                    msg_bet_content = msg_bet.content
+
+                    if not msg_bet_content.isnumeric():
+                        await ctx.send(f'โปรดใช้ตัวเลข')
+                        continue
+                    if int(msg_bet_content) < max_current_bet:
+                        await ctx.send(f'โปรดเดิมพันให้สูงกว่า {max_current_bet}')
+                        continue
+
+                    max_current_bet = int(msg_bet_content)
+                    await ctx.send(f'คุณ {str(msg_bet.author)} ได้เดิมพันเพิ่มเป็น {max_current_bet}')
+                    print('hello world')
+                    break
+
+    return players_left, players_card_left
