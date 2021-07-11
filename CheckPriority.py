@@ -38,9 +38,13 @@ def winner(win: List[List[str]]):
         player.append([best_card_ofone(win[i]),name])
     player.sort()
     player.reverse()
+    playerwin=[]
+    for i in range len(player):
+        if(player[0][0][3]==player[i][0][3]):
+            playerwin.append(player[i])
     #return naame,howwin and card that use
-    return [player[0][1],player[0][0][1],player[0][0][3]]
-
+    #return [player[0][1],player[0][0][1],player[0][0][3]]
+    return playwerwin
 
 '''
 value(args)  args is set of cards (5card only)
