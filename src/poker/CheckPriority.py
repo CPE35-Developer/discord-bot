@@ -216,7 +216,7 @@ def value(use: List[str]):
         return [1e3+twopair[0]+twopair[1]*100,'twopair',[left],use]
         #tie  pass
     elif(onepair!=0): 
-        zz=use
+        zz=use.copy()
         if(onepair==1):
             onepair=14
         for j in range(len(use)):
