@@ -2,13 +2,17 @@ import os
 
 from discord.ext import commands
 from dotenv import load_dotenv
-from poker import get_players, get_random_cards
-from poker import send_card_msg, three_middle_card_msg
-from bot_help import command_list, guess_command
+from poker import get_random_cards, send_card_msg, three_middle_card_msg
+from party import get_players
+from event import guess_command
+
+import json
+config = json.loads('config.json')
+
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
 
-bot = commands.Bot(command_prefix='$')
+bot = commands.Bot(command_prefix=config['prefix'])
 @bot.command(name='hello')
 async def nine_nine(ctx):
     channel = bot.get_channel(ctx.channel.id)
