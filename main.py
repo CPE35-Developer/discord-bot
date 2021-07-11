@@ -21,6 +21,7 @@ async def poker(ctx):
     if players is None:
         return
     player_cards, middle_cards = get_random_cards(players)
+    print(middle_cards)
     print(player_cards)
     await send_card_msg(players, player_cards)
     await three_middle_card_msg(middle_cards, ctx)
