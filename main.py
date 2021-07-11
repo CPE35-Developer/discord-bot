@@ -9,7 +9,7 @@ from src.utils.utils import guess_command
 from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import three_middle_card_msg, loop_pass_bet_fold
 
-from src.audio.audio import play
+from src.audio.audio import say
 
 load_dotenv()
 
@@ -38,9 +38,9 @@ async def poker(ctx):
         players, player_cards, bot, ctx
     )
 
-@bot.command(name='yee')
-async def yee(ctx):
-    await play.yee(bot, ctx)
+@bot.command(name='say')
+async def say_sound(ctx, sound):
+    await say(bot, ctx, sound)
 
 @bot.event
 async def on_message(message):
