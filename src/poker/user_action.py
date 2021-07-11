@@ -3,7 +3,7 @@ from typing import List, Tuple
 from .poker import show_middle_card
 
 
-async def summary_phase(players, play_time, players_status: list[str], ctx):
+async def summary_phase(players, play_time, players_status: List[str], ctx):
     msg = ''
     for player, status in zip(players, players_status):
         if status == 'f':
