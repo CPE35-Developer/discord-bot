@@ -1,1 +1,3 @@
 .env
+__pycache__/
+src/audio/ffmpeg.exe
