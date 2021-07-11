@@ -72,7 +72,7 @@ def value(use: List[str]):
         ":seven:":7,
         ":eight:":8,
         ":nine:":9,
-        "::one::zero::":10,
+        ":one::zero:":10,
         ":regional_indicator_j:":11,
         ":regional_indicator_q:":12,
         ":regional_indicator_k:":13,
