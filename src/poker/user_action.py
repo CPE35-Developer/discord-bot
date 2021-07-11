@@ -1,4 +1,3 @@
-from symbol import comp_iter
 from typing import List, Tuple
 from .poker import show_middle_card
 
@@ -27,50 +26,53 @@ async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ct
     def check_bet(msg_bet):
         return msg_bet.author == msg_author
 
-    for idx_player, player in enumerate(players):
-        global msg_author
-        print(players_status)
-        if players_status[idx_player] == 'f':
-            continue
+    while True:
+        for idx_player, player in enumerate(players):
+            global msg_author
+            print(players_status)
+            if players_status[idx_player] == 'f':
+                continue
 
-        await ctx.send(f'คุณ {str(player)} โปรดเลือก P/B/F')
-        msg = await client.wait_for('message', check=check_pbf)
-        msg_content = msg.content.lower()
-        msg_author = msg.author
+            await ctx.send(f'คุณ {str(player)} โปรดเลือก P/B/F')
+            msg = await client.wait_for('message', check=check_pbf)
+            msg_content = msg.content.lower()
+            msg_author = msg.author
 
-        if msg_content == 'f':  # หมอบ
-            count_fold += 1
-            idx_player_drop.append(idx_player)
-            players_status[idx_player] = 'f'
-            await ctx.send(f'{str(player)} หมอบ')
+            if msg_content == 'f':  # หมอบ
+                count_fold += 1
+                idx_player_drop.append(idx_player)
+                players_status[idx_player] = 'f'
+                await ctx.send(f'{str(player)} หมอบ')
 
-        elif msg_content == 'p':
-            players_status[idx_player] = 'p'
-            await ctx.send(f'{str(player)} ผ่าน')
+            elif msg_content == 'p':
+                players_status[idx_player] = 'p'
+                await ctx.send(f'{str(player)} ผ่าน')
 
-        elif msg_content == 'b':
-            while True:
-                await ctx.send(f'คุณ {str(player)} โปรดเดิมพัน')
+            elif msg_content == 'b':
+                while True:
+                    await ctx.send(f'คุณ {str(player)} โปรดเดิมพัน')
 
-                msg_bet = await client.wait_for('message', check=check_bet)
-                msg_bet_content = msg_bet.content
+                    msg_bet = await client.wait_for('message', check=check_bet)
+                    msg_bet_content = msg_bet.content
 
-                if not msg_bet_content.isnumeric():
-                    await ctx.send(f'โปรดใช้ตัวเลข')
-                    continue
+                    if not msg_bet_content.isnumeric():
+                        await ctx.send(f'โปรดใช้ตัวเลข')
+                        continue
 
-                if int(msg_bet_content) < max_current_bet:
-                    await ctx.send(f'โปรดเดิมพันให้สูงกว่าหรือเท่ากับ {max_current_bet}')
-                    continue
+                    if int(msg_bet_content) < max_current_bet:
+                        await ctx.send(f'โปรดเดิมพันให้สูงกว่าหรือเท่ากับ {max_current_bet}')
+                        continue
 
-                max_current_bet = int(msg_bet_content)
-                await ctx.send(f'คุณ {str(msg_bet.author)} ได้เดิมพันเพิ่มเป็น {max_current_bet}')
-                players_status[idx_player] = 'b'
+                    max_current_bet = int(msg_bet_content)
+                    await ctx.send(f'คุณ {str(msg_bet.author)} ได้เดิมพันเพิ่มเป็น {max_current_bet}')
+                    players_status[idx_player] = 'b'
 
-                break
+                    break
 
-        if count_fold == len(players)-1:
-            return True
+            if count_fold == len(players)-1:
+                return True
+        if  'b' not in players_status:
+            break
 
 
 async def loop_pass_bet_fold(players, player_cards: List[Tuple[int, int]], middle_cards, client, ctx):
