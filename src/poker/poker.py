@@ -43,12 +43,19 @@ async def send_card_msg(players, player_cards: List[Tuple[int, int]]):
         await player.send(msg)
 
 
-async def three_middle_card_msg(middle_cards: List[int], ctx):
+async def show_middle_card(middle_cards: List[int], ctx, show_four: bool, show_five: bool):
     first_card_msg = DECKS_OF_CARDS[middle_cards[0]]
     second_card_msg = DECKS_OF_CARDS[middle_cards[1]]
     third_card_msg = DECKS_OF_CARDS[middle_cards[2]]
 
     msg = f'เปิดไพ่\n {first_card_msg}   {second_card_msg}   {third_card_msg}'
+
+    if show_four:
+        four_card_msg = DECKS_OF_CARDS[middle_cards[3]]
+        msg += '  ' + four_card_msg
+    if show_five:
+        five_card_msg = DECKS_OF_CARDS[middle_cards[4]]
+        msg += '  ' + five_card_msg
 
     await ctx.send(msg)
 

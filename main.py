@@ -7,8 +7,10 @@ from src.utils.party import get_players
 from src.utils.utils import guess_command
 
 from src.poker.poker import get_random_cards, send_card_msg
-from src.poker.poker import three_middle_card_msg
+from src.poker.poker import show_middle_card
 from src.poker.user_action import loop_pass_bet_fold
+
+from src.audio.audio import say
 
 load_dotenv()
 
@@ -33,10 +35,15 @@ async def poker(ctx):
     print(middle_cards)
     print(player_cards)
     await send_card_msg(players, player_cards)
-    await three_middle_card_msg(middle_cards, ctx)
+    await show_middle_card(middle_cards, ctx, False, False)
     players_status = await loop_pass_bet_fold(
-        players, player_cards, bot, ctx
+        players, player_cards, middle_cards, bot, ctx
     )
+
+
+@bot.command(name='say')
+async def say_sound(ctx, sound):
+    await say(bot, ctx, sound)
 
 
 @bot.event
