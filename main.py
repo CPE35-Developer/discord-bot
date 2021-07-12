@@ -23,6 +23,7 @@ TOKEN = os.getenv("TOKEN")
 
 bot = commands.Bot(command_prefix=config.prefix)
 
+sys.path.insert(0, os.path.abspath("src/utils/"))
 
 @bot.command(name="hello")
 async def nine_nine(ctx):
@@ -50,7 +51,7 @@ async def poker(ctx):
 
 @bot.command(name='voice')
 async def audio_say(ctx, *, sound=None):
-    await voice(ctx, sound=None)
+    await voice(bot, ctx, sound)
 
 @bot.command(name='repeat')
 async def audio_repeat(ctx,* , text):
