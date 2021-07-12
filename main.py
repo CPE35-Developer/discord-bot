@@ -22,7 +22,7 @@ bot = commands.Bot(command_prefix="$")
 async def nine_nine(ctx):
     channel = bot.get_channel(ctx.channel.id)
     message_id = channel.last_message_id
-    await ctx.send("HI :heart:")
+    await ctx.send("HI :flushed:")
 
 
 @bot.command(name="poker")
@@ -40,12 +40,8 @@ async def poker(ctx):
     )
 
 @bot.command(name='voice')
-async def audio_say(ctx, sound=None):
+async def audio_say(ctx, *,sound : str =None):
     await voice(bot, ctx, sound)
-
-@bot.command(name='repeat')
-async def audio_repeat(ctx,* , text):
-    await repeat(bot, ctx, text = text)
 
 @bot.command(name='disconnect')
 async def audio_disconnect(ctx):
