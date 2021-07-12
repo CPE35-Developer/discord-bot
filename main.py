@@ -17,8 +17,9 @@ from src.audio.tts import repeat
 load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
+prefix = "$"
 
-bot = commands.Bot(command_prefix="$")
+bot = commands.Bot(command_prefix=prefix)
 
 
 @bot.command(name="hello")
@@ -56,6 +57,6 @@ async def audio_disconnect(ctx):
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
-    await guess_command(bot, message)
+    await guess_command(bot, message, bot.all_commands)
 
 bot.run(TOKEN)
