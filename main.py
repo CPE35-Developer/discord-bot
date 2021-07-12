@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 
 from src.utils.party import get_players
 from src.utils.utils import guess_command
+from src.utils.kick import random_kick
+from src.utils.utils import config
 
 from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import show_middle_card
