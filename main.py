@@ -1,4 +1,5 @@
-import os
+import os, sys
+import discord
 
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -20,14 +21,14 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
-bot = commands.Bot(command_prefix="$")
+bot = commands.Bot(command_prefix=config.prefix)
 
 
 @bot.command(name="hello")
 async def nine_nine(ctx):
     channel = bot.get_channel(ctx.channel.id)
     message_id = channel.last_message_id
-    await ctx.send("HI :heart:")
+    await ctx.send("HI :flushed:")
 
 
 @bot.command(name="poker")
@@ -48,8 +49,8 @@ async def poker(ctx):
     )
 
 @bot.command(name='voice')
-async def audio_say(ctx, sound=None):
-    await voice(bot, ctx, sound)
+async def audio_say(ctx, *, sound=None):
+    await voice(ctx, sound=None)
 
 @bot.command(name='repeat')
 async def audio_repeat(ctx,* , text):
@@ -59,9 +60,13 @@ async def audio_repeat(ctx,* , text):
 async def audio_disconnect(ctx):
     await disconnect(ctx)
 
+@bot.command(name='snap')
+async def snap_kick(ctx , user: discord.Member = None):
+    await random_kick(bot, ctx, user)
+
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
-    await guess_command(bot, message)
+    await guess_command(bot, message, bot.all_commands)
 
 bot.run(TOKEN)
