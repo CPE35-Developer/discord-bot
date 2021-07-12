@@ -7,7 +7,9 @@ from src.utils.party import get_players
 from src.utils.utils import guess_command
 
 from src.poker.poker import get_random_cards, send_card_msg
-from src.poker.poker import three_middle_card_msg, loop_pass_bet_fold
+from src.poker.poker import show_middle_card
+from src.poker.poker import who_win
+from src.poker.user_action import loop_pass_bet_fold
 
 from src.audio.audio import voice, disconnect
 from src.audio.tts import repeat
@@ -18,11 +20,12 @@ TOKEN = os.getenv("TOKEN")
 
 bot = commands.Bot(command_prefix="$")
 
+
 @bot.command(name="hello")
 async def nine_nine(ctx):
     channel = bot.get_channel(ctx.channel.id)
     message_id = channel.last_message_id
-    await ctx.send("HI :heart:")
+    await ctx.send("HI :flushed:")
 
 
 @bot.command(name="poker")
@@ -34,23 +37,21 @@ async def poker(ctx):
     print(middle_cards)
     print(player_cards)
     await send_card_msg(players, player_cards)
-    await three_middle_card_msg(middle_cards, ctx)
-    players_left, player_cards_left = await loop_pass_bet_fold(
-        players, player_cards, bot, ctx
+    await show_middle_card(middle_cards, ctx, False, False)
+    players_status = await loop_pass_bet_fold(
+        players, player_cards, middle_cards, bot, ctx
+    )
+    winner = await who_win(
+        middle_cards, ctx, player_cards, players, players_status
     )
 
 @bot.command(name='voice')
-async def audio_say(ctx, sound=None):
+async def audio_say(ctx, *,sound : str =None):
     await voice(bot, ctx, sound)
-
-@bot.command(name='repeat')
-async def audio_repeat(ctx,* , text):
-    await repeat(bot, ctx, text = text)
 
 @bot.command(name='disconnect')
 async def audio_disconnect(ctx):
     await disconnect(ctx)
-
 
 @bot.event
 async def on_message(message):
