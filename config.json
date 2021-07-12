@@ -1,0 +1,10 @@
+{
+    "prefix" : "$",
+    "savage" : true,
+    "audio"  : {
+        "volume"      :   1,
+        "PATH_mp3"    :   "src/audio/mp3/",
+        "PATH_ffmpeg" : "src/audio/ffmpeg.exe"
+    }
+
+}

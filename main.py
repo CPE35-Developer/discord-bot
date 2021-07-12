@@ -1,4 +1,4 @@
-import os
+import os, sys
 import discord
 
 from discord.ext import commands
@@ -8,9 +8,14 @@ from src.utils.party import get_players
 from src.utils.utils import guess_command
 from src.utils.kick import random_kick
 
+from party import get_players
+from utils import guess_command
+from utils import config
+
 from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import show_middle_card
 from src.poker.poker import who_win
+
 from src.poker.user_action import loop_pass_bet_fold
 
 from src.audio.audio import voice, disconnect
@@ -19,10 +24,10 @@ from src.audio.tts import repeat
 load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
-prefix = "$"
 
-bot = commands.Bot(command_prefix=prefix)
+bot = commands.Bot(command_prefix=config.prefix)
 
+sys.path.insert(0, os.path.abspath("src/utils/"))
 
 @bot.command(name="hello")
 async def nine_nine(ctx):
@@ -49,7 +54,7 @@ async def poker(ctx):
     )
 
 @bot.command(name='voice')
-async def audio_say(ctx, *,sound : str =None):
+async def audio_say(ctx, *,sound = None):
     await voice(bot, ctx, sound)
 
 @bot.command(name='disconnect')
