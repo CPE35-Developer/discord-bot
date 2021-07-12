@@ -60,8 +60,6 @@ async def audio_disconnect(ctx):
 async def snap_kick(ctx , user: discord.Member = None):
     await random_kick(bot, ctx, user)
 
-
-
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
