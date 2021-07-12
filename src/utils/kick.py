@@ -1,9 +1,8 @@
-from termios import INLCR
 from discord.ext.commands import MemberConverter
 from random import sample, random
 
 BOT_ID = 863101912730959894
-GENERAL_VOICE_ID = 847172394316464184
+THANOS_EMOJI_ID = 864186153033007125
 
 async def kick_person(user):
   await user.move_to(None)
@@ -16,14 +15,19 @@ async def random_kick(bot, ctx, user):
       await user.move_to(None)
     else:
       await ctx.send(f'โชคดีไป {str(user)}') #choose only 1 line between 18 or 19 or keep both?
-      await ctx.send(f'มึงโดนแทนละกั้น {str(ctx.author)}')
-      await ctx.author.move_to(None)
+      
+      if user != ctx.author:
+        await ctx.send(f'มึงโดนแทนละกั้น {str(ctx.author)}')
+        await ctx.author.move_to(None)
 
   else:
-    general_channel = bot.get_channel(GENERAL_VOICE_ID)  
+    emoji = bot.get_emoji(THANOS_EMOJI_ID)
+    await ctx.send(emoji)
+
+    general_channel = ctx.author.voice.channel
     member_ids = list(general_channel.voice_states.keys())
       
-    random_member_ids = sample(member_ids, (len(member_ids)//2)+1)
+    random_member_ids = sample(member_ids, len(member_ids)//2)
     
     for member_id in random_member_ids:
 
@@ -34,3 +38,4 @@ async def random_kick(bot, ctx, user):
       print(str(player))
 
       await player.move_to(None)
+    await ctx.send(f'Perfectly balanced, as all things should be')
