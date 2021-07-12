@@ -57,8 +57,8 @@ async def audio_disconnect(ctx):
     await disconnect(ctx)
 
 @bot.command(name='snap')
-async def snap_kick(ctx , user: discord.Member):
-    await random_kick(ctx, user)
+async def snap_kick(ctx , user: discord.Member = None):
+    await random_kick(bot, ctx, user)
 
 
 
