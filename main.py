@@ -1,21 +1,14 @@
-import os, sys
-import discord
+import os
 
 from discord.ext import commands
 from dotenv import load_dotenv
 
 from src.utils.party import get_players
 from src.utils.utils import guess_command
-from src.utils.kick import random_kick
-
-from party import get_players
-from utils import guess_command
-from utils import config
 
 from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import show_middle_card
 from src.poker.poker import who_win
-
 from src.poker.user_action import loop_pass_bet_fold
 
 from src.audio.audio import voice, disconnect
@@ -25,15 +18,14 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
-bot = commands.Bot(command_prefix=config.prefix)
+bot = commands.Bot(command_prefix="$")
 
-sys.path.insert(0, os.path.abspath("src/utils/"))
 
 @bot.command(name="hello")
 async def nine_nine(ctx):
     channel = bot.get_channel(ctx.channel.id)
     message_id = channel.last_message_id
-    await ctx.send("HI :flushed:")
+    await ctx.send("HI :heart:")
 
 
 @bot.command(name="poker")
@@ -54,20 +46,20 @@ async def poker(ctx):
     )
 
 @bot.command(name='voice')
-async def audio_say(ctx, *,sound = None):
+async def audio_say(ctx, sound=None):
     await voice(bot, ctx, sound)
+
+@bot.command(name='repeat')
+async def audio_repeat(ctx,* , text):
+    await repeat(bot, ctx, text = text)
 
 @bot.command(name='disconnect')
 async def audio_disconnect(ctx):
     await disconnect(ctx)
 
-@bot.command(name='snap')
-async def snap_kick(ctx , user: discord.Member = None):
-    await random_kick(bot, ctx, user)
-
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
-    await guess_command(bot, message, bot.all_commands)
+    await guess_command(bot, message)
 
 bot.run(TOKEN)
