@@ -53,10 +53,10 @@ async def show_middle_card(middle_cards: List[int], ctx, show_four: bool, show_f
 
     if show_four:
         four_card_msg = DECKS_OF_CARDS[middle_cards[3]]
-        msg += '  ' + four_card_msg
+        msg += '   ' + four_card_msg
     if show_five:
         five_card_msg = DECKS_OF_CARDS[middle_cards[4]]
-        msg += '  ' + five_card_msg
+        msg += '   ' + five_card_msg
 
     await ctx.send(msg)
 
@@ -65,6 +65,22 @@ async def who_win(middle_card: List[int], ctx, player_cards: List[Tuple[int, int
     deck = DECKS_OF_CARDS
     all_card_and_name = []
     middle = []
+
+    dic={
+        2: ":two:",
+        3: ":three:",
+        4: ":four:",
+        5: ':five:',
+        6: ':six:',
+        7: ':seven:',
+        8: ':eight:',
+        9: ':nine:',
+        10: ':one::zero:',
+        11: ':regional_indicator_j:',
+        12: ':regional_indicator_q:',
+        13: ':regional_indicator_k:',
+        14: ':a:'
+    }
 
     for i in middle_card:
         middle.append(deck[i])
@@ -80,13 +96,16 @@ async def who_win(middle_card: List[int], ctx, player_cards: List[Tuple[int, int
     win = winner(all_card_and_name)
     print(win)
 
-    msg = f'ผู้ชนะมี {len(win)} คน คือ '
+    msg = f'\nผู้ชนะมี {len(win)} คน คือ '
     for i in range(len(win)):
-        msg += str(win[i][3]) + ' โดยถือไพ่ ' + \
-            str(win[i][2]) + ' คือระดับ ' + win[i][1] + ','
-
+        card=' '
+        msg += str(win[i][4]) + ' โดยถือไพ่\n' 
+        for j in range(len(win[i][2])):
+            card += str(dic[win[i][2][j]])+' '+str(win[i][3][j]) + '   '
+        msg += card
+        msg +=  '\nคือระดับ ' + win[i][1] + ','
     msg = msg[0:-1]
     await ctx.send(msg)
     return win
-    # [[PriorityValue, CardPower, CardInHand, PlayerName],[PriorityValue, CardPower, CardInHand, PlayerName],[PriorityValue, CardPower, CardInHand, PlayerName],...]
+    # [[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],...]
     # len() is how many player tie

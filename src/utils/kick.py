@@ -1,5 +1,4 @@
 from discord.ext.commands import MemberConverter
-from discord.ext.commands import EmojiConverter
 from random import sample, random
 
 BOT_ID = 863101912730959894
