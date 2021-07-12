@@ -4,3 +4,4 @@ gTTS
 langdetect
 PyNaCl
 python-dotenv
+googledrivedownloader
