@@ -50,12 +50,8 @@ async def poker(ctx):
     )
 
 @bot.command(name='voice')
-async def audio_say(ctx, *, sound=None):
+async def audio_say(ctx, *,sound = None):
     await voice(bot, ctx, sound)
-
-@bot.command(name='repeat')
-async def audio_repeat(ctx,* , text):
-    await repeat(bot, ctx, text = text)
 
 @bot.command(name='disconnect')
 async def audio_disconnect(ctx):
