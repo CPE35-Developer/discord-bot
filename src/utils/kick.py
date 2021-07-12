@@ -1,8 +1,9 @@
 from discord.ext.commands import MemberConverter
+from discord.ext.commands import EmojiConverter
 from random import sample, random
 
 BOT_ID = 863101912730959894
-THANOS_EMOJI_ID = 864186198183116831
+THANOS_EMOJI_ID = 864186153033007125
 
 async def kick_person(user):
   await user.move_to(None)
@@ -21,12 +22,13 @@ async def random_kick(bot, ctx, user):
         await ctx.author.move_to(None)
 
   else:
-    await ctx.send(f':thanossnap128:')
+    emoji = bot.get_emoji(THANOS_EMOJI_ID)
+    await ctx.send(emoji)
 
     general_channel = ctx.author.voice.channel
     member_ids = list(general_channel.voice_states.keys())
       
-    random_member_ids = sample(member_ids, (len(member_ids)//2)+1)
+    random_member_ids = sample(member_ids, len(member_ids)//2)
     
     for member_id in random_member_ids:
 
