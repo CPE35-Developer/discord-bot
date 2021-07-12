@@ -1,14 +1,16 @@
 #pip install gtts langdetect
 from gtts import gTTS
-from discord import FFmpegPCMAudio, PCMVolumeTransformer
-from discord.utils import get
-import discord
+from discord import FFmpegPCMAudio
 from langdetect import detect
 
 
-async def repeat(bot, ctx, voice, *, text=None):
+async def repeat(voice, text=None):
 
-    tts = gTTS(text=text, lang=detect(text))
-    tts.save("./text.mp3")
-
+    try:
+        lang = detect(text)
+    except:
+        lang = 'en'
+    tts = gTTS(text=text, lang=lang)
+    tts.save("C:/text.mp3")
+    
     voice.play(FFmpegPCMAudio(executable="src/audio/ffmpeg.exe",source='./text.mp3'))

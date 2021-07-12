@@ -17,15 +17,16 @@ from src.audio.tts import repeat
 load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
+prefix = "$"
 
-bot = commands.Bot(command_prefix="$")
+bot = commands.Bot(command_prefix=prefix)
 
 
 @bot.command(name="hello")
 async def nine_nine(ctx):
     channel = bot.get_channel(ctx.channel.id)
     message_id = channel.last_message_id
-    await ctx.send("HI :heart:")
+    await ctx.send("HI :flushed:")
 
 
 @bot.command(name="poker")
@@ -46,12 +47,8 @@ async def poker(ctx):
     )
 
 @bot.command(name='voice')
-async def audio_say(ctx, sound=None):
+async def audio_say(ctx, *,sound : str =None):
     await voice(bot, ctx, sound)
-
-@bot.command(name='repeat')
-async def audio_repeat(ctx,* , text):
-    await repeat(bot, ctx, text = text)
 
 @bot.command(name='disconnect')
 async def audio_disconnect(ctx):
@@ -60,6 +57,6 @@ async def audio_disconnect(ctx):
 @bot.event
 async def on_message(message):
     await bot.process_commands(message)
-    await guess_command(bot, message)
+    await guess_command(bot, message, bot.all_commands)
 
 bot.run(TOKEN)

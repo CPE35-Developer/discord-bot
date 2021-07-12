@@ -7,10 +7,11 @@ import os
 sound_list = [file.replace(".mp3", "") for file in os.listdir("src/audio/mp3")]
 
 from src.audio.tts import repeat
+
+PATH_ffmpeg ="src/audio/ffmpeg.exe"
+PATH_mp3 = "src/audio/mp3/"
     
-
-async def voice(bot, ctx, sound):
-
+async def join_vc(bot, ctx):
     channel = ctx.message.author.voice.channel
     if not channel:
         await ctx.send("คุณไม่ได้อยู่ใน Channel")
@@ -20,7 +21,10 @@ async def voice(bot, ctx, sound):
         await voice.move_to(channel)
     else:
         voice = await channel.connect()
-        return voice
+    return voice
+
+
+async def voice(bot, ctx, sound):
 
     def check(msg):
         return ctx.author == msg.author
@@ -42,12 +46,14 @@ async def voice(bot, ctx, sound):
             await ctx.send('หมดเวลาในการเลือก')
             return
 
+    voice = await join_vc(bot, ctx)
+
     if sound in sound_list:
         print(f'Playing {sound}')
-        voice.play(FFmpegPCMAudio(executable="src/audio/ffmpeg.exe",\
-                                    source=f"src/audio/mp3/{sound}.mp3"))
+        voice.play(FFmpegPCMAudio(executable=PATH_ffmpeg,\
+                                    source=f"{PATH_mp3}{sound}.mp3"))
     else:
-        await repeat(bot, ctx, voice, text=sound)
+        await repeat(voice, text=sound)
 
 async def disconnect(ctx):
     voice = ctx.voice_client
