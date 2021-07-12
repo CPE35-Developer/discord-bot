@@ -1,10 +1,12 @@
 import os
+import discord
 
 from discord.ext import commands
 from dotenv import load_dotenv
 
 from src.utils.party import get_players
 from src.utils.utils import guess_command
+from src.utils.kick import random_kick
 
 from src.poker.poker import get_random_cards, send_card_msg
 from src.poker.poker import show_middle_card
@@ -53,6 +55,12 @@ async def audio_say(ctx, *,sound : str =None):
 @bot.command(name='disconnect')
 async def audio_disconnect(ctx):
     await disconnect(ctx)
+
+@bot.command(name='snap')
+async def snap_kick(ctx , user: discord.Member):
+    await random_kick(ctx, user)
+
+
 
 @bot.event
 async def on_message(message):
