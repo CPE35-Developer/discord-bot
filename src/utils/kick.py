@@ -15,7 +15,9 @@ async def random_kick(bot, ctx, user):
       await ctx.send(f'โชคร้ายหน่อยนะ {str(user)} บายย')
       await user.move_to(None)
     else:
-      await ctx.send(f'โชคดีไป {str(user)}')
+      await ctx.send(f'โชคดีไป {str(user)}') #choose only 1 line between 18 or 19 or keep both?
+      await ctx.send(f'มึงโดนแทนละกั้น {str(ctx.author)}')
+      await ctx.author.move_to(None)
 
   else:
     general_channel = bot.get_channel(GENERAL_VOICE_ID)  
