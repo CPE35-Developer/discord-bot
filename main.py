@@ -1,10 +1,12 @@
-import os
+import os, sys
+import discord
 
 from discord.ext import commands
 from dotenv import load_dotenv
 
-import os, sys
-sys.path.insert(0, os.path.abspath("src/utils/"))
+from src.utils.party import get_players
+from src.utils.utils import guess_command
+from src.utils.kick import random_kick
 
 from party import get_players
 from utils import guess_command
@@ -25,6 +27,7 @@ TOKEN = os.getenv("TOKEN")
 
 bot = commands.Bot(command_prefix=config.prefix)
 
+sys.path.insert(0, os.path.abspath("src/utils/"))
 
 @bot.command(name="hello")
 async def nine_nine(ctx):
@@ -57,6 +60,10 @@ async def audio_say(ctx, *,sound = None):
 @bot.command(name='disconnect')
 async def audio_disconnect(ctx):
     await disconnect(ctx)
+
+@bot.command(name='snap')
+async def snap_kick(ctx , user: discord.Member = None):
+    await random_kick(bot, ctx, user)
 
 @bot.event
 async def on_message(message):
