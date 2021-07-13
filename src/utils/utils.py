@@ -27,3 +27,5 @@ async def guess_command(client, message, commands):
         similar_commands = sorted(
             similar_commands, key=lambda l: l[1], reverse=True)
         await message.channel.send(f'คุณกำลังจะพิมพ์ {prefix}{similar_commands[0][0]} หรือเปล่า')
+
+

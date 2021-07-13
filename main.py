@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from src.utils.party import get_players
 from src.utils.utils import guess_command
 from src.utils.kick import random_kick
+from src.utils.travel import random_travel
 from src.utils.utils import config
 
 from src.poker.poker import get_random_cards, send_card_msg
@@ -15,7 +16,6 @@ from src.poker.poker import who_win
 from src.poker.user_action import loop_pass_bet_fold
 
 from src.audio.audio import voice, disconnect
-from src.audio.tts import repeat
 
 load_dotenv()
 
@@ -60,6 +60,10 @@ async def audio_disconnect(ctx):
 @bot.command(name='snap')
 async def snap_kick(ctx , user: discord.Member = None):
     await random_kick(bot, ctx, user)
+
+@bot.command(name='travel')
+async def travel_chanel(ctx , user: discord.Member = None):
+    await random_travel(ctx, user)
 
 @bot.event
 async def on_message(message):
