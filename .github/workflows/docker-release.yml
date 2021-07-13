@@ -1,17 +1,17 @@
-name: ci
+name: Docker Build & Push
 
 on:
+  push:
+    branches:
+      - 'main'
   pull_request:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v2
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -31,7 +31,7 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: user/app:latest
+          tags: namirinz/discord-bot:latest
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
