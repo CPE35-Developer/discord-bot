@@ -70,7 +70,10 @@ async def on_command_error(ctx, error):
     print(error)
     if isinstance(error, commands.CommandNotFound):
         msg = ctx.message.content.split()[0]
-        em = discord.Embed(title=f"ไม่พบคำสั่งที่ชื่อว่า {msg}", description= await guess_command(bot, msg, bot.all_commands), color=ctx.author.color) 
+        em = discord.Embed( title=f"ไม่พบคำสั่งที่ชื่อว่า {msg}",
+                            description= await guess_command(bot, msg,
+                                                             bot.all_commands),
+                            color=ctx.author.color) 
         await ctx.send(embed=em)
 
 
