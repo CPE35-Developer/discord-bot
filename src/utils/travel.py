@@ -1,8 +1,6 @@
 from discord.ext.commands import MemberConverter
 from random import randint
 
-# i try but sometime we can't send user=bot but sometime we can i don't know why ;-;
-# I fixed it |  @phusitsom
 async def random_travel(ctx, user):
 
     if (user == ctx.message.author) | (not user):
