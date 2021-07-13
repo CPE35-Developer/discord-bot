@@ -2,7 +2,7 @@ from discord import FFmpegPCMAudio
 from discord.utils import get
 from asyncio import TimeoutError
 import os, sys
-from src.utils.vc import get_PATH_ffmpeg
+from src.utils.vc import join_vc, get_PATH_ffmpeg
 from src.utils.utils import config
 from src.audio.tts import repeat
 
@@ -10,22 +10,13 @@ PATH_mp3 = config.audio.PATH_mp3
 PATH_ffmpeg = get_PATH_ffmpeg()
 sound_list = [file.replace(".mp3", "") for file in os.listdir(PATH_mp3)]
 
-    
-async def join_vc(bot, ctx):
-    channel = ctx.message.author.voice.channel
-    if not channel:
-        await ctx.send("คุณไม่ได้อยู่ใน Channel")
-        return
-    vc = get(bot.voice_clients, guild=ctx.guild)
-    if vc and vc.is_connected():
-        await vc.move_to(channel)
-    else:
-        vc = await channel.connect()
-    return vc
 
 
 async def voice(bot, ctx, sound):
     vc = await join_vc(bot, ctx)
+
+    if vc == None: 
+        return
 
     def check(msg):
         return ctx.author == msg.author
