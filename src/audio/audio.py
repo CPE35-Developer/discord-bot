@@ -2,21 +2,14 @@ from discord import FFmpegPCMAudio
 from discord.utils import get
 from asyncio import TimeoutError
 import os, sys
-
+from src.utils.vc import get_PATH_ffmpeg
 from src.utils.utils import config
 from src.audio.tts import repeat
 
 PATH_mp3 = config.audio.PATH_mp3
-
+PATH_ffmpeg = get_PATH_ffmpeg()
 sound_list = [file.replace(".mp3", "") for file in os.listdir(PATH_mp3)]
 
-if 'win' in sys.platform:
-    PATH_ffmpeg = config.audio.PATH_ffmpeg_windows
-    if not os.path.isfile(PATH_ffmpeg):
-        from google_drive_downloader import GoogleDriveDownloader as gdd
-        gdd.download_file_from_google_drive(file_id='1iK5q7--S6AY88hap32JhSN77gV-MB188',
-                                        dest_path='src/audio/ffmpeg.exe')
-else: PATH_ffmpeg = config.audio.PATH_ffmpeg
     
 async def join_vc(bot, ctx):
     channel = ctx.message.author.voice.channel
