@@ -8,6 +8,7 @@ from src.utils.party import get_players
 from src.utils.utils import guess_command
 from src.utils.kick import random_kick
 from src.utils.travel import random_travel
+from src.utils.change import change_last_message
 from src.utils.utils import config
 
 from src.poker.poker import get_random_cards, send_card_msg
@@ -65,6 +66,10 @@ async def snap_kick(ctx , user: discord.Member = None):
 async def travel_chanel(ctx , user: discord.Member = None):
     await random_travel(ctx, user)
 
+@bot.command(name='change')
+async def  change_message(ctx):
+    await change_last_message(ctx)
+   
 @bot.event
 async def on_command_error(ctx, error):
     print(error)
