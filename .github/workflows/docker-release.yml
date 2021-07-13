@@ -13,9 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
-        name: Checkout
-        uses: actions/checkout@v2
-      -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
       -
@@ -34,7 +31,7 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: ${{ steps.docker_meta.outputs.tags }}
+          tags: discord-bot/latest
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
