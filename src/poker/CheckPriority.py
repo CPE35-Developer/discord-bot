@@ -24,7 +24,7 @@ def best_card_ofone(card: List[str]):
         val.append(value(best[i]))
     val.sort()
     val.reverse()
-    #return is priority(int), howwin(str), dataforsort(list), cards in you hand that u shold choose(list)#
+    #return is priority(int), howwin(str), dataforsort(list), cards in you hand that u shold choose(list), card flower(list)#
     return val[0]
 
 
@@ -86,10 +86,15 @@ def value(use: List[str]):
         number,flower = i.split()
         if(flower!=flowers): #check flush here for flush and straight flush
             flushed=0
-        temp.append(dic[number]) #change str to int
-        
-    use=temp
-    use.sort()
+        temp.append([dic[number],flower]) #change str to int
+
+    temp.sort()
+    use=[]
+    card_flower=[]
+
+    for i in range(len(temp)):
+        use.append(temp[i][0])
+        card_flower.append(temp[i][1])
 
     highcard=0 #1
     onepair=0 #100
@@ -115,7 +120,9 @@ def value(use: List[str]):
     #onepair
     #twopair
     #threeofkind
+    
     #fourofkind
+
     dupcard2=[]
     skip=0
     for j in range(len(use)):
@@ -177,43 +184,43 @@ def value(use: List[str]):
     
     #for return is priority(int), howwin(str), dataforsort(list), cards in you hand that u shold choose(list)#
     if(royaleSF!=0):
-        return [1e10,'royaleSF',[0],use]
+        return [1e10,'royaleSF',[0],use,card_flower]
         #pass
     elif(straightflush!=0): 
         if(straight==1):
             straight=14
-        return [1e9+straightflush,'straightflush',[0],use]
+        return [1e9+straightflush,'straightflush',[0],use,card_flower]
         #pass
     elif(fourofkind!=0):
         if(fourofkind==1):
             fourofkind=14
-        return [1e8+fourofkind,'fourofkind',[0],use]
+        return [1e8+fourofkind,'fourofkind',[0],use,card_flower]
         #pass
     elif(fullhouse!=0): 
         if(fullhouse==1):
             fullhouse=14
-        return [1e7+fullhouse,'fullhouse',[0],use]
+        return [1e7+fullhouse,'fullhouse',[0],use,card_flower]
         #pass
     elif(flush!=0): 
         if(flush==1):
             flush=14
-        return [1e6+flush,'flush',use,use]
+        return [1e6+flush,'flush',use,use,card_flower]
         #tie pass
     elif(straight!=0): 
         if(straight==1):
             straight=14
-        return [1e5+straight,'straight',[0],use]
+        return [1e5+straight,'straight',[0],use,card_flower]
         #pass
     elif(threeofkind!=0): 
         if(threeofkind==1):
             threeofkind=14
-        return [1e4+threeofkind,'threeofkind',[0],use]
+        return [1e4+threeofkind,'threeofkind',[0],use,card_flower]
         #pass
     elif(len(twopair)!=0):
         left = sum(use)-2*(twopair[0]+twopair[1])
         if(twopair[0]==1):
             twopair[0]=14
-        return [1e3+twopair[0]+twopair[1]*100,'twopair',[left],use]
+        return [1e3+twopair[0]+twopair[1]*100,'twopair',[left],use,card_flower]
         #tie  pass
     elif(onepair!=0): 
         tmp=use.copy()
@@ -224,12 +231,12 @@ def value(use: List[str]):
                 use.pop(j)
                 use.pop(j)
                 break
-        return [1e2+onepair,'onepair',use,tmp]
+        return [1e2+onepair,'onepair',use,tmp,card_flower]
         #tie pass
     elif(highcard!=0): 
         if(highcard==1):
             highcard=14
-        return [highcard,'highcard',use,use]
+        return [highcard,'highcard',use,use,card_flower]
         #tie pass
         
 '''

@@ -1,26 +1,22 @@
 from discord import FFmpegPCMAudio
 from discord.utils import get
-
 from asyncio import TimeoutError
-
-import os
-sound_list = [file.replace(".mp3", "") for file in os.listdir("src/audio/mp3")]
-
+import os, sys
+from src.utils.vc import join_vc, get_PATH_ffmpeg
+from src.utils.utils import config
 from src.audio.tts import repeat
-    
+
+PATH_mp3 = config.audio.PATH_mp3
+PATH_ffmpeg = get_PATH_ffmpeg()
+sound_list = [file.replace(".mp3", "") for file in os.listdir(PATH_mp3)]
+
+
 
 async def voice(bot, ctx, sound):
+    vc = await join_vc(bot, ctx)
 
-    channel = ctx.message.author.voice.channel
-    if not channel:
-        await ctx.send("คุณไม่ได้อยู่ใน Channel")
+    if vc == None: 
         return
-    voice = get(bot.voice_clients, guild=ctx.guild)
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
-    else:
-        voice = await channel.connect()
-        return voice
 
     def check(msg):
         return ctx.author == msg.author
@@ -34,8 +30,10 @@ async def voice(bot, ctx, sound):
             if msg.content.lower() in sound_list:
                 sound = msg.content.lower()
             else:
+                print(msg.content)
                 sound = msg.content
-                await repeat(bot, ctx, voice, text=sound)
+                print(sound)
+                await repeat(vc, text=sound)
                 return
                 
         except TimeoutError:
@@ -44,16 +42,15 @@ async def voice(bot, ctx, sound):
 
     if sound in sound_list:
         print(f'Playing {sound}')
-        voice.play(FFmpegPCMAudio(executable="src/audio/ffmpeg.exe",\
-                                    source=f"src/audio/mp3/{sound}.mp3"))
+        vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg,source=f"{PATH_mp3}{sound}.mp3"))
     else:
-        await repeat(bot, ctx, voice, text=sound)
+        await repeat(vc, text=sound)
 
 async def disconnect(ctx):
-    voice = ctx.voice_client
-    if not voice:
+    vc = ctx.voice_client
+    if not vc:
         await ctx.send("จะให้ออกไปไหนนิ")
         return
 
-    await voice.disconnect()
+    await vc.disconnect()
     await ctx.send("ออกละ")
