@@ -15,7 +15,7 @@ with open('config.json', 'r') as f:
 
 prefix = config.prefix
 
-async def guess_command(client, message, commands):
+async def guess_command(bot, message, commands):
     similar_commands = []
     if message.startswith(prefix):
         for command in commands:

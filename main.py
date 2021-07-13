@@ -1,7 +1,8 @@
-import os, sys
+import os
+import sys
 import discord
-
 from discord.ext import commands
+from discord_slash import SlashCommand
 from dotenv import load_dotenv
 
 from src.utils.party import get_players
@@ -22,18 +23,25 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
-bot = commands.Bot(command_prefix=config.prefix)
+bot = commands.Bot(command_prefix=config.prefix,
+                   intents=discord.Intents.all(),
+                   case_insensitive=True)
+slash = SlashCommand(bot, sync_commands=True)
+guild_ids = config.GUILD_IDS
 
 sys.path.insert(0, os.path.abspath("src/utils/"))
 
-@bot.command(name="hello")
+
+@slash.slash(name="hello", description="Say hi to the bot. Most used to check if bot is working.", guild_ids=guild_ids)
+# @bot.command(name="hello", aliases=['hi', 'hoi'])
 async def nine_nine(ctx):
     channel = bot.get_channel(ctx.channel.id)
     message_id = channel.last_message_id
     await ctx.send("HI :flushed:")
 
 
-@bot.command(name="poker")
+@slash.slash(name="poker", description="Play poker.", guild_ids=guild_ids)
+# @bot.command(name="poker")
 async def poker(ctx):
     players = await get_players(bot, ctx)
     if players is None:
@@ -50,35 +58,34 @@ async def poker(ctx):
         middle_cards, ctx, player_cards, players, players_status
     )
 
-@bot.command(name='voice')
-async def audio_say(ctx, *,sound = None):
+
+@slash.slash(name="voice", description="Play an audio(listed in $help voice) or say some thing(Text to speech)", guild_ids=guild_ids)
+# @bot.command(name='voice', aliases=['v', 'vc'])
+async def audio_say(ctx, *, sound=None):
     await voice(bot, ctx, sound)
 
-@bot.command(name='disconnect')
+
+@slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=guild_ids)
+# @bot.command(name='disconnect',  aliases=['exit', 'dc'])
 async def audio_disconnect(ctx):
     await disconnect(ctx)
 
-@bot.command(name='snap')
-async def snap_kick(ctx , user: discord.Member = None):
+
+@slash.slash(name="snap", description="Perfectly balanced, as all things should be", guild_ids=guild_ids)
+# @bot.command(name='snap')
+async def snap_kick(ctx, user: discord.Member = None):
     await random_kick(bot, ctx, user)
 
-@bot.command(name='travel')
-async def travel_chanel(ctx , user: discord.Member = None):
+
+@slash.slash(name="travel", description="Travel to all of the Voice Channel.", guild_ids=guild_ids)
+# @bot.command(name='travel')
+async def travel_chanel(ctx, user: discord.Member = None):
     await random_travel(ctx, user)
 
-@bot.command(name='change')
-async def  change_message(ctx):
+
+@slash.slash(name="change", description="Convert the keyboard layout of your last message between en-th..", guild_ids=guild_ids)
+# @bot.command(name='change', aliases=['c'])
+async def change_message(ctx):
     await change_last_message(ctx)
-   
-@bot.event
-async def on_command_error(ctx, error):
-    print(error)
-    if isinstance(error, commands.CommandNotFound):
-        msg = ctx.message.content.split()[0]
-        em = discord.Embed( title=f"ไม่พบคำสั่งที่ชื่อว่า {msg}",
-                            description= await guess_command(bot, msg,
-                                                             bot.all_commands),
-                            color=ctx.author.color) 
-        await ctx.send(embed=em)
 
 bot.run(TOKEN)
