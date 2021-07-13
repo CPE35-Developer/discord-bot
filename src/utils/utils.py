@@ -30,5 +30,3 @@ async def guess_command(client, message, commands):
         return f"คำสั่งที่เรามีคือ\n {desc}"
     else:
         return f"คุณกำลังจะพิมพ์ {prefix}{similar_commands[0][0]} หรือเปล่า"
-
-

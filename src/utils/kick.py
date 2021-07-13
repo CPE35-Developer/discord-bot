@@ -1,8 +1,6 @@
+from src.utils.utils import config
 from discord.ext.commands import MemberConverter
 from random import sample, random
-
-BOT_ID = 863101912730959894
-THANOS_EMOJI_ID = 864186153033007125
 
 async def kick_person(user):
   await user.move_to(None)
@@ -21,8 +19,9 @@ async def random_kick(bot, ctx, user):
         await ctx.author.move_to(None)
 
   else:
-    emoji = bot.get_emoji(THANOS_EMOJI_ID)
-    await ctx.send(emoji)
+    snap_emoji = config.EMOJI_ID.thanos_snap
+    bot_id = config.BOT_ID
+    await ctx.send(snap_emoji)
 
     general_channel = ctx.author.voice.channel
     member_ids = list(general_channel.voice_states.keys())
@@ -31,7 +30,7 @@ async def random_kick(bot, ctx, user):
     
     for member_id in random_member_ids:
 
-      if BOT_ID == member_id:
+      if bot_id == member_id:
         continue
 
       player = await MemberConverter().convert(ctx, str(member_id))
