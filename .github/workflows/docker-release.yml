@@ -1,9 +1,12 @@
-name: ci
+name: Docker Build & Push
 
 on:
+  push:
+    branches:
+      - 'main'
   pull_request:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   docker:
