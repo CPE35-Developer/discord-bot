@@ -31,7 +31,7 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: discord-bot/latest
+          tags: namirinz/discord-bot:latest
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
