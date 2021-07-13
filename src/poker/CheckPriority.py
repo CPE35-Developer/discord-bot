@@ -5,7 +5,7 @@ def best_card_ofone(card: List[str]):
     from line 8 to 16
     choose 5 from 7 card
     '''
-    best=[[]]
+    best=[]
     for i in range(len(card)):
         for j in range(len(card)):
             if i < j:
@@ -20,13 +20,11 @@ def best_card_ofone(card: List[str]):
     by priority_value
     '''
     val=[]
-    ################################################## Why have none?
     for i in range(len(best)):
         val.append(value(best[i]))
-    val.pop(0)
     val.sort()
     val.reverse()
-    #return is priority(int), howwin(str), dataforsort(list), cards in you hand that u shold choose(list)#
+    #return is priority(int), howwin(str), dataforsort(list), cards in you hand that u shold choose(list), card flower(list)#
     return val[0]
 
 
@@ -35,12 +33,23 @@ def winner(win: List[List[str]]):
     for i in range (len(win)):
         name = win[i][-1]
         win[i].pop(-1)
-        player.append([best_card_ofone(win[i]),name])
+        tmp=best_card_ofone(win[i])
+        tmp.append(name)
+        player.append(tmp)
     player.sort()
     player.reverse()
-    #return naame,howwin and card that use
-    return [player[0][1],player[0][0][1],player[0][0][3]]
+    playerwin=[]
+    for i in range (len(player)):
+        if(player[0][3]==player[i][3]):
+            playerwin.append(player[i])
 
+    #delete some data for sort that not necessary
+    for i in range (len(playerwin)):
+        playerwin[i].pop(2)
+
+    #return naame,howwin and card that use
+    #return [player[0][1],player[0][0][1],player[0][0][3]]
+    return playerwin
 
 '''
 value(args)  args is set of cards (5card only)
@@ -53,7 +62,7 @@ def value(use: List[str]):
     and check it flower because only flush, straight flush and royal straight flush that use flower
     '''
     dic={ #change str to int easily
-        ":one:":1,
+        ":a:":14,
         ":two:":2,
         ":three:":3,
         ":four:":4,
@@ -62,7 +71,7 @@ def value(use: List[str]):
         ":seven:":7,
         ":eight:":8,
         ":nine:":9,
-        ":ten:":10,
+        ":one::zero:":10,
         ":regional_indicator_j:":11,
         ":regional_indicator_q:":12,
         ":regional_indicator_k:":13,
@@ -77,10 +86,15 @@ def value(use: List[str]):
         number,flower = i.split()
         if(flower!=flowers): #check flush here for flush and straight flush
             flushed=0
-        temp.append(dic[number]) #change str to int
-        
-    use=temp
-    use.sort()
+        temp.append([dic[number],flower]) #change str to int
+
+    temp.sort()
+    use=[]
+    card_flower=[]
+
+    for i in range(len(temp)):
+        use.append(temp[i][0])
+        card_flower.append(temp[i][1])
 
     highcard=0 #1
     onepair=0 #100
@@ -106,20 +120,27 @@ def value(use: List[str]):
     #onepair
     #twopair
     #threeofkind
+    
     #fourofkind
+
     dupcard2=[]
+    skip=0
     for j in range(len(use)):
+        if(skip!=0):
+            skip-=1
+            continue
         #fourofkind
         if(j+3<len(use) and use[j]==use[j+1]==use[j+2]==use[j+3]):
             fourofkind=use[j]
-
+            skip+=3
         #threeofkind
         elif(j+2<len(use) and use[j]==use[j+1]==use[j+2]):
             threeofkind=use[j]
-
+            skip+=2
         #twopair and onepair
         elif(j+1<len(use) and use[j]==use[j+1]):
             dupcard2.append(use[j])
+            skip+=1
 
     if(len(dupcard2)==2):
         twopair.append(dupcard2[0])
@@ -139,7 +160,7 @@ def value(use: List[str]):
     #staright
     if(len(use)==5 and use[0]==use[1]-1 and use[1]==use[2]-1 and use[2]==use[3]-1 and use[3]==use[4]-1):
         straight=use[4]
-    elif(len(use)==5 and use[0]==1 and use[1]==10 and use[2]==11 and use[3]==12  and use[4]==13):
+    elif(len(use)==5 and use[0]==10 and use[1]==11 and use[2]==12 and use[3]==13  and use[4]==14):
         straight=1
         royal=1
 
@@ -163,46 +184,46 @@ def value(use: List[str]):
     
     #for return is priority(int), howwin(str), dataforsort(list), cards in you hand that u shold choose(list)#
     if(royaleSF!=0):
-        return [1e10,'royaleSF',[0],use]
+        return [1e10,'royaleSF',[0],use,card_flower]
         #pass
     elif(straightflush!=0): 
         if(straight==1):
             straight=14
-        return [1e9+straightflush,'straightflush',[0],use]
+        return [1e9+straightflush,'straightflush',[0],use,card_flower]
         #pass
     elif(fourofkind!=0):
         if(fourofkind==1):
             fourofkind=14
-        return [1e8+fourofkind,'fourofkind',[0],use]
+        return [1e8+fourofkind,'fourofkind',[0],use,card_flower]
         #pass
     elif(fullhouse!=0): 
         if(fullhouse==1):
             fullhouse=14
-        return [1e7+fullhouse,'fullhouse',[0],use]
+        return [1e7+fullhouse,'fullhouse',[0],use,card_flower]
         #pass
     elif(flush!=0): 
         if(flush==1):
             flush=14
-        return [1e6+flush,'flush',use,use]
+        return [1e6+flush,'flush',use,use,card_flower]
         #tie pass
     elif(straight!=0): 
         if(straight==1):
             straight=14
-        return [1e5+straight,'straight',[0],use]
+        return [1e5+straight,'straight',[0],use,card_flower]
         #pass
     elif(threeofkind!=0): 
         if(threeofkind==1):
             threeofkind=14
-        return [1e4+threeofkind,'threeofkind',[0],use]
+        return [1e4+threeofkind,'threeofkind',[0],use,card_flower]
         #pass
     elif(len(twopair)!=0):
         left = sum(use)-2*(twopair[0]+twopair[1])
         if(twopair[0]==1):
             twopair[0]=14
-        return [1e3+twopair[0]+twopair[1]*100,'twopair',[left],use]
+        return [1e3+twopair[0]+twopair[1]*100,'twopair',[left],use,card_flower]
         #tie  pass
     elif(onepair!=0): 
-        zz=use
+        tmp=use.copy()
         if(onepair==1):
             onepair=14
         for j in range(len(use)):
@@ -210,14 +231,16 @@ def value(use: List[str]):
                 use.pop(j)
                 use.pop(j)
                 break
-        return [1e2+onepair,'onepair',use,zz]
+        return [1e2+onepair,'onepair',use,tmp,card_flower]
         #tie pass
     elif(highcard!=0): 
         if(highcard==1):
             highcard=14
-        return [highcard,'highcard',use,use]
+        return [highcard,'highcard',use,use,card_flower]
         #tie pass
+        
 '''
-winner([["2 0","3 0","4 0","5 0","6 0","7 0","8 0","ixq1"],["2 0","3 0","4 0","5 0","6 0","7 0","8 0","ixq2"],["2 0","3 0","4 0","5 0","6 0","7 0","8 0","ixq3"]])
-print() -> ['ixq3', 'straightflush', [4, 5, 6, 7, 8]]
+winner([[CardInHand1,name1],[CardInHand2,name2],[CardInHand3,name3],[CardInHand4,name4],...])
+print(winner([[":two: 0",":two: 0",":two: 0",":three: 0",":three: 0",":three: 0",":eight: 0","ixq1"],[":two: 0",":three: 0",":four: 1",":five: 0",":six: 0",":seven: 0",":eight: 0","ixq2"],[":two: 0",":three: 0",":four: 1",":five: 0",":six: 0",":seven: 0",":eight: 0","ixq3"]]))
+print -> [[10000003.0, 'fullhouse', [2, 2, 3, 3, 3], 'ixq1']]
 '''

@@ -1,0 +1,8 @@
+discord
+discord.py
+gTTS
+langdetect
+PyNaCl
+python-dotenv
+googledrivedownloader
+discord-py-slash-command
