@@ -6,7 +6,6 @@
         "PATH_mp3"    :   "src/audio/mp3/",
         "PATH_ffmpeg" : "ffmpeg",
         "PATH_ffmpeg_windows" : "src/audio/ffmpeg.exe"
-
     }
 
 }
