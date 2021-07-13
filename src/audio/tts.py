@@ -19,3 +19,4 @@ async def repeat(vc, text=None):
     except:
         tts.save("C:/text.mp3")
         vc.play(FFmpegPCMAudio(executable=config.audio.PATH_ffmpeg_windows, source='C:/text.mp3'))
+
