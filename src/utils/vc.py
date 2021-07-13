@@ -14,7 +14,7 @@ def get_PATH_ffmpeg():
     return PATH_ffmpeg
 
 
-async def check_vc(ctx):
+async def get_vc(ctx):
 
     try: 
         voice_state = ctx.member.voice
@@ -29,7 +29,7 @@ async def check_vc(ctx):
 
 
 async def join_vc(bot, ctx):
-    channel = await check_vc(ctx)
+    channel = await get_vc(ctx)
     vc = get(bot.voice_clients, guild=ctx.guild)
     if vc and vc.is_connected():
         await vc.move_to(channel)
