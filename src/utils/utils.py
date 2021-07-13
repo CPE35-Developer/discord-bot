@@ -17,15 +17,16 @@ prefix = config.prefix
 
 async def guess_command(client, message, commands):
     similar_commands = []
-    if (message.content.startswith(prefix)) & (message.content.split()[0].replace(prefix,'') not in commands):
-        print(f'{message.author}: {message.content}')
+    if message.startswith(prefix):
         for command in commands:
             similar_ratio = SequenceMatcher(
-                None, message.content, command).ratio()
+                None, message, command).ratio()
             if similar_ratio >= 0.6:
                 similar_commands.append([command, similar_ratio])
         similar_commands = sorted(
             similar_commands, key=lambda l: l[1], reverse=True)
-        await message.channel.send(f'คุณกำลังจะพิมพ์ {prefix}{similar_commands[0][0]} หรือเปล่า')
-
-
+    if similar_commands == []:
+        desc = '\n'.join(commands)
+        return f"คำสั่งที่เรามีคือ\n {desc}"
+    else:
+        return f"คุณกำลังจะพิมพ์ {prefix}{similar_commands[0][0]} หรือเปล่า"

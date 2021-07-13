@@ -6,8 +6,8 @@
         "PATH_mp3"    :   "src/audio/mp3/",
         "PATH_ffmpeg" : "ffmpeg",
         "PATH_ffmpeg_windows" : "src/audio/ffmpeg.exe"
-        
     },
+    
     "BOT_ID" : 863101912730959894,
     "EMOJI_ID": {
         "thanos_snap": "<a:thanossnap128:864186153033007125>"
