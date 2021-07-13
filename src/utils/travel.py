@@ -20,23 +20,12 @@ async def random_travel(ctx, user):
             return
 
     voice_channel_list = ctx.guild.voice_channels
-    if user is not None:
-        first_channel = user.voice.channel
-        await ctx.send(f'ไปเที่ยวกันเถอะคุณ {str(user)} ')
-        for i in range(10):
-            if(i==9):
-                await user.move_to(first_channel)
-            else:
-                rand=randint(0,len(voice_channel_list)-1)
-                await user.move_to(voice_channel_list[rand])
-
-    else:
-        first_channel = ctx.author.voice.channel
-        await ctx.send(f'ไปเที่ยวกันเถอะคุณ {str(ctx.author)} ')
-
-        for i in range(10):
-            if(i==9):
-                await user.move_to(first_channel)
-            else:
-                rand=randint(0,len(voice_channel_list)-1)
-                await user.move_to(voice_channel_list[rand])
+    
+    first_channel = user.voice.channel
+    await ctx.send(f'ไปเที่ยวกันเถอะคุณ {str(user)} ')
+    for i in range(10):
+        if(i==9):
+            await user.move_to(first_channel)
+        else:
+            rand=randint(0,len(voice_channel_list)-1)
+            await user.move_to(voice_channel_list[rand])
