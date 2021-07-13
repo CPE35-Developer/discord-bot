@@ -34,7 +34,7 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: user/app:latest
+          tags: ${{ steps.docker_meta.outputs.tags }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
