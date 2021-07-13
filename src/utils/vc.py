@@ -18,12 +18,12 @@ async def get_vc(ctx):
 
     try: 
         voice_state = ctx.member.voice
-    except AttributeError:
+    except:
         voice_state = ctx.author.voice
-        
-    if not voice_state:
+
+    if voice_state == None:
         await ctx.send('เข้า Voice Channel ก่อนสิคุณ')
-        return 
+        return
     else: 
         return voice_state.channel
 
@@ -34,5 +34,8 @@ async def join_vc(bot, ctx):
     if vc and vc.is_connected():
         await vc.move_to(channel)
     else:
-        vc = await channel.connect()
+        try: 
+            vc = await channel.connect()
+        except AttributeError:
+            vc = None
     return vc
