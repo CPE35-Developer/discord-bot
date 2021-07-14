@@ -6,3 +6,4 @@ PyNaCl
 python-dotenv
 googledrivedownloader
 discord-py-slash-command
+googletrans

@@ -9,16 +9,15 @@ async def change_last_message(ctx):
     fetchMessage = await channel.history().flatten()
     for i in range(1, len(fetchMessage)):
         if (fetchMessage[i].author == ctx.author) & (not fetchMessage[i].content.startswith('$')):
-            message = fetchMessage[i].content
+            message = fetchMessage[i]
             answer = ''
-            for i in range(len(message)):
-
+            for j in range(len(message.content)):
                 try:
-                    answer += lang_switch['en-th'][message[i]]
+                    answer += lang_switch['en-th'][message.content[j]]
                 except KeyError:
-                    answer += lang_switch['th-en'][message[i]]
-
-            await ctx.send(f"> {answer}\n`โดย {ctx.author}`")
+                    answer += lang_switch['th-en'][message.content[j]]
+            await message.reply(f" {answer}")
             break
-    if fetchMessage[i].content == None:
+
+    if message.content == None:
         await ctx.send(f'{ctx.author} พิมพ์มาก่อนดิวะไม่พิมพ์มาผมจะแก้อะไรล่ะะ')

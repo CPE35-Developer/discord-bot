@@ -3,6 +3,7 @@ from src.utils.config import CONFIG
 import os
 import sys
 
+
 def get_PATH_ffmpeg():
     if 'win' in sys.platform:
         PATH_ffmpeg = CONFIG.audio.PATH_ffmpeg_windows
@@ -24,7 +25,7 @@ async def get_vc(ctx):
 
     if voice_state == None:
         await ctx.send('เข้า Voice Channel ก่อนสิคุณ')
-        return
+        return None
     else:
         return voice_state.channel
 
@@ -40,3 +41,9 @@ async def join_vc(bot, ctx):
         except AttributeError:
             vc = None
     return vc
+
+async def leavevoice(bot, ctx):
+    for x in bot.voice_clients:
+            if(x.server == ctx.message.server):
+                return await x.disconnect()
+
