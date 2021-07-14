@@ -2,8 +2,6 @@ from discord.utils import get
 from src.utils.config import CONFIG
 import os
 import sys
-from discord_slash.utils.manage_commands import create_choice
-
 
 def get_PATH_ffmpeg():
     if 'win' in sys.platform:
@@ -42,29 +40,3 @@ async def join_vc(bot, ctx):
         except AttributeError:
             vc = None
     return vc
-
-voiceLangChoice = [{"value": "af", "name": "Afrikaans"},
-                   {"value": "ar", "name": "Arabic"},
-                   {"value": "de", "name": "German"},
-                   {"value": "el", "name": "Greek"},
-                   {"value": "en", "name": "English"},
-                   {"value": "es", "name": "Spanish"},
-                   {"value": "fi", "name": "Finnish"},
-                   {"value": "fr", "name": "French"},
-                   {"value": "hi", "name": "Hindi"},
-                   {"value": "id", "name": "Indonesian"},
-                   {"value": "it", "name": "Italian"},
-                   {"value": "ja", "name": "Japanese"},
-                   {"value": "ko", "name": "Korean"},
-                   {"value": "la", "name": "Latin"},
-                   {"value": "mk", "name": "Macedonian"},
-                   {"value": "my", "name": "Myanmar (Burmese)"},
-                   {"value": "nl", "name": "Dutch"},
-                   {"value": "pl", "name": "Polish"},
-                   {"value": "pt", "name": "Portuguese"},
-                   {"value": "ru", "name": "Russian"},
-                   {"value": "th", "name": "Thai"},
-                   {"value": "tl", "name": "Filipino"},
-                   {"value": "tr", "name": "Turkish"},
-                   {"value": "vi", "name": "Vietnamese"},
-                   {"value": "zh-CN", "name": "Chinese"}]

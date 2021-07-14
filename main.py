@@ -3,15 +3,14 @@ import discord
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
 from discord.ext import commands
-from src.utils.vc import voiceLangChoice
 from src.utils.utils import commandSuggestFromError
 from src.utils.kick import random_kick
 from src.utils.travel import random_travel
 from src.utils.change import change_last_message
-from src.utils.config import Prefix, CONFIG
+from src.utils.config import CONFIG, Prefix
+from src.utils.command import SlashChoice
 from src.poker.poker import poker_play
 from src.audio.audio import voice, disconnect
-from discord_slash.model import SlashCommandOptionType
 from discord_slash.utils.manage_commands import create_option, create_choice
 from dotenv import load_dotenv
 
@@ -79,7 +78,7 @@ async def poker(ctx):
 
 @slash.slash(name="voice", description="Play an audio or say some thing(Text to speech)", guild_ids=CONFIG.GUILD_IDS,
              options=[create_option(name='message', description='The sound to play or the text for TTS', option_type=SlashCommandOptionType.STRING, required=True),
-                      create_option(name='language', description='The language you want TTS to speak', option_type=SlashCommandOptionType.STRING, required=False, choices=voiceLangChoice)])
+                      create_option(name='language', description='The language you want TTS to speak', option_type=SlashCommandOptionType.STRING, required=False, choices=SlashChoice.voiceLangChoice)])
 async def audio_voice(ctx, message, language=None):
     await voice(bot, ctx, message, language)
 
