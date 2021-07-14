@@ -28,9 +28,8 @@ async def voice(bot, ctx, msg, language=None):
     else:
         await repeat(ctx, vc, text=msg, lang=language)
         returnMessage = f'{ctx.author.mention}: {msg}'
-    
+
     return await ctx.send(returnMessage)
-        
 
 
 async def disconnect(ctx):

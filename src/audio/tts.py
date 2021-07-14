@@ -7,10 +7,10 @@ from src.utils.config import CONFIG
 PATH_ffmpeg = get_PATH_ffmpeg()
 
 
-async def repeat(ctx, vc, text:str = None, lang:str = None):
+async def repeat(ctx, vc, text: str = None, lang: str = None):
     if not lang == None:
         tts = gTTS(text=text, lang=lang)
-    else: 
+    else:
         try:
             tts = gTTS(text=text, lang=detect(text))
         except:
