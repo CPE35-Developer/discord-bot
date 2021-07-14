@@ -3,10 +3,10 @@ from discord.utils import get
 from asyncio import TimeoutError
 import os, sys
 from src.utils.vc import join_vc, get_PATH_ffmpeg
-from src.utils.utils import config
+from src.utils.config import CONFIG
 from src.audio.tts import repeat
 
-PATH_mp3 = config.audio.PATH_mp3
+PATH_mp3 = CONFIG.audio.PATH_mp3
 PATH_ffmpeg = get_PATH_ffmpeg()
 sound_list = [file.replace(".mp3", "") for file in os.listdir(PATH_mp3)]
 

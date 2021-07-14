@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from .poker import show_middle_card
+from .utils import show_middle_card
 
 
 async def summary_phase(players, play_time, players_status: List[str], ctx):

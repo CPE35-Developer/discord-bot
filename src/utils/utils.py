@@ -1,23 +1,11 @@
 from difflib import SequenceMatcher
+from discord import Embed
+from discord.ext.commands import CommandNotFound
+from src.utils.config import Prefix
 
-import json
-class obj(object):
-    def __init__(self, d):
-        for a, b in d.items():
-            if isinstance(b, (list, tuple)):
-               setattr(self, a, [obj(x) if isinstance(x, dict) else x for x in b])
-            else:
-               setattr(self, a, obj(b) if isinstance(b, dict) else b)
-
-
-with open('config.json', 'r') as f:
-    config = obj(json.load(f))
-
-prefix = config.prefix
-
-async def guess_command(bot, message, commands):
+async def commandSuggest(bot, message, commands):
     similar_commands = []
-    if message.startswith(prefix):
+    if message.startswith(Prefix):
         for command in commands:
             similar_ratio = SequenceMatcher(
                 None, message, command).ratio()
@@ -29,4 +17,14 @@ async def guess_command(bot, message, commands):
         desc = '\n'.join(commands)
         return f"คำสั่งที่เรามีคือ\n {desc}"
     else:
-        return f"คุณกำลังจะพิมพ์ {prefix}{similar_commands[0][0]} หรือเปล่า"
+        return f"คุณกำลังจะพิมพ์ {Prefix}{similar_commands[0][0]} หรือเปล่า"
+
+async def commandSuggestFromError(ctx, bot, error):
+    print(error)
+    if isinstance(error, CommandNotFound):
+        msg = ctx.message.content.split()[0]
+        em = Embed( title=f"ไม่พบคำสั่งที่ชื่อว่า {msg}",
+                            description= await commandSuggest(bot, msg,
+                                                             bot.all_commands),
+                            color=ctx.author.color) 
+        await ctx.send(embed=em)

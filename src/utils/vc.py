@@ -1,16 +1,16 @@
 from discord.utils import get
-from src.utils.utils import config
+from src.utils.config import CONFIG
 import os, sys
 
 def get_PATH_ffmpeg():
     if 'win' in sys.platform:
-        PATH_ffmpeg = config.audio.PATH_ffmpeg_windows
+        PATH_ffmpeg = CONFIG.audio.PATH_ffmpeg_windows
         if not os.path.isfile(PATH_ffmpeg):
             from google_drive_downloader import GoogleDriveDownloader as gdd
             gdd.download_file_from_google_drive(file_id='1iK5q7--S6AY88hap32JhSN77gV-MB188',
                                             dest_path='src/audio/ffmpeg.exe')
     else: 
-        PATH_ffmpeg = config.audio.PATH_ffmpeg
+        PATH_ffmpeg = CONFIG.audio.PATH_ffmpeg
     return PATH_ffmpeg
 
 
