@@ -7,17 +7,15 @@ from src.utils.config import CONFIG
 PATH_ffmpeg = get_PATH_ffmpeg()
 
 
-async def repeat(vc, text=None):
-    try:
-        language = detect(text)
-    except:
-        language = 'en'
+async def repeat(ctx, vc, text:str = None, lang:str = None):
+    if not lang == None:
+        tts = gTTS(text=text, lang=lang)
+    else: 
+        try:
+            tts = gTTS(text=text, lang=detect(text))
+        except:
+            tts = gTTS(text=text, lang='th')
 
-    tts = gTTS(text=text, lang=language)
-    try:
-        tts.save("text.mp3")
-        vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg, source='text.mp3'))
-    except:
-        tts.save("C:/text.mp3")
-        vc.play(FFmpegPCMAudio(
-            executable=CONFIG.audio.PATH_ffmpeg_windows, source='C:/text.mp3'))
+    print(f'Saying {text}')
+    tts.save("text.mp3")
+    vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg, source='text.mp3'))

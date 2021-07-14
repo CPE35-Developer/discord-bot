@@ -1,51 +1,36 @@
 from discord import FFmpegPCMAudio
-from discord.utils import get
-from asyncio import TimeoutError
-import os
-import sys
 from src.utils.vc import join_vc, get_PATH_ffmpeg
-from src.utils.config import CONFIG
+from src.utils.config import CONFIG, MP3_files
 from src.audio.tts import repeat
-
-PATH_mp3 = CONFIG.audio.PATH_mp3
+from src.utils.command import fetchArguments
 PATH_ffmpeg = get_PATH_ffmpeg()
-sound_list = [file.replace(".mp3", "") for file in os.listdir(PATH_mp3)]
 
 
-async def voice(bot, ctx, sound):
+async def voice(bot, ctx, msg, language=None):
+
+    if not language:
+        msg, args = fetchArguments(msg)
+        ttsLang = None
+        if (args != None) & (ttsLang == None):
+            for arg in args:
+                if arg.startswith('l'):
+                    language = arg[2:]
+
     vc = await join_vc(bot, ctx)
 
     if vc == None:
         return
 
-    def check(msg):
-        return ctx.author == msg.author
-
-    if sound == None:
-
-        await ctx.send(f"กรุณาเลือกเสียง [{', '.join(sound_list)}]\nหรือ พิมพ์อย่างอื่นเพื่อ Text to speech")
-
-        try:
-            msg = await bot.wait_for("message", check=check, timeout=20)
-            if msg.content.lower() in sound_list:
-                sound = msg.content.lower()
-            else:
-                print(msg.content)
-                sound = msg.content
-                print(sound)
-                await repeat(vc, text=sound)
-                return
-
-        except TimeoutError:
-            await ctx.send('หมดเวลาในการเลือก')
-            return
-
-    if sound in sound_list:
-        print(f'Playing {sound}')
+    if (msg in MP3_files) & (not language):
         vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg,
-                source=f"{PATH_mp3}{sound}.mp3"))
+                source=f"{CONFIG.audio.PATH_mp3}{msg}.mp3"))
+        returnMessage = f'{ctx.author}: เล่น **{msg}.mp3**'
     else:
-        await repeat(vc, text=sound)
+        await repeat(ctx, vc, text=msg, lang=language)
+        returnMessage = f'{ctx.author.mention}: {msg}'
+    
+    return await ctx.send(returnMessage)
+        
 
 
 async def disconnect(ctx):

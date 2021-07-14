@@ -1,4 +1,4 @@
-import json
+import os, json
 
 
 class obj(object):
@@ -15,3 +15,6 @@ with open('config.json', 'r') as f:
     CONFIG = obj(json.load(f))
 
 Prefix = CONFIG.prefix
+PATH_mp3 = CONFIG.audio.PATH_mp3
+MP3_files = [file.replace(".mp3", "") for file in os.listdir(PATH_mp3)]
+
