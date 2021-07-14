@@ -71,7 +71,7 @@ async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ct
 
             if count_fold == len(players)-1:
                 return True
-        if  'b' not in players_status:
+        if 'b' not in players_status:
             break
 
 
