@@ -1,5 +1,5 @@
 from typing import List, Tuple
-from .poker import show_middle_card
+from .utils import show_middle_card
 
 
 async def summary_phase(players, play_time, players_status: List[str], ctx):
@@ -16,7 +16,7 @@ async def summary_phase(players, play_time, players_status: List[str], ctx):
     await ctx.send(f'เฟสที่ {play_time+1}/3\nสรุปผล {msg}\n'+'-'*15)
 
 
-async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ctx, client):
+async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ctx, bot):
     def check_pbf(msg):
         return msg.author == player and msg.channel == ctx.channel and \
             msg.content.lower() in ["p", "b", "f"]
@@ -34,7 +34,7 @@ async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ct
                 continue
 
             await ctx.send(f'คุณ {str(player)} โปรดเลือก P/B/F')
-            msg = await client.wait_for('message', check=check_pbf)
+            msg = await bot.wait_for('message', check=check_pbf)
             msg_content = msg.content.lower()
             msg_author = msg.author
 
@@ -52,7 +52,7 @@ async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ct
                 while True:
                     await ctx.send(f'คุณ {str(player)} โปรดเดิมพัน')
 
-                    msg_bet = await client.wait_for('message', check=check_bet)
+                    msg_bet = await bot.wait_for('message', check=check_bet)
                     msg_bet_content = msg_bet.content
 
                     if not msg_bet_content.isnumeric():
@@ -71,11 +71,11 @@ async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ct
 
             if count_fold == len(players)-1:
                 return True
-        if  'b' not in players_status:
+        if 'b' not in players_status:
             break
 
 
-async def loop_pass_bet_fold(players, player_cards: List[Tuple[int, int]], middle_cards, client, ctx):
+async def loop_pass_bet_fold(players, player_cards: List[Tuple[int, int]], middle_cards, bot, ctx):
     global player, idx_player_drop, max_current_bet, count_fold
     count_fold = 0
     idx_player_drop = []
@@ -87,7 +87,7 @@ async def loop_pass_bet_fold(players, player_cards: List[Tuple[int, int]], middl
     for play_time in range(3):
         await ctx.send(f'เฟสที่ {play_time+1}/3')
         found_winner = await pass_bet_fold(players, players_status, count_fold,
-                                           max_current_bet, ctx, client)
+                                           max_current_bet, ctx, bot)
         await summary_phase(players, play_time, players_status, ctx)
         if found_winner:
             await show_middle_card(middle_cards, ctx, True, False)
