@@ -24,7 +24,7 @@ async def voice(bot, ctx, msg, language=None):
     if (msg in MP3_files) & (not language):
         vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg,
                 source=f"{CONFIG.audio.PATH_mp3}{msg}.mp3"))
-        returnMessage = f'{ctx.author}: เล่น **{msg}.mp3**'
+        returnMessage = f'{ctx.author.mention} เล่น **{msg}**.mp3'
     else:
         await repeat(ctx, vc, text=msg, lang=language)
         returnMessage = f'{ctx.author.mention}: {msg}'
