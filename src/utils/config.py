@@ -9,6 +9,6 @@ class obj(object):
 
 
 with open('config.json', 'r') as f:
-    Config = obj(json.load(f))
+    CONFIG = obj(json.load(f))
 
-Prefix = Config.prefix
+Prefix = CONFIG.prefix
