@@ -3,12 +3,13 @@ from src.utils.kick import random_kick
 from src.utils.travel import random_travel
 from src.utils.change import change_last_message
 from src.utils.config import CONFIG
-import discord 
+import discord
 from src.poker.poker import poker_play
 
 from src.audio.audio import voice, disconnect
 
 guild_ids = CONFIG.GUILD_IDS
+
 
 async def botCommand(bot):
 
@@ -73,6 +74,7 @@ async def slashCommand(bot, slash):
     @slash.slash(name="change", description="Convert the keyboard layout of your last message between en-th..", guild_ids=guild_ids)
     async def change_message(ctx):
         await change_last_message(ctx)
+
 
 async def runCommands(bot, slash):
     await botCommand(bot)

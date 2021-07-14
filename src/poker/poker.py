@@ -38,7 +38,7 @@ async def who_win(middle_card: List[int], ctx, player_cards: List[Tuple[int, int
     all_card_and_name = []
     middle = []
 
-    dic={
+    dic = {
         2: ":two:",
         3: ":three:",
         4: ":four:",
@@ -70,19 +70,20 @@ async def who_win(middle_card: List[int], ctx, player_cards: List[Tuple[int, int
 
     msg = f'\nผู้ชนะมี {len(win)} คน คือ '
     for i in range(len(win)):
-        card=' '
-        msg += str(win[i][4]) + ' โดยถือไพ่\n' 
+        card = ' '
+        msg += str(win[i][4]) + ' โดยถือไพ่\n'
         for j in range(len(win[i][2])):
             card += str(dic[win[i][2][j]])+' '+str(win[i][3][j]) + '   '
         msg += card
-        msg +=  '\nคือระดับ ' + win[i][1] + ','
+        msg += '\nคือระดับ ' + win[i][1] + ','
     msg = msg[0:-1]
     await ctx.send(msg)
     return win
     # [[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],...]
     # len() is how many player tie
 
-async def poker_play(bot, ctx):    
+
+async def poker_play(bot, ctx):
     players = await get_players(bot, ctx)
     if players is None:
         return

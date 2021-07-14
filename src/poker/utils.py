@@ -17,6 +17,7 @@ DECKS_OF_CARDS = [
     ':a: :clubs:', ':a: :diamonds:', ':a: :heart:', ':a: :spades:'
 ]
 
+
 async def show_middle_card(middle_cards: List[int], ctx, show_four: bool, show_five: bool):
     first_card_msg = DECKS_OF_CARDS[middle_cards[0]]
     second_card_msg = DECKS_OF_CARDS[middle_cards[1]]
