@@ -1,4 +1,4 @@
-from src.utils.utils import config
+from src.utils.config import Config
 from discord.ext.commands import MemberConverter
 from random import sample, random
 
@@ -19,8 +19,8 @@ async def random_kick(bot, ctx, user):
         await ctx.author.move_to(None)
 
   else:
-    snap_emoji = config.EMOJI_ID.thanos_snap
-    bot_id = config.BOT_ID
+    snap_emoji = Config.EMOJI_ID.thanos_snap
+    bot_id = Config.BOT_ID
     await ctx.send(snap_emoji)
 
     general_channel = ctx.author.voice.channel
