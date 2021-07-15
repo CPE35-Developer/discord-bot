@@ -1,3 +1,4 @@
+from discord import Embed
 from discord.utils import get
 from src.utils.config import CONFIG
 import os
@@ -41,4 +42,16 @@ async def joinVoiceChannel(bot, ctx):
         except AttributeError:
             vc = None
     return vc
+
+async def leaveVoiceChannel(bot, ctx):
+    vc = get(bot.voice_clients, guild=ctx.guild)
+    try:
+        await vc.disconnect()
+        await ctx.send(f'ออกจาก {vc.channel.mention} แล้ว')
+    except:
+        embed = Embed(title=f'Command Error', color = 0xc11515)
+        embed.add_field(name=f"{ctx.name}", value="บอทควรอยู่ใน Voice Channel ก่อน\nหรือควรทำคำสั่งเกี่ยวกับเสียงก่อน", inline=False)
+        await ctx.send(embed = embed, delete_after = 5)
+        return
+
 
