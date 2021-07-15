@@ -75,13 +75,13 @@ async def on_command_error(ctx, error):
 
 @slash.slash(name="hello", description="Say hi to the bot. Most used to check if bot is ready.", guild_ids=GUILD_IDS)
 async def nine_nine(ctx):
-    await ctx.send("HI :flushed:", hidden=True)
-    await ctx.defer()
-    await ctx.channel.send("HI :flushed:")
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await ctx.send("HI :flushed:")
 
 
 @slash.slash(name="poker", description="Play poker.", guild_ids=GUILD_IDS)
 async def poker(ctx):
+    print(f'{str(ctx.author)} used {ctx.name}')
     await poker_play(bot, ctx)
 
 
@@ -94,6 +94,7 @@ async def poker(ctx):
                                     option_type=SlashCommandOptionType.STRING, required=False,
                                     choices=SlashChoice.voiceLangChoice)])
 async def audio_voice(ctx, message, language=None):
+    print(f'{str(ctx.author)} used {ctx.name}')
     await voice(bot, ctx, message, language)
 
 
@@ -107,6 +108,7 @@ async def audio_voice(ctx, message, language=None):
                                     option_type=SlashCommandOptionType.STRING, required=False,
                                     choices=SlashChoice.voiceLangChoice)])
 async def audio_say(ctx, message, language=None):
+    print(f'{str(ctx.author)} used {ctx.name}')
     await say(bot, ctx, message, language)
 
 
@@ -116,28 +118,32 @@ async def audio_say(ctx, message, language=None):
                                     option_type=SlashCommandOptionType.STRING, required=True,
                                     choices=SlashChoice.voiceSoundChoice)])
 async def audio_play(ctx, sound):
+    print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound)
 
 
 @slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=GUILD_IDS)
 async def audio_disconnect(ctx):
+    print(f'{str(ctx.author)} used {ctx.name}')
     await disconnect(bot, ctx)
 
 
 
 @slash.slash(name="snap", description="Perfectly balanced, as all things should be", guild_ids=GUILD_IDS)
 async def snap_kick(ctx, user: discord.Member = None):
+    print(f'{str(ctx.author)} used {ctx.name}')
     await random_kick(bot, ctx, user)
 
 
 @slash.slash(name="travel", description="Travel to all of the Voice Channel.", guild_ids=GUILD_IDS)
 async def travel_chanel(ctx, user: discord.Member = None):
+    print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel(bot, ctx, user)
 
 
 @slash.slash(name="change", description="Convert the keyboard layout of your last message between en-th.", guild_ids=GUILD_IDS)
 async def change_message(ctx):
+    print(f'{str(ctx.author)} used {ctx.name}')
     await change_last_message(ctx)
-
 
 bot.run(TOKEN)
