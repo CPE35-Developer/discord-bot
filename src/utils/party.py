@@ -14,34 +14,34 @@ async def get_players(bot, ctx):
         if (msg.content.lower() == "y") & (msg.author not in players):
             players.append(msg.author)
             players = list(set(players))
-            await ctx.send(f"ตอนนี้มี {' '.join([str(member) for member in players])} เป็นผู้เล่น ({len(players)} คน)")
+            await ctx.channel.send(f"ตอนนี้มี {' '.join([str(member) for member in players])} เป็นผู้เล่น ({len(players)} คน)")
             print(players)
 
         elif (msg.content.lower() == "y") & (msg.author in players):
-            await ctx.send(f"เองอยู่ในเกมแล้วไอเปรด {msg.author}")
+            await ctx.channel.send(f"เองอยู่ในเกมแล้วไอเปรด {msg.author}")
 
         elif (msg.content.lower() == "n") & (msg.author in players):
             players.remove(msg.author)
             if len(players) == 0:
-                await ctx.send(f'อ้าวไม่มีคนเล่นละ :( ({len(players)} คน)')
+                await ctx.channel.send(f'อ้าวไม่มีคนเล่นละ :( ({len(players)} คน)')
             else:
                 await msg.author.send("ชิ่วๆ")
                 await ctx.send(f"ตอนนี้เหลือ {' '.join([str(member) for member in players])} ({len(players)} คน); ไปไป๊ {msg.author}")
 
         elif (msg.content.lower() == "n") & (msg.author not in players):
-            await ctx.send(f"เข้าเกมมาก่อนดิค่อยออก {msg.author}")
+            await ctx.channel.send(f"เข้าเกมมาก่อนดิค่อยออก {msg.author}")
 
         elif (msg.content.lower() == 'cancel'):
-            await ctx.send('k**y เสียเวลาฉิบหาย')
+            await ctx.channel.send('k**y เสียเวลาฉิบหาย')
             return None
 
         elif (msg.content.lower() == "done") or (len(players) == 9):
-            await ctx.send(f"ผู้เล่นทั้งหมดคือ {' '.join([str(member) for member in players])} ถูกมั้ย (y=ใช่,n=แก้ไขจำนวนคนต่อ)")
+            await ctx.channel.send(f"ผู้เล่นทั้งหมดคือ {' '.join([str(member) for member in players])} ถูกมั้ย (y=ใช่,n=แก้ไขจำนวนคนต่อ)")
 
             while True:
                 chk_msg = await bot.wait_for("message", check=check)
                 if (chk_msg.content.lower() == 'y'):
                     return players
                 elif (chk_msg.content.lower() == 'n'):
-                    await ctx.send(intro_str)
+                    await ctx.channel.send(intro_str)
                     break

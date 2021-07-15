@@ -78,7 +78,7 @@ async def who_win(middle_card: List[int], ctx, player_cards: List[Tuple[int, int
         msg += card
         msg += '\nคือระดับ ' + win[i][1] + ','
     msg = msg[0:-1]
-    await ctx.send(msg)
+    await ctx.channel.send(msg)
     return win
     # [[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],...]
     # len() is how many player tie
