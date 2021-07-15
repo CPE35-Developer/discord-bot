@@ -16,7 +16,7 @@ def get_PATH_ffmpeg():
     return PATH_ffmpeg
 
 
-async def get_vc(ctx):
+async def getUserVoiceState(ctx):
 
     try:
         voice_state = ctx.member.voice
@@ -30,8 +30,8 @@ async def get_vc(ctx):
         return voice_state.channel
 
 
-async def join_vc(bot, ctx):
-    channel = await get_vc(ctx)
+async def joinVoiceChannel(bot, ctx):
+    channel = await getUserVoiceState(ctx)
     vc = get(bot.voice_clients, guild=ctx.guild)
     if vc and vc.is_connected():
         await vc.move_to(channel)
@@ -41,9 +41,4 @@ async def join_vc(bot, ctx):
         except AttributeError:
             vc = None
     return vc
-
-async def leavevoice(bot, ctx):
-    for x in bot.voice_clients:
-            if(x.server == ctx.message.server):
-                return await x.disconnect()
 

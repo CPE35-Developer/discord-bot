@@ -1,7 +1,7 @@
 from random import randint
+from src.audio.audio import say
 
-
-async def random_travel(ctx, user):
+async def random_travel(bot, ctx, user):
 
     if (not user) | (user == ctx.author):
         user = ctx.author
@@ -27,3 +27,5 @@ async def random_travel(ctx, user):
         else:
             rand = randint(0, len(voice_channel_list)-1)
             await user.move_to(voice_channel_list[rand])
+            
+    await say(bot, ctx, f'Welcome back {ctx.author.nick if ctx.author.nick is not None else ctx.author.name}', travel=True)

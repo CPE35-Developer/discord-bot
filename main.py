@@ -121,7 +121,8 @@ async def audio_play(ctx, sound):
 
 @slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=GUILD_IDS)
 async def audio_disconnect(ctx):
-    await disconnect(ctx)
+    await disconnect(bot, ctx)
+
 
 
 @slash.slash(name="snap", description="Perfectly balanced, as all things should be", guild_ids=GUILD_IDS)
@@ -131,7 +132,7 @@ async def snap_kick(ctx, user: discord.Member = None):
 
 @slash.slash(name="travel", description="Travel to all of the Voice Channel.", guild_ids=GUILD_IDS)
 async def travel_chanel(ctx, user: discord.Member = None):
-    await random_travel(ctx, user)
+    await random_travel(bot, ctx, user)
 
 
 @slash.slash(name="change", description="Convert the keyboard layout of your last message between en-th.", guild_ids=GUILD_IDS)
