@@ -61,16 +61,20 @@ async def say(bot, ctx, msg, language=None, travel=False):
     return await ctx.send(returnMessage)
 
 
-async def play(bot, ctx, sound):
+async def play(bot, ctx, sound, tu=False):
 
     vc = await joinVoiceChannel(bot, ctx)
 
     if vc == None:
         return
-
+    
     vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg,
             source=f"{CONFIG.audio.PATH_mp3}{sound}.mp3"))
-    returnMessage = f'{getNick(ctx.author)} เล่น **{sound}**.mp3'
+        
+    if not tu:
+        returnMessage = f'{getNick(ctx.author)} เล่น **{sound}**.mp3'
+    else:
+        returnMessage = f'||`ข้อความนี้ถูกลบโดยรัฐบาลไทย`||'
 
     return await ctx.send(returnMessage)
 
