@@ -73,10 +73,12 @@ async def play(bot, ctx, sound, tu=False):
         
     if not tu:
         returnMessage = f'{getNick(ctx.author)} เล่น **{sound}**.mp3'
+        return await ctx.send(returnMessage)
     else:
         returnMessage = f'||`ข้อความนี้ถูกลบโดยรัฐบาลไทย`||'
+        return await ctx.send(returnMessage, delete_after=5)
 
-    return await ctx.send(returnMessage)
+    
 
 async def disconnect(bot, ctx):
     await leaveVoiceChannel(bot, ctx)
