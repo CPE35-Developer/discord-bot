@@ -6,4 +6,5 @@ PyNaCl
 python-dotenv
 googledrivedownloader
 discord-py-slash-command
-googletrans
+googletrans==4.0.0-rc1
+requests

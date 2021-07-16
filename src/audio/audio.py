@@ -40,8 +40,7 @@ async def say(bot, ctx, msg, language=None, travel=False):
 
     if (language is None) & (isBotCommand):
         msg, args = fetchArguments(msg)
-        ttsLang = None
-        if (args != None) & (ttsLang == None):
+        if args is not None:
             for arg in args:
                 if arg.startswith('l'):
                     language = arg[2:]
@@ -61,7 +60,7 @@ async def say(bot, ctx, msg, language=None, travel=False):
     return await ctx.send(returnMessage)
 
 
-async def play(bot, ctx, sound, tu=False):
+async def play(bot, ctx, sound, political=False):
 
     vc = await joinVoiceChannel(bot, ctx)
 
@@ -71,7 +70,7 @@ async def play(bot, ctx, sound, tu=False):
     vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg,
             source=f"{CONFIG.audio.PATH_mp3}{sound}.mp3"))
         
-    if not tu:
+    if not political:
         returnMessage = f'{getNick(ctx.author)} เล่น **{sound}**.mp3'
         return await ctx.send(returnMessage)
     else:
