@@ -1,4 +1,5 @@
 import os
+import re
 import discord
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
@@ -11,7 +12,7 @@ from src.utils.config import Prefix
 from src.utils.command import SlashChoice
 from src.poker.poker import poker_play
 from src.audio.audio import voice, say, play, disconnect
-from discord_slash.utils.manage_commands import create_option
+from discord_slash.utils.manage_commands import create_option, create_choice
 from dotenv import load_dotenv
 
 
@@ -31,7 +32,7 @@ async def on_ready():
     global GUILD_IDS
     GUILD_IDS = [guild.id for guild in bot.guilds]
     print(GUILD_IDS)
-
+    
 
 @bot.command(name="hello", aliases=['hi', 'hoi'])
 async def nine_nine(ctx):
@@ -154,5 +155,35 @@ async def travel_chanel(ctx, user: discord.Member = None):
 async def change_message(ctx):
     print(f'{str(ctx.author)} used {ctx.name}')
     await change_last_message(ctx)
-
+    
+@slash.slash(name="set",
+             description="Setting.",
+             guild_ids=GUILD_IDS,
+             options=[create_option(name='codechannel', 
+                                    description='Code channel settings', 
+                                    option_type=SlashCommandOptionType.SUB_COMMAND_GROUP,
+                                    options=[create_option(name='add', 
+                                                           description='Add auto text formatting to a text channel',
+                                                           option_type=SlashCommandOptionType.SUB_COMMAND,
+                                                           options = [create_option(name='channel',
+                                                                                    description='The channel you want to add text formatting to.',
+                                                                                    option_type=SlashCommandOptionType.CHANNEL,
+                                                                                    required=True,
+                                                                                    ),
+                                                                      create_option(name='language',
+                                                                                    description='The programming language for text formatting on this channel.',
+                                                                                    option_type=SlashCommandOptionType.STRING,
+                                                                                    required=True,
+                                                                                    choices=SlashChoice.lan
+                                                                                    )
+                                                                      ]
+                                                           )
+                                             ]
+                                    )
+                      ]
+             )
+async def settings(ctx):
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await settings(ctx)
+    
 bot.run(TOKEN)
