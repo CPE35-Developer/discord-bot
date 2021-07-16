@@ -27,7 +27,7 @@ async def voice(bot, ctx, msg, language=None, ):
                 source=f"{CONFIG.audio.PATH_mp3}{msg}.mp3"))
         returnMessage = f'{getNick(ctx.author)} เล่น **{msg}**.mp3'
     else:
-        await repeat(ctx, vc, text=msg, lang=language)
+        await repeat(vc, text=msg, lang=language)
         returnMessage = f'{getNick(ctx.author)}: {msg}'
 
     return await ctx.send(returnMessage)
@@ -35,9 +35,10 @@ async def voice(bot, ctx, msg, language=None, ):
 
 async def say(bot, ctx, msg, language=None, travel=False):
     
-  
+    try: isBotCommand = ctx.message.startswith('$')
+    except: isBotCommand = False
 
-    if not language:
+    if (language is None) & (isBotCommand):
         msg, args = fetchArguments(msg)
         ttsLang = None
         if (args != None) & (ttsLang == None):
@@ -50,7 +51,7 @@ async def say(bot, ctx, msg, language=None, travel=False):
     if vc == None:
         return
  
-    await repeat(ctx, vc, text=msg, lang=language)
+    await repeat(vc, text=msg, lang=language)
     
     if travel is True:
         return 
