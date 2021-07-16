@@ -5,7 +5,7 @@
         "volume"      :   1,
         "PATH_mp3"    :   "src/audio/mp3/",
         "PATH_ffmpeg" : "ffmpeg",
-        "PATH_ffmpeg_windows" : "src/audio/ffmpeg.exe"
+        "PATH_ffmpeg_windows" : "C:/ffmpeg.exe"
     },
     
     "BOT_ID" : 863101912730959894,

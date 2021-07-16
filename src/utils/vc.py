@@ -11,7 +11,7 @@ def get_PATH_ffmpeg():
         if not os.path.isfile(PATH_ffmpeg):
             from google_drive_downloader import GoogleDriveDownloader as gdd
             gdd.download_file_from_google_drive(file_id='1iK5q7--S6AY88hap32JhSN77gV-MB188',
-                                                dest_path='src/audio/ffmpeg.exe')
+                                                dest_path='C:/ffmpeg.exe')
     else:
         PATH_ffmpeg = CONFIG.audio.PATH_ffmpeg
     return PATH_ffmpeg

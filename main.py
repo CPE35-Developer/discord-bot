@@ -1,6 +1,7 @@
 import os
 import re
 import discord
+import discord_slash
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
 from discord.ext import commands
@@ -13,8 +14,10 @@ from src.utils.command import SlashChoice
 from src.poker.poker import poker_play
 from src.audio.audio import voice, say, play, disconnect
 from discord_slash.utils.manage_commands import create_option, create_choice
+from src.format.code import formatCode
 from dotenv import load_dotenv
-
+import pkg_resources
+pkg_resources.require("googletrans>=4.0.0-rc.1")
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
@@ -64,9 +67,17 @@ async def travel_chanel(ctx, user: discord.Member = None):
     await random_travel(ctx, user)
 
 
-@bot.command(name='change', aliases=['c'])
+@bot.command(name='change')
 async def change_message(ctx):
     await change_last_message(ctx)
+    
+
+@bot.command(name='code', aliases=['c','format','f'])
+async def formatSourceCode(ctx, *, sourcecode):
+    print(f'{str(ctx.author)} used {ctx.command}')
+    await ctx.send(formatCode(ctx, 'py', sourcecode), delete_after=5)
+    await ctx.message.delete()
+
 
 
 @bot.event
@@ -93,7 +104,7 @@ async def poker(ctx):
 
                       create_option(name='language', description='The language you want TTS to speak',
                                     option_type=SlashCommandOptionType.STRING, required=False,
-                                    choices=SlashChoice.voiceLangChoice)])
+                                    choices=SlashChoice.choiceVoiceLang)])
 async def audio_voice(ctx, message, language=None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await voice(bot, ctx, message, language)
@@ -107,7 +118,7 @@ async def audio_voice(ctx, message, language=None):
                       create_option(name='language',
                                     description='The language you want TTS to speak',
                                     option_type=SlashCommandOptionType.STRING, required=False,
-                                    choices=SlashChoice.voiceLangChoice)])
+                                    choices=SlashChoice.choiceVoiceLang)])
 async def audio_say(ctx, message, language=None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await say(bot, ctx, message, language)
@@ -117,21 +128,38 @@ async def audio_say(ctx, message, language=None):
              options=[create_option(name='sound',
                                     description='Choose a sound to play.',
                                     option_type=SlashCommandOptionType.STRING, required=True,
-                                    choices=SlashChoice.voiceSoundChoice)])
+                                    choices=SlashChoice.choiceSound)])
 async def audio_play(ctx, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound)
 
 
 @slash.slash(name="tu", description="ตู่", guild_ids=GUILD_IDS,
-             options=[create_option(name='tusound',
-                                    description='ตูตู่ตู้ตู๊ตู๋',
+             options=[create_option(name='sound',
+                                    description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                     option_type=SlashCommandOptionType.STRING, required=True,
-                                    choices=SlashChoice.voiceTuSoundChoice)])
+                                    choices=SlashChoice.choiceTuVoice)])
 async def audio_play(ctx, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
-    await play(bot, ctx, sound)
+    await play(bot, ctx, sound, political=True)
 
+@slash.slash(name="pom", description="ป้อม", guild_ids=GUILD_IDS,
+             options=[create_option(name='sound',
+                                    description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
+                                    option_type=SlashCommandOptionType.STRING, required=True,
+                                    choices=SlashChoice.choicePomVoice)])
+async def audio_play(ctx, sound):
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await play(bot, ctx, sound, political=True)
+
+@slash.slash(name="o", description="112", guild_ids=GUILD_IDS,
+             options=[create_option(name='sound',
+                                    description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
+                                    option_type=SlashCommandOptionType.STRING, required=True,
+                                    choices=SlashChoice.choiceOVoice)])
+async def audio_play(ctx, sound):
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await play(bot, ctx, sound, political=True)
 
 @slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=GUILD_IDS)
 async def audio_disconnect(ctx):
