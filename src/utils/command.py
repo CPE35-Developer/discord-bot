@@ -25,8 +25,10 @@ class SlashChoice:
                         {"value": "oof",    "name": "OOF"},
                         {"value": "intro",  "name": "Intro"}]
     
+    voiceOSoundChoice = [{"value": "o1",    "name": "o1 ข้าพเจ้ารู้สึกตื้นตันใจ (I am impressed.)"},
+                         {"value":"o2",     "name": "o2 ข้าพเจ้าขอส่งความประถณาดี (I wish you best wishes.)"}]
     
-    voiceTuSoundChoice=[{"value": "tu1:",   "name": "tu1 ฮ้ะ (Huh?)"},
+    voiceTuSoundChoice=[{"value": "tu1",    "name": "tu1 ฮ้ะ (Huh?)"},
                         {"value": "tu2",    "name": "tu2 อื่อฮึ (Uh-huh)"},
                         {"value": "tu3",    "name": "tu3 ทำไม (Why?)"},
                         {"value": "tu4",    "name": "tu4 อะไร อะไร (Whatx2)"},
@@ -45,7 +47,7 @@ class SlashChoice:
                         {"value": "tu17",   "name": "tu17 ชักไม่เข้าท่าแล้วนะ2 (It's getting inappropriate2"},
                         {"value": "tu18",   "name": "tu18 เดี๋ยวเหอะ (Interjection2)"},
                         {"value": "tu19",   "name": "tu19 ไร้สาระ (Nonsense.)"},
-                        {"value": "tu20",   "name": "tu20 อะไรน (What??)"},
+                        {"value": "tu20",   "name": "tu20 อะไรนะ  (What??)"},
                         {"value": "tu21",   "name": "tu21 เข้าใจมั้ย (Got it?)"},
                         {"value": "tu22",   "name": "tu22 หัวเราะ หัวเราะ (Laughx2)"}]
                 
