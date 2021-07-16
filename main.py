@@ -122,11 +122,20 @@ async def audio_play(ctx, sound):
     await play(bot, ctx, sound)
 
 
+@slash.slash(name="tu", description="ตู่", guild_ids=GUILD_IDS,
+             options=[create_option(name='tusound',
+                                    description='ตูตู่ตู้ตู๊ตู๋',
+                                    option_type=SlashCommandOptionType.STRING, required=True,
+                                    choices=SlashChoice.voiceTuSoundChoice)])
+async def audio_play(ctx, sound):
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await play(bot, ctx, sound)
+
+
 @slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=GUILD_IDS)
 async def audio_disconnect(ctx):
     print(f'{str(ctx.author)} used {ctx.name}')
     await disconnect(bot, ctx)
-
 
 
 @slash.slash(name="snap", description="Perfectly balanced, as all things should be", guild_ids=GUILD_IDS)
