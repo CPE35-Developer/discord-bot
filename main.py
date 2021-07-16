@@ -1,11 +1,14 @@
-import os
-import re
+import os, json
 import discord
+from discord.channel import TextChannel
 import discord_slash
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
 from discord.ext import commands
+from discord.ext.commands.context import Context 
 from src.utils.utils import commandSuggestFromError
+from src.utils.message import deleteMesssage
+from src.utils.codechannel import codeChannelAdd, codeChannelRemove, codeChannelCheck
 from src.utils.kick import random_kick
 from src.utils.travel import random_travel
 from src.utils.change import change_last_message
@@ -13,7 +16,7 @@ from src.utils.config import Prefix
 from src.utils.command import SlashChoice
 from src.poker.poker import poker_play
 from src.audio.audio import voice, say, play, disconnect
-from discord_slash.utils.manage_commands import create_option, create_choice
+from discord_slash.utils.manage_commands import create_option
 from src.format.code import formatCode
 from dotenv import load_dotenv
 import pkg_resources
@@ -21,6 +24,12 @@ pkg_resources.require("googletrans>=4.0.0-rc.1")
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
+
+PATH_GUILDDATA = 'src/utils/guild.json'
+
+with open(PATH_GUILDDATA, 'r') as f:
+    allGuildData = json.load(f)
+
 
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
@@ -34,11 +43,36 @@ GUILD_IDS = None
 async def on_ready():
     global GUILD_IDS
     GUILD_IDS = [guild.id for guild in bot.guilds]
-    print(GUILD_IDS)
+    GUILD_NAMES = [guild.name for guild in bot.guilds]
+    print(GUILD_NAMES)
+
+@bot.event
+async def on_message(msg:discord.Message):
+    if msg.author.bot:
+        return
     
+    global allGuildData
+    
+    with open(PATH_GUILDDATA, 'r') as f:
+        allGuildData = json.load(f)
+        
+    channel = msg.channel
+    guildCodeChannels = allGuildData[str(msg.guild.id)]['codechannels']
+    guildCodeChannelsID = [a[0] for a in guildCodeChannels]
+    
+    if channel.id in guildCodeChannelsID:
+        language = guildCodeChannels[guildCodeChannelsID.index(channel.id)][1]
+        await channel.send(formatCode(msg, language, msg.content))
+        await msg.delete()
+        return
+        
+        
+    
+
 
 @bot.command(name="hello", aliases=['hi', 'hoi'])
 async def nine_nine(ctx):
+    print(type(ctx))
     await ctx.send("HI :flushed:")
 
 
@@ -75,7 +109,7 @@ async def change_message(ctx):
 @bot.command(name='code', aliases=['c','format','f'])
 async def formatSourceCode(ctx, *, sourcecode):
     print(f'{str(ctx.author)} used {ctx.command}')
-    await ctx.send(formatCode(ctx, 'py', sourcecode), delete_after=5)
+    await ctx.send(formatCode(ctx, 'py', sourcecode))
     await ctx.message.delete()
 
 
@@ -86,13 +120,13 @@ async def on_command_error(ctx, error):
 
 
 @slash.slash(name="hello", description="Say hi to the bot. Most used to check if bot is ready.", guild_ids=GUILD_IDS)
-async def nine_nine(ctx):
+async def nine_nine(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await ctx.send("HI :flushed:")
 
 
 @slash.slash(name="poker", description="Play poker.", guild_ids=GUILD_IDS)
-async def poker(ctx):
+async def poker(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await poker_play(bot, ctx)
 
@@ -105,7 +139,7 @@ async def poker(ctx):
                       create_option(name='language', description='The language you want TTS to speak',
                                     option_type=SlashCommandOptionType.STRING, required=False,
                                     choices=SlashChoice.choiceVoiceLang)])
-async def audio_voice(ctx, message, language=None):
+async def audio_voice(ctx:discord_slash.SlashContext, message, language=None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await voice(bot, ctx, message, language)
 
@@ -119,7 +153,7 @@ async def audio_voice(ctx, message, language=None):
                                     description='The language you want TTS to speak',
                                     option_type=SlashCommandOptionType.STRING, required=False,
                                     choices=SlashChoice.choiceVoiceLang)])
-async def audio_say(ctx, message, language=None):
+async def audio_say(ctx:discord_slash.SlashContext, message, language=None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await say(bot, ctx, message, language)
 
@@ -129,7 +163,7 @@ async def audio_say(ctx, message, language=None):
                                     description='Choose a sound to play.',
                                     option_type=SlashCommandOptionType.STRING, required=True,
                                     choices=SlashChoice.choiceSound)])
-async def audio_play(ctx, sound):
+async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound)
 
@@ -139,7 +173,7 @@ async def audio_play(ctx, sound):
                                     description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                     option_type=SlashCommandOptionType.STRING, required=True,
                                     choices=SlashChoice.choiceTuVoice)])
-async def audio_play(ctx, sound):
+async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound, political=True)
 
@@ -148,7 +182,7 @@ async def audio_play(ctx, sound):
                                     description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                     option_type=SlashCommandOptionType.STRING, required=True,
                                     choices=SlashChoice.choicePomVoice)])
-async def audio_play(ctx, sound):
+async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound, political=True)
 
@@ -157,61 +191,70 @@ async def audio_play(ctx, sound):
                                     description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                     option_type=SlashCommandOptionType.STRING, required=True,
                                     choices=SlashChoice.choiceOVoice)])
-async def audio_play(ctx, sound):
+async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound, political=True)
 
 @slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=GUILD_IDS)
-async def audio_disconnect(ctx):
+async def audio_disconnect(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await disconnect(bot, ctx)
 
 
 @slash.slash(name="snap", description="Perfectly balanced, as all things should be", guild_ids=GUILD_IDS)
-async def snap_kick(ctx, user: discord.Member = None):
+async def snap_kick(ctx:discord_slash.SlashContext, user: discord.Member = None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_kick(bot, ctx, user)
 
 
 @slash.slash(name="travel", description="Travel to all of the Voice Channel.", guild_ids=GUILD_IDS)
-async def travel_chanel(ctx, user: discord.Member = None):
+async def travel_chanel(ctx:discord_slash.SlashContext, user: discord.Member = None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel(bot, ctx, user)
 
 
 @slash.slash(name="change", description="Convert the keyboard layout of your last message between en-th.", guild_ids=GUILD_IDS)
-async def change_message(ctx):
+async def change_message(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await change_last_message(ctx)
     
-@slash.slash(name="set",
-             description="Setting.",
-             guild_ids=GUILD_IDS,
-             options=[create_option(name='codechannel', 
-                                    description='Code channel settings', 
-                                    option_type=SlashCommandOptionType.SUB_COMMAND_GROUP,
-                                    options=[create_option(name='add', 
-                                                           description='Add auto text formatting to a text channel',
-                                                           option_type=SlashCommandOptionType.SUB_COMMAND,
-                                                           options = [create_option(name='channel',
-                                                                                    description='The channel you want to add text formatting to.',
-                                                                                    option_type=SlashCommandOptionType.CHANNEL,
-                                                                                    required=True,
-                                                                                    ),
-                                                                      create_option(name='language',
-                                                                                    description='The programming language for text formatting on this channel.',
-                                                                                    option_type=SlashCommandOptionType.STRING,
-                                                                                    required=True,
-                                                                                    choices=SlashChoice.lan
-                                                                                    )
-                                                                      ]
-                                                           )
-                                             ]
-                                    )
-                      ]
-             )
-async def settings(ctx):
-    print(f'{str(ctx.author)} used {ctx.name}')
-    await settings(ctx)
+
+@slash.slash(name="set",description="Setting.",guild_ids=GUILD_IDS)
+async def _set(ctx):
+    if ctx.invoked_subcommand is None:
+        await bot.say('Invalid sub command passed')
+        
+@slash.subcommand(base='codechannel', name='add', description='Add auto text formatting to a text channel.', 
+                  options=[create_option(name='channel',description='The channel you want to add text formatting to.',
+                                         option_type=SlashCommandOptionType.CHANNEL,required=True),
+                           create_option(name='language',description='The programming language for text formatting on this channel.',
+                                         option_type=SlashCommandOptionType.STRING,required=True,
+                                         choices=SlashChoice.programmingLanguageChoice)])
+async def _codechannel_add(ctx:discord_slash.SlashContext, channel:discord.TextChannel, language:str):
+    await codeChannelAdd(ctx,channel,language)
+
+
+@slash.subcommand(base='codechannel', name='remove',description='Add auto text formatting to a text channel.',
+                  options = [create_option(name='channel',description='The channel you want to remove text formatting from.',
+                                           option_type=SlashCommandOptionType.CHANNEL,required=True,)])
+async def _codechannel_remove(ctx:discord_slash.SlashContext, channel:discord.TextChannel):
+    await codeChannelRemove(ctx,channel)
+    
+@slash.subcommand(base='codechannel', name='check',description='Check code channel in this server.')
+async def _codechannel_check(ctx:discord_slash.SlashContext):
+    await codeChannelCheck(ctx)
+
+@slash.slash(name="delete",description="Delete a message.",guild_ids=GUILD_IDS)
+async def _set(ctx):
+    if ctx.invoked_subcommand is None:
+        await bot.say('Invalid sub command passed')
+        
+# @slash.subcommand(base='delete', name='message', description='Delete your message by id.',
+#                   options=[create_option(name='channel',description='The channel you want to add text formatting to.',
+#                                          option_type=SlashCommandOptionType.CHANNEL,required=True),
+#                            create_option(name='id',description='The ID of your message.',
+#                                          option_type=SlashCommandOptionType.INTEGER,required=True)])
+# async def _delete_messsage(ctx:discord_slash.SlashContext,channel, id:int):
+#     await deleteMesssage(ctx, id)
     
 bot.run(TOKEN)
