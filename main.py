@@ -70,11 +70,12 @@ async def travel_chanel(ctx, user: discord.Member = None):
 async def change_message(ctx):
     await change_last_message(ctx)
     
+
 @bot.command(name='code', aliases=['c','format','f'])
 async def formatSourceCode(ctx, *, sourcecode):
     print(f'{str(ctx.author)} used {ctx.command}')
-    await ctx.send(formatCode(ctx, 'py', sourcecode))
-
+    await ctx.send(formatCode(ctx, 'py', sourcecode), delete_after=5)
+    await ctx.message.delete()
 
 
 
