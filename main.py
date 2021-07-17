@@ -56,7 +56,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(msg:discord.Message):
-    if msg.author.bot or msg.content[0] in ['_', '*'] or msg.attachments is not None:
+    if msg.author.bot or msg.content[0] in ['_', '*']:
         return
     
     global allGuildData
