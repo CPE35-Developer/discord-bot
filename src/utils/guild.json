@@ -6,7 +6,12 @@
         "codechannels": {}
     },
     "440532168389689345": {
-        "codechannels": {}
+        "codechannels": {
+            "440532635568046081": {
+                "lang": "py",
+                "botmsgID": 865950810402586634
+            }
+        }
     },
     "628998367250350130": {
         "codechannels": {}
