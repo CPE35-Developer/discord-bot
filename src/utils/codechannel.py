@@ -1,42 +1,57 @@
 import discord, discord_slash
+from discord.utils import get
+from discord.ext.commands import context
 import json, os
 
-PATH_GUILDDATA = 'src/utils/guild.json'
+from discord_slash.utils import manage_commands
 
-async def codeChannelCheck(ctx:discord_slash.SlashContext):
-    with open(PATH_GUILDDATA, 'r+') as f:
+PATH_GUILDDATA = 'src/utils/guild.json'
+allGuildData = None
+
+def getallGuildData(option='r+'):
+    with open(PATH_GUILDDATA, option) as f:
+        global allGuildData
         allGuildData = json.load(f)
-        
-    GUILD_ID = str(ctx.guild_id)
-    codeChannels = allGuildData[GUILD_ID]['codechannels']
+
+def getcodeChannels(GUILD_ID:int):
+        return allGuildData[str(GUILD_ID)]['codechannels']
+
+def updateallGuildDataJSON():
+        os.remove(PATH_GUILDDATA)
+        with open(PATH_GUILDDATA, 'w') as f:
+            json.dump(allGuildData, f, indent=4)
+
+            
+async def Check(ctx:discord_slash.SlashContext):
+    getallGuildData()
     
-    if codeChannels == []:
+    codeChannels = getcodeChannels(ctx.guild_id)
+    
+    if codeChannels == {}:
         em = discord.Embed(title=f"This server doesn't have any code channel yet", description=f"Add code channel by using /set codechannel set [channel] [language]", color=0x3d5bc7)
     else:
         em = discord.Embed(title=f"Code Channel(s) in {ctx.guild.name}", color=0x3d5bc7)
-        for codechannel in codeChannels:
-            channel = discord.utils.get(ctx.guild.channels, id=codechannel[0])
+        for codechannelID in codeChannels:
+            channel = discord.utils.get(ctx.guild.channels, id=int(codechannelID))
             channelName = channel.name
-            em.add_field(name=channelName, value=codechannel[1], inline=True)
+            em.add_field(name=channelName, value=codeChannels[codechannelID]['lang'], inline=True)
     
-    return await ctx.send(embed=em)
- 
- 
-async def codeChannelAdd(ctx:discord_slash.SlashContext, channel:discord.TextChannel, language:str):
-    with open(PATH_GUILDDATA, 'r+') as f:
-        allGuildData = json.load(f)
+    await ctx.send(embed=em)
+
+
+async def Add(ctx:discord_slash.SlashContext, channel:discord.TextChannel, language:str):
+    getallGuildData()
         
     GUILD_ID = str(ctx.guild_id)
-    CHANNEL_ID = channel.id
+    CHANNEL_ID = str(channel.id)
     
-    codeChannels = allGuildData[GUILD_ID]['codechannels']
-    
-    if CHANNEL_ID in [a[0] for a in codeChannels]:
-        codeChannel = codeChannels[[a[0] for a in codeChannels].index(channel.id)]
-        if codeChannel[1] == language:
+    codeChannels = getcodeChannels(ctx.guild_id)        
+    if CHANNEL_ID in codeChannels:
+        codeChannel = codeChannels[CHANNEL_ID]
+        if codeChannel['lang'] == language:
             await ctx.send(f"{channel.mention} เป็น Code Channel ภาษา {language} อยู่แล้ว")
         else:
-            botmsg = await channel.fetch_message(codeChannels[[a[0] for a in codeChannels].index(channel.id)][2])
+            botmsg = await channel.fetch_message(codeChannels[CHANNEL_ID]['botmsgID'])
             await botmsg.delete()
             
 
@@ -45,42 +60,76 @@ async def codeChannelAdd(ctx:discord_slash.SlashContext, channel:discord.TextCha
             botmsg = await channel.send(embed=em)
             await botmsg.pin()
             
-            codeChannels[[a[0] for a in codeChannels].index(channel.id)][1] = language
-            codeChannels[[a[0] for a in codeChannels].index(channel.id)][2] = botmsg.id
+            codeChannel['lang'], codeChannel['botmsgID'] = language, botmsg.id
+            codeChannels[CHANNEL_ID] = codeChannel
             allGuildData[str(ctx.guild_id)]['codechannels'] = codeChannels
             
             await ctx.send(f"แก้ไขให้ {channel.mention} เป็น Code Channel ภาษา {language} แล้ว")
- 
+
     else:
         em = discord.Embed(title=f'{channel.name}')
         em.add_field(name="Programming Language:", value=f"{language}")
         botmsg = await channel.send(embed=em)
-        await botmsg.pin()
         
-        codeChannels.append([CHANNEL_ID, language, botmsg.id])
+        await botmsg.pin()
+        codeChannels.update({CHANNEL_ID:{'lang' :language,
+                                            'botmsgID':botmsg.id}})
         allGuildData[GUILD_ID]['codechannels'] = codeChannels
+        await channel.set_permissions(ctx.guild.default_role, manage_messages=True)
+
         await ctx.send(f"เพิ่ม {channel.mention} เป็น Code Channel ภาษา {language} แล้ว")
     
-    os.remove(PATH_GUILDDATA)
-    with open(PATH_GUILDDATA, 'w') as f:
-        json.dump(allGuildData, f, indent=4)
+    updateallGuildDataJSON()
     
     
-async def codeChannelRemove(ctx:discord_slash.SlashContext, channel:discord.TextChannel):
-    with open('src/utils/guild.json', 'r+') as f:
-        allGuildData = json.load(f)
+async def Remove(ctx:discord_slash.SlashContext, channel:discord.TextChannel):
+    getallGuildData()
         
     GUILD_ID = str(ctx.guild_id)
-    CHANNEL_ID = channel.id
-    codeChannels = allGuildData[GUILD_ID]['codechannels']
-    if CHANNEL_ID in [a[0] for a in codeChannels]:
-        codeChannels = allGuildData[str(GUILD_ID)]['codechannels']
-        codeChannels.pop([a[0] for a in codeChannels].index(CHANNEL_ID))
+    CHANNEL_ID = str(channel.id)
+    
+    codeChannels = getcodeChannels(ctx.guild_id)
+    
+    if CHANNEL_ID in codeChannels:
+        botmsg = await channel.fetch_message(codeChannels[CHANNEL_ID]['botmsgID'])
+        await botmsg.delete()
+        codeChannels.pop(CHANNEL_ID)
         allGuildData[str(GUILD_ID)]['codechannels'] = codeChannels
+        await channel.set_permissions(ctx.guild.default_role, manage_messages=False)
         await ctx.send(f"ลบ {channel.mention} จาก Code Channels แล้ว")
+
     else:
         await ctx.send(f"{channel.mention} ไม่ได้เป็น Code Channel อยู่แล้ว")
         
-    os.remove(PATH_GUILDDATA)
-    with open(PATH_GUILDDATA, 'w') as f:
-        json.dump(allGuildData, f, indent=4)
+    updateallGuildDataJSON()
+        
+        
+class Permission:
+    async def ManageMessage(ctx:discord_slash.SlashContext, manageable:bool ,channel:discord.TextChannel=None):
+        codeChannels = getcodeChannels(ctx.guild_id)
+        if str(channel.id) not in codeChannels:
+            return ctx.send(f"{channel.mention} ไม่ใช่ Code Channel")
+        if channel is None:
+            getallGuildData()
+            codeChannels = getcodeChannels(ctx.guild_id)
+            for codechannelID in codeChannels:
+                channel = discord.utils.get(ctx.guild.channels, id=int(codechannelID))
+                if manageable:
+                    await channel.set_permissions(ctx.guild.default_role, manage_messages=True)
+                    await channel.send(f"สามารถลบข้อความใน Code channels ได้แล้ว")
+
+                else:
+                    await channel.set_permissions(ctx.guild.default_role, manage_messages=False)
+                    await channel.send(f"ไม่สามารถลบข้อความใน Code channels ได้แล้ว")
+
+
+        else: 
+            if manageable:
+                await channel.set_permissions(ctx.guild.default_role, manage_messages=True)
+                await channel.send(f"สามารถลบข้อความใน {channel.name} ได้แล้ว")
+            else:
+                await channel.set_permissions(ctx.guild.default_role, manage_messages=False)
+                await channel.send(f"ไม่สามารถลบข้อความใน {channel.name} ได้แล้ว")
+
+
+    

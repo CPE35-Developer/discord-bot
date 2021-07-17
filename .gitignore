@@ -1,4 +1,4 @@
-.env
+d.env
 __pycache__/
 src/audio/ffmpeg.exe
 text.mp3
