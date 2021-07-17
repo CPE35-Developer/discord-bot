@@ -24,7 +24,8 @@ class SlashChoice:
         {"value": "imgay",  "name": "I am gay (IDUBBBZTV)"},
         {"value": "yee",    "name": "Yee"},
         {"value": "oof",    "name": "OOF"},
-        {"value": "intro",  "name": "Intro"}
+        {"value": "intro",  "name": "Intro"},
+        {"value": "blessing", "name": "Blessing"}
         ]
     
     choiceOVoice =[
