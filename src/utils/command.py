@@ -37,7 +37,7 @@ class SlashChoice:
         {"value": "o5",     "name": "o5 เก่งมาก (Very good.)"},
         {"value": "o6",     "name": "o6 ขอบใจ (Thanks.)"},
         {"value": "o7",     "name": "o7 ขอบใจมาก (Thank you so much.)"},
-        {"value": "o8",     "name": "o8 ใช้มั้ย (Is it?)"},
+        {"value": "o8",     "name": "o8 ใช่มั้ย (Is it?)"},
         ]
     
     choiceNuiVoice=[
