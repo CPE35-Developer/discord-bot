@@ -191,11 +191,20 @@ async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound, political=True)
 
-@slash.slash(name="o", description="112", guild_ids=GUILD_IDS,
+@slash.subcommand(base='oneonetwo', name="o", description="112", guild_ids=GUILD_IDS,
              options=[create_option(name='sound',
                                     description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                     option_type=SlashCommandOptionType.STRING, required=True,
                                     choices=SlashChoice.choiceOVoice)])
+async def audio_play(ctx:discord_slash.SlashContext, sound):
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await play(bot, ctx, sound, political=True)
+
+@slash.subcommand(base='oneonetwo', name="nui", description="112", guild_ids=GUILD_IDS,
+             options=[create_option(name='sound',
+                                    description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
+                                    option_type=SlashCommandOptionType.STRING, required=True,
+                                    choices=SlashChoice.choiceNuiVoice)])
 async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound, political=True)
