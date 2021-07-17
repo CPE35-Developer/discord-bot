@@ -18,6 +18,7 @@ from src.audio.audio import voice, say, play, disconnect
 from discord_slash.utils.manage_commands import create_option
 from src.format.code import formatCode
 from dotenv import load_dotenv
+import platform
 import pkg_resources
 pkg_resources.require("googletrans>=4.0.0-rc.1")
 
@@ -49,7 +50,9 @@ async def on_ready():
     GUILD_NAMES = [guild.name for guild in bot.guilds]
     print(GUILD_NAMES)
     botchannel = await bot.fetch_channel(863859177633480714)
-    await botchannel.send(f'{bot.user.mention} เปิดใช้งานแล้วจ้า', delete_after=60)
+    await botchannel.send(f'{bot.user.mention} เปิดให้ใช้งานแล้วจ้า', delete_after=30)
+    me = await bot.fetch_user(186315352026644480)
+    await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
 
 @bot.event
 async def on_message(msg:discord.Message):
@@ -220,11 +223,6 @@ async def change_message(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await change_last_message(ctx)
     
-
-@slash.slash(name="set",description="Setting.",guild_ids=GUILD_IDS)
-async def _set(ctx):
-    if ctx.invoked_subcommand is None:
-        await bot.say('Invalid sub command passed')
         
 @slash.subcommand(base='codechannel', name='add', description='Add auto text formatting to a text channel.', 
                   options=[create_option(name='channel',description='The channel you want to add text formatting to.',
