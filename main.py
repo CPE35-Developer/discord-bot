@@ -32,6 +32,7 @@ def getallGuildDataM(option='r+'):
     with open(PATH_GUILDDATA, option) as f:
         global allGuildData
         allGuildData = json.load(f)
+    
 
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
@@ -47,6 +48,8 @@ async def on_ready():
     GUILD_IDS = [guild.id for guild in bot.guilds]
     GUILD_NAMES = [guild.name for guild in bot.guilds]
     print(GUILD_NAMES)
+    botchannel = await bot.fetch_channel(863859177633480714)
+    await botchannel.send(f'{bot.user.mention} เปิดใช้งานแล้วจ้า', delete_after=60)
 
 @bot.event
 async def on_message(msg:discord.Message):
