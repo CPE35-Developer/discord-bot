@@ -2,21 +2,11 @@ from typing import List, Tuple
 from random import sample, shuffle
 from .CheckPriority import winner
 
-DECKS_OF_CARDS = [
-    ':two: :clubs:', ':two: :diamonds:', ':two: :heart:', ':two: :spades:',
-    ':three: :clubs:', ':three: :diamonds:', ':three: :heart:', ':three: :spades:',
-    ':four: :clubs:', ':four: :diamonds:', ':four: :heart:', ':four: :spades:',
-    ':five: :clubs:', ':five: :diamonds:', ':five: :heart:', ':five: :spades:',
-    ':six: :clubs:', ':six: :diamonds:', ':six: :heart:', ':six: :spades:',
-    ':seven: :clubs:', ':seven: :diamonds:', ':seven: :heart:', ':seven: :spades:',
-    ':eight: :clubs:', ':eight: :diamonds:', ':eight: :heart:', ':eight: :spades:',
-    ':nine: :clubs:', ':nine: :diamonds:', ':nine: :heart:', ':nine: :spades:',
-    ':one::zero: :clubs:', ':one::zero: :diamonds:', ':one::zero: :heart:', ':one::zero: :spades:',
-    ':regional_indicator_j: :clubs:', ':regional_indicator_j: :diamonds:', ':regional_indicator_j: :heart:', ':regional_indicator_j: :spades:',
-    ':regional_indicator_q: :clubs:', ':regional_indicator_q: :diamonds:', ':regional_indicator_q: :heart:', ':regional_indicator_q: :spades:',
-    ':regional_indicator_k: :clubs:', ':regional_indicator_k: :diamonds:', ':regional_indicator_k: :heart:', ':regional_indicator_k: :spades:',
-    ':a: :clubs:', ':a: :diamonds:', ':a: :heart:', ':a: :spades:'
-]
+from src.poker.user_action import loop_pass_bet_fold
+from src.poker.utils import show_middle_card
+from src.utils.party import get_players
+
+from .utils import DECKS_OF_CARDS
 
 
 def get_random_cards(players) -> Tuple[List[Tuple[int, int]], List[int]]:
@@ -44,27 +34,26 @@ async def send_card_msg(players, player_cards: List[Tuple[int, int]]):
         await player.send(msg)
 
 
-async def show_middle_card(middle_cards: List[int], ctx, show_four: bool, show_five: bool):
-    first_card_msg = DECKS_OF_CARDS[middle_cards[0]]
-    second_card_msg = DECKS_OF_CARDS[middle_cards[1]]
-    third_card_msg = DECKS_OF_CARDS[middle_cards[2]]
-
-    msg = f'เปิดไพ่\n {first_card_msg}   {second_card_msg}   {third_card_msg}'
-
-    if show_four:
-        four_card_msg = DECKS_OF_CARDS[middle_cards[3]]
-        msg += '  ' + four_card_msg
-    if show_five:
-        five_card_msg = DECKS_OF_CARDS[middle_cards[4]]
-        msg += '  ' + five_card_msg
-
-    await ctx.send(msg)
-
-
 async def who_win(middle_card: List[int], ctx, player_cards: List[Tuple[int, int]], players: List[str], player_status: List[str]) -> List[List[str]]:
     deck = DECKS_OF_CARDS
     all_card_and_name = []
     middle = []
+
+    dic = {
+        2: ":two:",
+        3: ":three:",
+        4: ":four:",
+        5: ':five:',
+        6: ':six:',
+        7: ':seven:',
+        8: ':eight:',
+        9: ':nine:',
+        10: ':one::zero:',
+        11: ':regional_indicator_j:',
+        12: ':regional_indicator_q:',
+        13: ':regional_indicator_k:',
+        14: ':a:'
+    }
 
     for i in middle_card:
         middle.append(deck[i])
@@ -80,13 +69,33 @@ async def who_win(middle_card: List[int], ctx, player_cards: List[Tuple[int, int
     win = winner(all_card_and_name)
     print(win)
 
-    msg = f'ผู้ชนะมี {len(win)} คน คือ '
+    msg = f'\nผู้ชนะมี {len(win)} คน คือ '
     for i in range(len(win)):
-        msg += str(win[i][3]) + ' โดยถือไพ่ ' + \
-            str(win[i][2]) + ' คือระดับ ' + win[i][1] + ','
-
+        card = ' '
+        msg += str(win[i][4]) + ' โดยถือไพ่\n'
+        for j in range(len(win[i][2])):
+            card += str(dic[win[i][2][j]])+' '+str(win[i][3][j]) + '   '
+        msg += card
+        msg += '\nคือระดับ ' + win[i][1] + ','
     msg = msg[0:-1]
-    await ctx.send(msg)
+    await ctx.channel.send(msg)
     return win
-    # [[PriorityValue, CardPower, CardInHand, PlayerName],[PriorityValue, CardPower, CardInHand, PlayerName],[PriorityValue, CardPower, CardInHand, PlayerName],...]
+    # [[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],[PriorityValue, CardPower, CardInHand, PlayerName, CardFlower],...]
     # len() is how many player tie
+
+
+async def poker_play(bot, ctx):
+    players = await get_players(bot, ctx)
+    if players is None:
+        return
+    player_cards, middle_cards = get_random_cards(players)
+    print(middle_cards)
+    print(player_cards)
+    await send_card_msg(players, player_cards)
+    await show_middle_card(middle_cards, ctx, False, False)
+    players_status = await loop_pass_bet_fold(
+        players, player_cards, middle_cards, bot, ctx
+    )
+    winner = await who_win(
+        middle_cards, ctx, player_cards, players, players_status
+    )

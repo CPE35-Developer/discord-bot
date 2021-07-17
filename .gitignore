@@ -1,3 +1,6 @@
-.env
 __pycache__/
 src/audio/ffmpeg.exe
+text.mp3
+test.ipynb
+src/utils/guild.json
+.env

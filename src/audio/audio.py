@@ -1,59 +1,83 @@
-from discord import FFmpegPCMAudio
-from discord.utils import get
-
-from asyncio import TimeoutError
-
-import os
-sound_list = [file.replace(".mp3", "") for file in os.listdir("src/audio/mp3")]
-
+from discord import FFmpegPCMAudio, Embed
+from src.utils.vc import joinVoiceChannel, leaveVoiceChannel, get_PATH_ffmpeg
+from src.utils.member import getNick
+from src.utils.config import CONFIG, MP3_files
 from src.audio.tts import repeat
+from src.utils.command import fetchArguments
+PATH_ffmpeg = get_PATH_ffmpeg()
+
+
+async def voice(bot, ctx, msg, language=None, ):
+    
+    if not language:
+        msg, args = fetchArguments(msg)
+        ttsLang = None
+        if (args != None) & (ttsLang == None):
+            for arg in args:
+                if arg.startswith('l'):
+                    language = arg[2:]
+
+    vc = await joinVoiceChannel(bot, ctx)
+
+    if vc == None:
+        return
+
+    if (msg in MP3_files) & (not language):
+        vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg,
+                source=f"{CONFIG.audio.PATH_mp3}{msg}.mp3"))
+        returnMessage = f'{getNick(ctx.author)} เล่น **{msg}**.mp3'
+    else:
+        await repeat(vc, text=msg, lang=language)
+        returnMessage = f'{getNick(ctx.author)}: {msg}'
+
+    return await ctx.send(returnMessage)
+
+
+async def say(bot, ctx, msg, language=None, travel=False):
+    
+    try: isBotCommand = ctx.message.startswith('$')
+    except: isBotCommand = False
+
+    if (language is None) & (isBotCommand):
+        msg, args = fetchArguments(msg)
+        if args is not None:
+            for arg in args:
+                if arg.startswith('l'):
+                    language = arg[2:]
+
+    vc = await joinVoiceChannel(bot, ctx)
+
+    if vc == None:
+        return
+ 
+    await repeat(vc, text=msg, lang=language)
+    
+    if travel is True:
+        return 
+    
+    returnMessage = f'{getNick(ctx.author)}: {msg}'
+
+    return await ctx.send(returnMessage)
+
+
+async def play(bot, ctx, sound, political=False):
+
+    vc = await joinVoiceChannel(bot, ctx)
+
+    if vc == None:
+        return
+    
+    vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg,
+            source=f"{CONFIG.audio.PATH_mp3}{sound}.mp3"))
+        
+    if not political:
+        returnMessage = f'{getNick(ctx.author)} เล่น **{sound}**.mp3'
+        return await ctx.send(returnMessage)
+    else:
+        returnMessage = f'||`ข้อความนี้ถูกลบโดยรัฐบาลไทย`||'
+        return await ctx.send(returnMessage, delete_after=5)
+
     
 
-async def voice(bot, ctx, sound):
-
-    channel = ctx.message.author.voice.channel
-    if not channel:
-        await ctx.send("คุณไม่ได้อยู่ใน Channel")
-        return
-    voice = get(bot.voice_clients, guild=ctx.guild)
-    if voice and voice.is_connected():
-        await voice.move_to(channel)
-    else:
-        voice = await channel.connect()
-        return voice
-
-    def check(msg):
-        return ctx.author == msg.author
-
-    if sound == None:
-        
-        await ctx.send(f"กรุณาเลือกเสียง [{', '.join(sound_list)}]\nหรือ พิมพ์อย่างอื่นเพื่อ Text to speech")
-        
-        try:
-            msg = await bot.wait_for("message", check=check, timeout=20)
-            if msg.content.lower() in sound_list:
-                sound = msg.content.lower()
-            else:
-                sound = msg.content
-                await repeat(bot, ctx, voice, text=sound)
-                return
-                
-        except TimeoutError:
-            await ctx.send('หมดเวลาในการเลือก')
-            return
-
-    if sound in sound_list:
-        print(f'Playing {sound}')
-        voice.play(FFmpegPCMAudio(executable="src/audio/ffmpeg.exe",\
-                                    source=f"src/audio/mp3/{sound}.mp3"))
-    else:
-        await repeat(bot, ctx, voice, text=sound)
-
-async def disconnect(ctx):
-    voice = ctx.voice_client
-    if not voice:
-        await ctx.send("จะให้ออกไปไหนนิ")
-        return
-
-    await voice.disconnect()
-    await ctx.send("ออกละ")
+async def disconnect(bot, ctx):
+    await leaveVoiceChannel(bot, ctx)
