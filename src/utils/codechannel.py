@@ -1,9 +1,6 @@
 import discord
 import discord_slash
 from discord.utils import get
-from discord.ext.commands import context
-import json
-import os
 import os
 import boto3
 from dotenv import load_dotenv
