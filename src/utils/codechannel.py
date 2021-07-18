@@ -46,7 +46,11 @@ class GuildData:
     def channeldata(self,CHANNEL_ID):
         return [channel for channel in self.codechannels if channel['channelID'] == CHANNEL_ID][0]
             
-            
+    def updatecodechannels(self, newChannelData):
+        channelID = newChannelData['channelID']
+        for channel in self.codechannels:
+            if channel['channelID'] == channelID:
+                channel = newChannelData
 
 async def Check(ctx: discord_slash.SlashContext):
 
@@ -77,18 +81,17 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
         if codeChannel['lang'] == language:
             await ctx.send(f"{channel.mention} เป็น Code Channel ภาษา {language} อยู่แล้ว")
         else:
-            botmsg = await channel.fetch_message(codeChannel['botmsgID'])
-            await botmsg.delete()
+            try:
+                botmsg = await channel.fetch_message(codeChannel['botmsgID'])
+                await botmsg.delete()
+            except: print("Bot couldn't find the Bot's pinned message")
 
             em = discord.Embed(title=f'{channel.name}')
             em.add_field(name="Programming Language:", value=f"{language}")
             botmsg = await channel.send(embed=em)
             await botmsg.pin()
 
-            codeChannel['lang'], codeChannel['botmsgID'] = language, botmsg.id
-            guilddata.updatecodechannels(guilddata.channeldata(CHANNEL_ID))
-            
-
+            guilddata.channeldata(CHANNEL_ID)['lang'], guilddata.channeldata(CHANNEL_ID)['botmsgID'] = language, botmsg.id            
             
             await ctx.send(f"แก้ไขให้ {channel.mention} เป็น Code Channel ภาษา {language} แล้ว")
 
@@ -98,9 +101,9 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
         botmsg = await channel.send(embed=em)
 
         await botmsg.pin()
-        guilddata.codechannels.append({{'lang': language,
+        guilddata.codechannels.append({'lang': language,
                                         'channelID': channel.id,
-                                        'botmsgID': botmsg.id}})
+                                        'botmsgID': botmsg.id})
         
         guilddata.data['codechannels'] = guilddata.codechannels
 
@@ -140,7 +143,7 @@ class Permission:
     async def ManageMessage(ctx: discord_slash.SlashContext, manageable: bool, channel: discord.TextChannel = None):
         guilddata = GuildData(ctx.guild_id)
         
-        if channel.id not in guilddata.codechannel_ids:
+        if channel is not None and channel.id not in guilddata.codechannel_ids:
             return ctx.send(f"{channel.mention} ไม่ใช่ Code Channel")
         if channel is None:
             for codechannelID in guilddata.codechannel_ids:
@@ -148,16 +151,20 @@ class Permission:
                     ctx.guild.channels, id=int(codechannelID))
                 if manageable:
                     await channel.set_permissions(ctx.guild.default_role, manage_messages=True)
+                    await ctx.send(f"สามารถลบข้อความใน Code channels ได้แล้ว", delete_after=5)
                     await channel.send(f"สามารถลบข้อความใน Code channels ได้แล้ว")
 
                 else:
                     await channel.set_permissions(ctx.guild.default_role, manage_messages=False)
+                    await ctx.send(f"ไม่สามารถลบข้อความใน Code channels ได้แล้ว", delete_after=5)
                     await channel.send(f"ไม่สามารถลบข้อความใน Code channels ได้แล้ว")
 
         else:
             if manageable:
                 await channel.set_permissions(ctx.guild.default_role, manage_messages=True)
+                await ctx.send(f"สามารถลบข้อความใน {channel.mention} ได้แล้ว", delete_after=5)
                 await channel.send(f"สามารถลบข้อความใน {channel.name} ได้แล้ว")
             else:
                 await channel.set_permissions(ctx.guild.default_role, manage_messages=False)
+                await ctx.send(f"ไม่สามารถลบข้อความใน {channel.mention} ได้แล้ว", delete_after=5)
                 await channel.send(f"ไม่สามารถลบข้อความใน {channel.name} ได้แล้ว")
