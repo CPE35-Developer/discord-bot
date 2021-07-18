@@ -1,4 +1,4 @@
-import os, json
+import os, boto3
 import discord
 from discord.channel import TextChannel
 import discord_slash
@@ -23,6 +23,7 @@ import pkg_resources
 pkg_resources.require("googletrans>=4.0.0-rc.1")
 
 load_dotenv()
+
 TOKEN = os.getenv("TOKEN")
 
 

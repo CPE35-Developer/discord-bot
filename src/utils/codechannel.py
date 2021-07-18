@@ -26,7 +26,7 @@ def updateTable(table_name:table, item:dict):
     isUpdated = True
     
     table_name.put_item(Item=item)
-    
+
 class GuildData:
     def __init__(self, GUILD_ID):
         
