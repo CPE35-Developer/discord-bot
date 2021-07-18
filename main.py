@@ -25,14 +25,7 @@ pkg_resources.require("googletrans>=4.0.0-rc.1")
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
 
-PATH_GUILDDATA = 'src/utils/guild.json'
 
-allGuildData = None
-
-def getallGuildDataM(option='r+'):
-    with open(PATH_GUILDDATA, option) as f:
-        global allGuildData
-        allGuildData = json.load(f)
     
 
 bot = commands.Bot(command_prefix=Prefix,
@@ -58,15 +51,12 @@ async def on_ready():
 async def on_message(msg:discord.Message):
     if msg.author.bot or msg.content[0] in ['_', '*']:
         return
-    
-    global allGuildData
-    getallGuildDataM()
         
     channel = msg.channel
-    guildCodeChannels = allGuildData[str(msg.guild.id)]['codechannels']
+    guildCodeChannels = GuildData(msg.guild.id).codechannels
     
-    if str(channel.id) in guildCodeChannels:
-        language = guildCodeChannels[str(channel.id)]['lang']
+    if channel.id in guildCodeChannels:
+        language = GuildData(msg.guild.id).channeldata[channel.id]['lang']
         await channel.send(formatCode(msg, language, msg.content))
         await msg.delete()
         return
