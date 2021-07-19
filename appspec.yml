@@ -5,10 +5,10 @@ files:
     destination: /deploy/discord-bot
 hooks:
   ApplicationStart:
-    - location: scripts/start_bot
+    - location: scripts/start_bot.sh
       timeout: 300
       runas: root
   ApplicationStop:
-    - location: scripts/stop_bot
+    - location: scripts/stop_bot.sh
       timeout: 300
       runas: root
