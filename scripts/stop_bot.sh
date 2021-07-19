@@ -1,3 +1,3 @@
 #!/bin/bash
 
-forever stop 0 || echo "forever stop failed"
+sudo kill $(ps aux | grep python | grep main.py | awk '{print $2}') || echo 'nohup is not running'
