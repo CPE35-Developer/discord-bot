@@ -1,11 +1,9 @@
-import os, boto3
+import os
 import discord
-from discord.channel import TextChannel
 import discord_slash
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
 from discord.ext import commands
-from discord.ext.commands.context import Context 
 from src.utils.utils import commandSuggestFromError
 from src.utils.codechannel import *
 from src.utils.kick import random_kick
