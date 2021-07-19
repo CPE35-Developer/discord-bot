@@ -19,4 +19,3 @@ hooks:
   ApplicationStop:
     - location: aws/stop_bot.sh
       timeout: 300
-      runas: root
