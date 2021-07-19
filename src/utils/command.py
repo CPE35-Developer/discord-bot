@@ -24,14 +24,28 @@ class SlashChoice:
         {"value": "imgay",  "name": "I am gay (IDUBBBZTV)"},
         {"value": "yee",    "name": "Yee"},
         {"value": "oof",    "name": "OOF"},
-        {"value": "intro",  "name": "Intro"}
+        {"value": "intro",  "name": "Intro"},
+        {"value": "blessing", "name": "Blessing"},
+        {"value": "letitbe",    "name": "Let it be"}
         ]
     
     choiceOVoice =[
         {"value": "o1",     "name": "o1 ข้าพเจ้ารู้สึกตื้นตัน (I am impressed.)"},
-        {"value": "o2",     "name": "o2 ข้าพเจ้าขอส่งความประถณาดี (I wish you best wishes.)"},
-        {"value": "o3",     "name": "o3 *ไอ* (*cough*)"}
+        {"value": "o2",     "name": "o2 ข้าพเจ้าขอส่งความปราถณาดี (I wish you best wishes.)"},
+        {"value": "o3",     "name": "o3 *ไอ* (*cough*)"},
+        {"value": "o4",     "name": "o4 กล้ามาก (So brave.)"},
+        {"value": "o5",     "name": "o5 เก่งมาก (Very good.)"},
+        {"value": "o6",     "name": "o6 ขอบใจ (Thanks.)"},
+        {"value": "o7",     "name": "o7 ขอบใจมาก (Thank you so much.)"},
+        {"value": "o8",     "name": "o8 ใช่มั้ย (Is it?)"},
         ]
+    
+    choiceNuiVoice=[
+        {"value": "nui1",     "name": "nui1 ขอบคุณมาก (Thank you so much.)"},
+        {"value": "nui2",     "name": "nui2 เป็นกำลังใจให้ (I'm cheering you up)"},
+        {"value": "nui3",     "name": "nui3 เราจำได้ (I remember.)"},
+
+    ]
     
     choiceTuVoice=[
         {"value": "tu1",    "name": "tu1 ฮ้ะ (Huh?)"},

@@ -1,4 +1,4 @@
-import os, json
+import os, boto3
 import discord
 from discord.channel import TextChannel
 import discord_slash
@@ -18,21 +18,14 @@ from src.audio.audio import voice, say, play, disconnect
 from discord_slash.utils.manage_commands import create_option
 from src.format.code import formatCode
 from dotenv import load_dotenv
+
+import platform
 import pkg_resources
 pkg_resources.require("googletrans>=4.0.0-rc.1")
 
 load_dotenv()
-TOKEN = os.getenv("TOKEN")
 
-PATH_GUILDDATA = 'src/utils/guild.json'
-
-allGuildData = None
-
-def getallGuildDataM(option='r+'):
-    with open(PATH_GUILDDATA, option) as f:
-        global allGuildData
-        allGuildData = json.load(f)
-    
+TOKEN = os.getenv("TOKEN")    
 
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
@@ -49,21 +42,20 @@ async def on_ready():
     GUILD_NAMES = [guild.name for guild in bot.guilds]
     print(GUILD_NAMES)
     botchannel = await bot.fetch_channel(863859177633480714)
-    await botchannel.send(f'{bot.user.mention} เปิดใช้งานแล้วจ้า', delete_after=60)
+    await botchannel.send(f'{bot.user.mention} เปิดให้ใช้งานแล้วจ้า', delete_after=30)
+    me = await bot.fetch_user(186315352026644480)
+    await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
 
 @bot.event
 async def on_message(msg:discord.Message):
-    if msg.author.bot:
+    if msg.author.bot or msg.content[0] in ['_', '*']:
         return
-    
-    global allGuildData
-    getallGuildDataM()
         
     channel = msg.channel
-    guildCodeChannels = allGuildData[str(msg.guild.id)]['codechannels']
+    guildCodeChannels = GuildData(msg.guild.id).codechannels
     
-    if str(channel.id) in guildCodeChannels:
-        language = guildCodeChannels[str(channel.id)]['lang']
+    if channel.id in guildCodeChannels:
+        language = GuildData(msg.guild.id).channeldata[channel.id]['lang']
         await channel.send(formatCode(msg, language, msg.content))
         await msg.delete()
         return
@@ -188,7 +180,7 @@ async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound, political=True)
 
-@slash.slash(name="o", description="112", guild_ids=GUILD_IDS,
+@slash.subcommand(base='oneonetwo', name="o", description="112", guild_ids=GUILD_IDS,
              options=[create_option(name='sound',
                                     description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
                                     option_type=SlashCommandOptionType.STRING, required=True,
@@ -197,6 +189,15 @@ async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound, political=True)
 
+@slash.subcommand(base='oneonetwo', name="nui", description="112", guild_ids=GUILD_IDS,
+             options=[create_option(name='sound',
+                                    description='[รายละเอียดถูกลบโดยรัฐบาลไทย]',
+                                    option_type=SlashCommandOptionType.STRING, required=True,
+                                    choices=SlashChoice.choiceNuiVoice)])
+async def audio_play(ctx:discord_slash.SlashContext, sound):
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await play(bot, ctx, sound, political=True)
+                  
 @slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=GUILD_IDS)
 async def audio_disconnect(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
@@ -219,12 +220,7 @@ async def travel_chanel(ctx:discord_slash.SlashContext, user: discord.Member = N
 async def change_message(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await change_last_message(ctx)
-    
-
-@slash.slash(name="set",description="Setting.",guild_ids=GUILD_IDS)
-async def _set(ctx):
-    if ctx.invoked_subcommand is None:
-        await bot.say('Invalid sub command passed')
+  
         
 @slash.subcommand(base='codechannel', name='add', description='Add auto text formatting to a text channel.', 
                   options=[create_option(name='channel',description='The channel you want to add text formatting to.',
