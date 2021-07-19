@@ -25,7 +25,7 @@ pkg_resources.require("googletrans>=4.0.0-rc.1")
 
 load_dotenv()
 
-TOKEN = os.getenv("TOKEN")    
+TOKEN = os.getenv("TOKEN")
 
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
@@ -35,11 +35,13 @@ slash = SlashCommand(bot, sync_commands=True)
 GUILD_IDS = None
 
 
+
 @bot.event
 async def on_ready():
     global GUILD_IDS
     GUILD_IDS = [guild.id for guild in bot.guilds]
     GUILD_NAMES = [guild.name for guild in bot.guilds]
+    
     print(GUILD_NAMES)
     botchannel = await bot.fetch_channel(863859177633480714)
     await botchannel.send(f'{bot.user.mention} เปิดให้ใช้งานแล้วจ้า', delete_after=30)
