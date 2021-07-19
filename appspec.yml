@@ -3,3 +3,12 @@ os: linux
 files:
   - source: /
     destination: /deploy/discord-bot
+hooks:
+  ApplicationStart:
+    - location: scripts/start_bot
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_bot
+      timeout: 300
+      runas: root
