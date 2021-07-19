@@ -30,16 +30,7 @@ bot = commands.Bot(command_prefix=Prefix,
                    case_insensitive=True)
 slash = SlashCommand(bot, sync_commands=True)
 
-GUILD_IDS = None
-
-@bot.event
-async def on_guild_join(guild):
-    global GUILD_IDS
-    GUILD_IDS.append(guild.id)
-    if guild.id not in GuildIDs:
-        addGuild(guild.id)
-    print(f'Joined {guild.name}')
-    
+GUILD_IDS = None    
 
 @bot.event
 async def on_ready():
@@ -57,6 +48,12 @@ async def on_ready():
 async def on_message(msg:discord.Message):
     if msg.author.bot or msg.content[0] in ['_', '*']:
         return
+    
+    
+    if msg.guild.id not in GuildIDs:
+        global GUILD_IDS
+        GUILD_IDS.append(msg.guild.id)
+        addGuild(msg.guild.id)
         
     channel = msg.channel
     guildCodeChannels = GuildData(msg.guild.id).codechannels
