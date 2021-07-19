@@ -32,7 +32,14 @@ slash = SlashCommand(bot, sync_commands=True)
 
 GUILD_IDS = None
 
-
+@bot.event
+async def on_guild_join(guild):
+    global GUILD_IDS
+    GUILD_IDS.append(guild.id)
+    if guild.id not in GuildIDs:
+        addGuild(guild.id)
+    print(f'Joined {guild.name}')
+    
 
 @bot.event
 async def on_ready():
@@ -251,9 +258,9 @@ async def _codechannel_check(ctx:discord_slash.SlashContext):
 async def _codechannel_permission_managemessage(ctx:discord_slash.SlashContext, manageable:bool, channel:discord.TextChannel=None):
     await Permission.ManageMessage(ctx,manageable,channel)
     
-@slash.slash(name='invitebot',description='I will send you the authorization link, see you in your server.')
+@slash.slash(name='invitebot',description='I will send you the authorization link, see you in your server.', guild_ids=GUILD_IDS)
 async def send_botinvitelink(ctx:discord_slash.SlashContext):
-    await ctx.user.send('https://tinyurl.com/blackhole112')
+    await ctx.author.send("https://tinyurl.com/blackhole112")
     await ctx.send('ส่งลิงค์ไปใน PM เรียบร้อย!')
     
 

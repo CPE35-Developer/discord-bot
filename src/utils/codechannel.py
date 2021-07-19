@@ -19,16 +19,27 @@ class table:
 
 
 GuildsData = table.Guilds.scan()['Items']
+GuildIDs = [guild['guildID'] for guild in GuildsData]
+
 isUpdated = False
 
 def updateTable(table_name:table, item:dict):
     global isUpdated
     isUpdated = True
-    
     table_name.put_item(Item=item)
+    
+
+def addGuild(GUILD_ID:int):
+    global GuildsData
+    global GuildIDs
+    table.Guilds.put_item(Item={"guildID":GUILD_ID,
+                                "codechannels":[]})
+    GuildsData = table.Guilds.scan()['Items']
+    GuildIDs = [guild['guildID'] for guild in GuildsData]
+    
 
 class GuildData:
-    def __init__(self, GUILD_ID):
+    def __init__(self, GUILD_ID:int):
         
         global isUpdated
         global GuildsData
@@ -37,11 +48,16 @@ class GuildData:
             isUpdated = False
             GuildsData = table.Guilds.scan()['Items']
         GUILD_DATA = next((item for item in GuildsData if item['guildID'] == GUILD_ID), None)
-                
         self.data =  GUILD_DATA
-        self.id = int(self.data['guildID'])
-        self.codechannels = self.data['codechannels']
-        self.codechannel_ids = [channel['channelID'] for channel in self.data['codechannels']]
+        try:      
+            self.id = int(self.data['guildID'])
+            self.codechannels = self.data['codechannels']
+            self.codechannel_ids = [channel['channelID'] for channel in self.data['codechannels']]
+        except:
+            self.id = None
+            self.codechannels = None
+            self.codechannel_ids = None
+        
         
     def channeldata(self,CHANNEL_ID):
         return [channel for channel in self.codechannels if channel['channelID'] == CHANNEL_ID][0]
@@ -53,6 +69,8 @@ class GuildData:
                 channel = newChannelData
 
 async def Check(ctx: discord_slash.SlashContext):
+    if ctx.guild_id not in GuildIDs:
+        ctx.send('Server นี้ยังไม่มี Code Channel กรุณาใช้คำสั่ง `/codechannel add [channel] [language] ก่อน`')
 
     guilddata = GuildData(ctx.guild_id)
 
@@ -72,6 +90,10 @@ async def Check(ctx: discord_slash.SlashContext):
 
 
 async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, language: str):
+    if ctx.guild_id not in GuildIDs:
+        addGuild(ctx.guild_id)
+        print(f'Added {ctx.guild.name} to guild table')
+    
     guilddata = GuildData(ctx.guild_id)
 
     CHANNEL_ID = channel.id
@@ -115,6 +137,9 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
 
 
 async def Remove(ctx: discord_slash.SlashContext, channel: discord.TextChannel):
+    if ctx.guild_id not in GuildIDs:
+        ctx.send('Server นี้ยังไม่มี Code Channel กรุณาใช้คำสั่ง `/codechannel add [channel] [language] ก่อน`')
+    
     guilddata = GuildData(ctx.guild_id)
 
     CHANNEL_ID = channel.id
