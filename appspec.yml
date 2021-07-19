@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /discord-bot
+    destination: /home/deploy/discord-bot
 hooks:
   ApplicationStart:
     - location: aws/start_bot.sh
