@@ -66,10 +66,6 @@ async def on_message(msg:discord.Message):
         await channel.send(formatCode(msg, language, msg.content))
         await msg.delete()
         return
-        
-        
-    
-
 
 @bot.command(name="hello", aliases=['hi', 'hoi'])
 async def nine_nine(ctx):
@@ -260,7 +256,7 @@ async def _codechannel_permission_managemessage(ctx:discord_slash.SlashContext, 
     
 @slash.slash(name='invitebot',description='I will send you the authorization link, see you in your server.', guild_ids=GUILD_IDS)
 async def send_botinvitelink(ctx:discord_slash.SlashContext):
-    await ctx.send('รับน้าาาาาาาาาาา\nhttps://tinyurl.com/blackhole112')
+    await ctx.send('https://tinyurl.com/blackhole112')
     
 
 
