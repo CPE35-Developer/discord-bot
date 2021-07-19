@@ -5,3 +5,6 @@ wget https://anaconda.org/anaconda-adam/adam-installer/4.4.0/download/adam-insta
 bash adam-installer-4.4.0-Linux-x86_64.sh -b -p ~/adam
 echo -e '\n# Anaconda Adam\nexport PATH=~/adam/bin:$PATH' >> ~/.bashrc
 source ~/.bashrc
+
+sudo apt install -y python3-pip
+
