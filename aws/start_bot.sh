@@ -1,8 +1,8 @@
 #!/bin/bash
 pip3 install --upgrade awscli
-
-$(aws s3 cp s3://cpe35-discord-bot/.env  ~/.env) &
-sudo mv ~/.env /deploy/discord-bot
+# cd
+# aws s3 cp s3://cpe35-discord-bot/.env  ./.env
+# sudo mv ./.env /deploy/discord-bot
 
 cd /deploy/discord-bot
 pip install -r requirements.txt
