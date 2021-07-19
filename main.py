@@ -118,6 +118,9 @@ async def nine_nine(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await ctx.send("HI :flushed:")
 
+@slash.slash(name='invitebot',description='I will send you the authorization link, see you in your server.', guild_ids=GUILD_IDS)
+async def send_botinvitelink(ctx:discord_slash.SlashContext):
+    await ctx.send('https://tinyurl.com/blackhole112')
 
 @slash.slash(name="poker", description="Play poker.", guild_ids=GUILD_IDS)
 async def poker(ctx:discord_slash.SlashContext):
@@ -251,9 +254,7 @@ async def _codechannel_check(ctx:discord_slash.SlashContext):
 async def _codechannel_permission_managemessage(ctx:discord_slash.SlashContext, manageable:bool, channel:discord.TextChannel=None):
     await Permission.ManageMessage(ctx,manageable,channel)
     
-@slash.slash(name='invitebot',description='I will send you the authorization link, see you in your server.', guild_ids=GUILD_IDS)
-async def send_botinvitelink(ctx:discord_slash.SlashContext):
-    await ctx.send('https://tinyurl.com/blackhole112')
+
     
 
 
