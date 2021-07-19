@@ -17,7 +17,6 @@ class table:
     Guilds = dynamodb.Table('guilds')
 
 
-
 GuildsData = table.Guilds.scan()['Items']
 GuildIDs = [guild['guildID'] for guild in GuildsData]
 
