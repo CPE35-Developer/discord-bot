@@ -1,14 +1,14 @@
 version: 0.0
 os: linux
 files:
-  - source: /
-    destination: ~/deploy/discord-bot
+  - source: source
+    destination: /deploy/discord-bot
 hooks:
   ApplicationStart:
-    - location: ~/deploy/discord-bot/aws/start_bot.sh
+    - location: aws/start_bot.sh
       timeout: 300
       runas: root
   ApplicationStop:
-    - location: ~/deploy/discord-bot/aws/stop_bot.sh
+    - location: aws/stop_bot.sh
       timeout: 300
       runas: root
