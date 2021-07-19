@@ -9,6 +9,6 @@ hooks:
       timeout: 300
       runas: root
   ApplicationStop:
-    - location: /discord-bot/aws/stop_bot
+    - location: /discord-bot/aws/stop_bot.sh
       timeout: 300
       runas: root
