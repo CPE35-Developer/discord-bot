@@ -9,3 +9,4 @@ discord-py-slash-command
 googletrans==4.0.0-rc1
 requests
 boto3
+paramiko
