@@ -250,6 +250,12 @@ async def _codechannel_check(ctx:discord_slash.SlashContext):
                                            option_type=SlashCommandOptionType.CHANNEL,required=False)])
 async def _codechannel_permission_managemessage(ctx:discord_slash.SlashContext, manageable:bool, channel:discord.TextChannel=None):
     await Permission.ManageMessage(ctx,manageable,channel)
+    
+@slash.slash(name='invitebot',description='I will send you the authorization link, see you in your server.')
+async def send_botinvitelink(ctx:discord_slash.SlashContext):
+    await ctx.user.send('https://tinyurl.com/blackhole112')
+    await ctx.send('ส่งลิงค์ไปใน PM เรียบร้อย!')
+    
 
 
     
