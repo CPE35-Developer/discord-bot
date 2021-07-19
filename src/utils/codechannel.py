@@ -86,6 +86,7 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
                 await botmsg.delete()
             except: print("Bot couldn't find the Bot's pinned message")
 
+
             em = discord.Embed(title=f'{channel.name}')
             em.add_field(name="Programming Language:", value=f"{language}")
             botmsg = await channel.send(embed=em)
@@ -99,7 +100,6 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
         em = discord.Embed(title=f'{channel.name}')
         em.add_field(name="Programming Language:", value=f"{language}")
         botmsg = await channel.send(embed=em)
-
         await botmsg.pin()
         guilddata.codechannels.append({'lang': language,
                                         'channelID': channel.id,
@@ -130,6 +130,7 @@ async def Remove(ctx: discord_slash.SlashContext, channel: discord.TextChannel):
         guilddata.codechannels = [x for x in guilddata.codechannels if not (CHANNEL_ID == x.get('channelID'))]
         guilddata.data['codechannels'] = guilddata.codechannels
         
+
         await channel.set_permissions(ctx.guild.default_role, manage_messages=False)
         await ctx.send(f"ลบ {channel.mention} จาก Code Channels แล้ว")
 

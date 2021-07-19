@@ -18,16 +18,14 @@ from src.audio.audio import voice, say, play, disconnect
 from discord_slash.utils.manage_commands import create_option
 from src.format.code import formatCode
 from dotenv import load_dotenv
+
 import platform
 import pkg_resources
 pkg_resources.require("googletrans>=4.0.0-rc.1")
 
 load_dotenv()
 
-TOKEN = os.getenv("TOKEN")
-
-
-    
+TOKEN = os.getenv("TOKEN")    
 
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
@@ -199,7 +197,7 @@ async def audio_play(ctx:discord_slash.SlashContext, sound):
 async def audio_play(ctx:discord_slash.SlashContext, sound):
     print(f'{str(ctx.author)} used {ctx.name}')
     await play(bot, ctx, sound, political=True)
-
+                  
 @slash.slash(name="disconnect", description="Disconnect bot from the Voice Channel", guild_ids=GUILD_IDS)
 async def audio_disconnect(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
@@ -222,7 +220,7 @@ async def travel_chanel(ctx:discord_slash.SlashContext, user: discord.Member = N
 async def change_message(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await change_last_message(ctx)
-    
+  
         
 @slash.subcommand(base='codechannel', name='add', description='Add auto text formatting to a text channel.', 
                   options=[create_option(name='channel',description='The channel you want to add text formatting to.',
