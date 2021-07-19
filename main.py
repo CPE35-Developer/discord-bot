@@ -26,11 +26,12 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
-
-
+activity=discord.Activity(type=discord.ActivityType.competing, name='tinyurl.com/blackhole112')
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
-                   case_insensitive=True,)
+                   case_insensitive=True,
+                   activity=activity, 
+                   status=discord.Status.idle)
 slash = SlashCommand(bot, sync_commands=True)
 
 
@@ -41,8 +42,6 @@ async def on_ready():
     global GUILD_IDS
     GUILD_IDS = [guild.id for guild in bot.guilds]
     GUILD_NAMES = [guild.name for guild in bot.guilds]
-    
-    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name='tinyurl.com/blackhole112'))
     print(GUILD_NAMES)
     me = await bot.fetch_user(186315352026644480)
     await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
