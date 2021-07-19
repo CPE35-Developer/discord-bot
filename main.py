@@ -1,5 +1,6 @@
 import os
 import discord
+from discord import activity
 import discord_slash
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
@@ -25,10 +26,13 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
+
+
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
-                   case_insensitive=True)
+                   case_insensitive=True,)
 slash = SlashCommand(bot, sync_commands=True)
+
 
 GUILD_IDS = None    
 
@@ -38,6 +42,7 @@ async def on_ready():
     GUILD_IDS = [guild.id for guild in bot.guilds]
     GUILD_NAMES = [guild.name for guild in bot.guilds]
     
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.competing, name='tinyurl.com/blackhole112'))
     print(GUILD_NAMES)
     me = await bot.fetch_user(186315352026644480)
     await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
@@ -46,7 +51,6 @@ async def on_ready():
 async def on_message(msg:discord.Message):
     if msg.author.bot or msg.content[0] in ['_', '*']:
         return
-    
     
     if msg.guild.id not in GuildIDs:
         global GUILD_IDS
