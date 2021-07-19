@@ -4,6 +4,14 @@ files:
   - source: source
     destination: ~/deploy/discord-bot
 hooks:
+  # BeforeInstall:
+  #   - location: aws/install_dependencies.sh
+  #     timeout: 300
+  #     runas: root
+  # AfterInstall:
+  #   - location: aws/create_venv.sh
+  #     timeout: 300
+  #     runas: root
   ApplicationStart:
     - location: aws/start_bot.sh
       timeout: 300
