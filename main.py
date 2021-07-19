@@ -39,8 +39,6 @@ async def on_ready():
     GUILD_NAMES = [guild.name for guild in bot.guilds]
     
     print(GUILD_NAMES)
-    botchannel = await bot.fetch_channel(863859177633480714)
-    await botchannel.send(f'{bot.user.mention} เปิดให้ใช้งานแล้วจ้า', delete_after=30)
     me = await bot.fetch_user(186315352026644480)
     await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
 
