@@ -2,7 +2,7 @@ version: 0.0
 os: linux
 files:
   - source: source
-    destination: deploy/discord-bot
+    destination: /deploy/discord-bot
 hooks:
   # BeforeInstall:
   #   - location: aws/install_dependencies.sh
