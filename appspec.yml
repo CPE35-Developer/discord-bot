@@ -4,7 +4,7 @@ files:
   - source: /
     destination: /deploy/discord-bot
 hooks:
-  ApplicationStart:
+  BeforeInstall:
     - location: scripts/start_bot.sh
       timeout: 300
       runas: root
