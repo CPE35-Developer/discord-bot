@@ -13,9 +13,10 @@ from src.utils.change import change_last_message
 from src.utils.config import Prefix
 from src.utils.command import SlashChoice
 from src.poker.poker import poker_play
+from src.pog.pog import pog_play
 from src.audio.audio import voice, say, play, disconnect
 from discord_slash.utils.manage_commands import create_option
-from src.format.code import formatCode
+from src.format.code import formatCode, formatCode_emb
 from dotenv import load_dotenv
 from datetime import datetime
 import platform
@@ -62,7 +63,10 @@ async def on_message(msg:discord.Message):
     
     if channel.id in guilddata.codechannel_ids:
         language = GuildData(msg.guild.id).channeldata(channel.id)['lang']
-        await channel.send(formatCode(msg, language, msg.content))
+        if msg.content[:1] == '-m':
+            await formatCode(msg, language, msg.content)
+        else:
+            await formatCode_emb(msg, language, msg.content)
         await msg.delete()
         return
 
@@ -79,6 +83,12 @@ async def send_botinvitelink(ctx:discord_slash.SlashContext):
 async def poker(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await poker_play(bot, ctx)
+
+
+@slash.slash(name="pog", description="Play pog.", guild_ids=GUILD_IDS)
+async def pog(ctx:discord_slash.SlashContext):
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await pog_play(bot, ctx)
 
 
 @slash.slash(name="voice", description="Play an audio or say some thing(Text to speech)", guild_ids=GUILD_IDS,
@@ -181,7 +191,7 @@ async def change_message(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await change_last_message(ctx)
   
-        
+
 @slash.subcommand(base='codechannel', name='add', description='Add auto text formatting to a text channel.', guild_ids=GUILD_IDS,
                   options=[create_option(name='channel',description='The channel you want to add text formatting to.',
                                          option_type=SlashCommandOptionType.CHANNEL,required=True),
@@ -210,5 +220,5 @@ async def _codechannel_check(ctx:discord_slash.SlashContext):
                                            option_type=SlashCommandOptionType.CHANNEL,required=False)])
 async def _codechannel_permission_managemessage(ctx:discord_slash.SlashContext, manageable:bool, channel:discord.TextChannel=None):
     await Permission.ManageMessage(ctx,manageable,channel)
-    
+
 bot.run(TOKEN)
