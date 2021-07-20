@@ -1,7 +1,7 @@
 from random import randint
 from src.audio.audio import say
 from src.utils.member import getNick
-import time 
+import time, discord
 
 async def random_travel(bot, ctx, user):
 
@@ -42,11 +42,16 @@ async def random_travel_all(bot, ctx):
         for member in members:
             if(i == 9):
                 await member.move_to(first_channel)
-            # elif member.bot: 
-            #     pass
+            elif member.bot: 
+                pass
             else:
-                rand = randint(0, len(voice_channel_list)-1)
-                await member.move_to(voice_channel_list[rand])
+                try:
+                    rand = randint(0, len(voice_channel_list)-1)
+                    await member.move_to(voice_channel_list[rand])
+                except discord.errors.HTTPException:
+                    rand = randint(0, len(voice_channel_list)-1)
+                    await member.move_to(voice_channel_list[rand])
+                    
     
     
     await say(bot, ctx, f'Welcome back everyone','en', travel=True)
