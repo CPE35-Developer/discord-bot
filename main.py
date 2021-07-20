@@ -30,7 +30,7 @@ bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
                    case_insensitive=True,
                    activity=activity, 
-                   status=discord.Status.idle)
+                   status=discord.Status.online)
 slash = SlashCommand(bot, sync_commands=True)
 
 ADMIN_ID = 186315352026644480
