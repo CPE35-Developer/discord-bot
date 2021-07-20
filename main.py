@@ -25,7 +25,7 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
-activity=discord.Activity(type=discord.ActivityType.competing, name='tinyurl.com/blackhole112')
+activity=discord.Activity(type=discord.ActivityType.competing, name='the universe')
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
                    case_insensitive=True,
