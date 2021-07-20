@@ -51,7 +51,7 @@ async def on_ready():
 
 @bot.event
 async def on_message(msg:discord.Message):
-    if msg.author.bot or msg.content[0] in ['_', '*']:
+    if msg.author.bot or msg.content[0] in ['_', '*','`']:
         return
     
     if msg.guild.id not in GuildIDs:
