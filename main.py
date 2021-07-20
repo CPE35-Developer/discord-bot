@@ -64,8 +64,8 @@ async def on_message(msg:discord.Message):
     
     if channel.id in guilddata.codechannel_ids:
         language = GuildData(msg.guild.id).channeldata(channel.id)['lang']
-        if msg.content[:1] == '-m':
-            fmc = formatCode(msg, language, msg.content)
+        if msg.content[:2] == '-m':
+            await msg.channel.send(formatCode(msg, language, msg.content))
         else:
             fmc = formatCode_emb(msg, language, msg.content)
             if type(fmc) == list:
