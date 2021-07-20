@@ -56,10 +56,10 @@ async def on_message(msg:discord.Message):
         addGuild(msg.guild.id)
         
     channel = msg.channel
-    guildCodeChannels = GuildData(msg.guild.id).codechannels
+    guilddata = GuildData(msg.guild.id)
     
-    if channel.id in guildCodeChannels:
-        language = GuildData(msg.guild.id).channeldata[channel.id]['lang']
+    if channel.id in guilddata.codechannel_ids:
+        language = GuildData(msg.guild.id).channeldata(channel.id)['lang']
         await channel.send(formatCode(msg, language, msg.content))
         await msg.delete()
         return
@@ -180,7 +180,7 @@ async def change_message(ctx:discord_slash.SlashContext):
     await change_last_message(ctx)
   
         
-@slash.subcommand(base='codechannel', name='add', description='Add auto text formatting to a text channel.', 
+@slash.subcommand(base='codechannel', name='add', description='Add auto text formatting to a text channel.', guild_ids=GUILD_IDS,
                   options=[create_option(name='channel',description='The channel you want to add text formatting to.',
                                          option_type=SlashCommandOptionType.CHANNEL,required=True),
                            create_option(name='language',description='The programming language for text formatting on this channel.',
@@ -190,26 +190,23 @@ async def _codechannel_add(ctx:discord_slash.SlashContext, channel:discord.TextC
     await Add(ctx,channel,language)
 
 
-@slash.subcommand(base='codechannel', name='remove',description='Add auto text formatting to a text channel.',
+@slash.subcommand(base='codechannel', name='remove',description='Add auto text formatting to a text channel.', guild_ids=GUILD_IDS,
                   options = [create_option(name='channel',description='The channel you want to remove text formatting from.',
                                            option_type=SlashCommandOptionType.CHANNEL,required=True,)])
 async def _codechannel_remove(ctx:discord_slash.SlashContext, channel:discord.TextChannel):
     await Remove(ctx,channel)
     
-@slash.subcommand(base='codechannel', name='check',description='Check code channel in this server.')
+@slash.subcommand(base='codechannel', name='check',description='Check code channel in this server.', guild_ids=GUILD_IDS)
 async def _codechannel_check(ctx:discord_slash.SlashContext):
     await Check(ctx)
     
 
-@slash.subcommand(base='codechannel', subcommand_group='permission', name='managemessage',description='Set Manage Messages permission of a/all code channel(s).',
+@slash.subcommand(base='codechannel', subcommand_group='permission', name='managemessage',description='Set Manage Messages permission of a/all code channel(s).', guild_ids=GUILD_IDS,
                   options = [create_option(name='manageable',description='manageable or not.',
                                            option_type=SlashCommandOptionType.BOOLEAN,required=True),
                              create_option(name='channel',description='Choose a code channel| All code channels.',
                                            option_type=SlashCommandOptionType.CHANNEL,required=False)])
 async def _codechannel_permission_managemessage(ctx:discord_slash.SlashContext, manageable:bool, channel:discord.TextChannel=None):
     await Permission.ManageMessage(ctx,manageable,channel)
-
-
-
     
 bot.run(TOKEN)
