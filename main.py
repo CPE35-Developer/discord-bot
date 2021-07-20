@@ -1,4 +1,5 @@
 import os
+from aiohttp.helpers import TimerNoop
 import discord
 from discord import activity
 import discord_slash
@@ -16,7 +17,7 @@ from src.audio.audio import voice, say, play, disconnect
 from discord_slash.utils.manage_commands import create_option
 from src.format.code import formatCode
 from dotenv import load_dotenv
-
+from datetime import datetime
 import platform
 import pkg_resources
 pkg_resources.require("googletrans>=4.0.0-rc.1")
@@ -39,6 +40,7 @@ GUILD_IDS = None
 @bot.event
 async def on_ready():
     global GUILD_IDS
+    print(datetime.now())
     GUILD_IDS = [guild.id for guild in bot.guilds]
     GUILD_NAMES = [guild.name for guild in bot.guilds]
     print(GUILD_NAMES)
