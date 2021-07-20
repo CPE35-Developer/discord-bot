@@ -5,10 +5,9 @@ import discord_slash
 from discord_slash import SlashCommand
 from discord_slash.model import SlashCommandOptionType
 from discord.ext import commands
-from src.utils.utils import commandSuggestFromError
 from src.utils.codechannel import *
 from src.utils.kick import random_kick
-from src.utils.travel import random_travel
+from src.utils.travel import random_travel, random_travel_all
 from src.utils.change import change_last_message
 from src.utils.config import Prefix
 from src.utils.command import SlashChoice
@@ -34,7 +33,7 @@ bot = commands.Bot(command_prefix=Prefix,
                    status=discord.Status.idle)
 slash = SlashCommand(bot, sync_commands=True)
 
-
+ADMIN_ID = 186315352026644480
 GUILD_IDS = None    
 
 @bot.event
@@ -43,7 +42,7 @@ async def on_ready():
     GUILD_IDS = [guild.id for guild in bot.guilds]
     GUILD_NAMES = [guild.name for guild in bot.guilds]
     print(GUILD_NAMES)
-    me = await bot.fetch_user(186315352026644480)
+    me = await bot.fetch_user(ADMIN_ID)
     await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
 
 @bot.event
@@ -64,55 +63,6 @@ async def on_message(msg:discord.Message):
         await channel.send(formatCode(msg, language, msg.content))
         await msg.delete()
         return
-
-@bot.command(name="hello", aliases=['hi', 'hoi'])
-async def nine_nine(ctx):
-    print(type(ctx))
-    await ctx.send("HI :flushed:")
-
-
-@bot.command(name="poker")
-async def poker(ctx):
-    await poker_play(bot, ctx)
-
-
-@bot.command(name='voice', aliases=['v', 'vc'])
-async def audio_voice(ctx, *, message=None):
-    await voice(bot, ctx, message)
-
-
-@bot.command(name='disconnect',  aliases=['exit', 'dc'])
-async def audio_disconnect(ctx):
-    await disconnect(bot, ctx)
-
-
-@bot.command(name='snap')
-async def snap_kick(ctx, user: discord.Member = None):
-    await random_kick(bot, ctx, user)
-
-
-@bot.command(name='travel')
-async def travel_chanel(ctx, user: discord.Member = None):
-    await random_travel(ctx, user)
-
-
-@bot.command(name='change')
-async def change_message(ctx):
-    await change_last_message(ctx)
-    
-
-@bot.command(name='code', aliases=['c','format','f'])
-async def formatSourceCode(ctx, *, sourcecode):
-    print(f'{str(ctx.author)} used {ctx.command}')
-    await ctx.send(formatCode(ctx, 'py', sourcecode))
-    await ctx.message.delete()
-
-
-
-@bot.event
-async def on_command_error(ctx, error):
-    await commandSuggestFromError(ctx, bot, error)
-
 
 @slash.slash(name="hello", description="Say hi to the bot. Most used to check if bot is ready.", guild_ids=GUILD_IDS)
 async def nine_nine(ctx:discord_slash.SlashContext):
@@ -214,11 +164,15 @@ async def snap_kick(ctx:discord_slash.SlashContext, user: discord.Member = None)
     await random_kick(bot, ctx, user)
 
 
-@slash.slash(name="travel", description="Travel to all of the Voice Channel.", guild_ids=GUILD_IDS)
+@slash.subcommand(base="travel", name='user', description="Travel to all of the Voice Channel.")
 async def travel_chanel(ctx:discord_slash.SlashContext, user: discord.Member = None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel(bot, ctx, user)
 
+@slash.subcommand(base='travel', name='all',description='Just try it.')
+async def _travel_all(ctx:discord_slash.SlashContext):
+    print(f'{str(ctx.author)} used {ctx.name}')
+    await random_travel_all(bot, ctx)
 
 @slash.slash(name="change", description="Convert the keyboard layout of your last message between en-th.", guild_ids=GUILD_IDS)
 async def change_message(ctx:discord_slash.SlashContext):
@@ -254,9 +208,7 @@ async def _codechannel_check(ctx:discord_slash.SlashContext):
                                            option_type=SlashCommandOptionType.CHANNEL,required=False)])
 async def _codechannel_permission_managemessage(ctx:discord_slash.SlashContext, manageable:bool, channel:discord.TextChannel=None):
     await Permission.ManageMessage(ctx,manageable,channel)
-    
 
-    
 
 
     
