@@ -164,12 +164,12 @@ async def snap_kick(ctx:discord_slash.SlashContext, user: discord.Member = None)
     await random_kick(bot, ctx, user)
 
 
-@slash.subcommand(base="travel", name='user', description="Travel to all of the Voice Channel.")
+@slash.subcommand(base="travel", name='user', description="Travel to all of the Voice Channel.", guild_ids=GUILD_IDS)
 async def travel_chanel(ctx:discord_slash.SlashContext, user: discord.Member = None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel(bot, ctx, user)
 
-@slash.subcommand(base='travel', name='all',description='Just try it.')
+@slash.subcommand(base='travel', name='all',description='Just try it.', guild_ids=GUILD_IDS)
 async def _travel_all(ctx:discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel_all(bot, ctx)
