@@ -17,6 +17,7 @@ from src.pog.pog import pog_play
 from src.audio.audio import voice, say, play, disconnect
 from discord_slash.utils.manage_commands import create_option
 from src.format.code import formatCode, formatCode_emb
+from src.utils.member import getNick
 from dotenv import load_dotenv
 from datetime import datetime
 import platform
@@ -64,9 +65,23 @@ async def on_message(msg:discord.Message):
     if channel.id in guilddata.codechannel_ids:
         language = GuildData(msg.guild.id).channeldata(channel.id)['lang']
         if msg.content[:1] == '-m':
-            await formatCode(msg, language, msg.content)
+            fmc = formatCode(msg, language, msg.content)
         else:
-            await formatCode_emb(msg, language, msg.content)
+            fmc = formatCode_emb(msg, language, msg.content)
+            if type(fmc) == list:
+                SCfst = '\n'.join(fmc[0])
+                pfp = msg.author.avatar_url
+                embed=discord.Embed()
+                embed.set_thumbnail(url=pfp)
+                embed.add_field(name='Code', value=f"""By {getNick(msg.author)}```{language}\n{SCfst}\n```""")
+                await msg.channel.send(embed=embed)
+                for count, code in enumerate(fmc[1:],start=1):
+                    SCrest = '\n'.join(code)
+                    embed=discord.Embed()
+                    embed.add_field(name = f'#continue {count}', value=f"""```{language}\n{SCrest}\n```""")
+                    await msg.channel.send(embed=embed)
+            else:
+                await msg.channel.send(embed=fmc)
         await msg.delete()
         return
 
