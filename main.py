@@ -86,7 +86,7 @@ async def on_message(msg:discord.Message):
                 await msg.channel.send(f"""By {getNick(msg.author)}```{language}\n{SCfst}\n```""")
                 for code in fmc[1:]:
                     SCline = '\n'.join(code)
-                    await msg.channel.send(f"""By {getNick(msg.author)}```{language}\n{SCline}\n```""")
+                    await msg.channel.send(f"""```{language}\n{SCline}\n```""")
             else:
                 await msg.channel.send(formatCode(msg, language, msg.content))
         await msg.delete()
