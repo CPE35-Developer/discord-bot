@@ -20,4 +20,14 @@ def formatCode_emb(msg:discord.Message, language:str, sourcecode:str):
         
 
 def formatCode(msg:discord.Message, language:str, sourcecode:str):
-    return f"""By {getNick(msg.author)}```{language}\n{sourcecode}\n```"""
+    if len(sourcecode) >= 2000:
+        SCsplit = sourcecode.split('\n')
+        SCsplitratio = -(-len(sourcecode)//2000)
+        SCsplitind = len(SCsplit)//SCsplitratio
+        SClist = []
+        for i in range(1,SCsplitratio+1):
+            SClist.append(SCsplit[SCsplitind*(i-1):SCsplitind*(i)])
+        return SClist
+              
+    else:
+        return f"""By {getNick(msg.author)}```{language}\n{sourcecode}\n```"""

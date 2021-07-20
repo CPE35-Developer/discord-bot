@@ -64,24 +64,31 @@ async def on_message(msg:discord.Message):
     
     if channel.id in guilddata.codechannel_ids:
         language = GuildData(msg.guild.id).channeldata(channel.id)['lang']
-        if msg.content[:2] == '-m':
-            await msg.channel.send(formatCode(msg, language, msg.content))
-        else:
-            fmc = formatCode_emb(msg, language, msg.content)
+
+        if msg.content[:2] in '-e':
+            fmc = formatCode_emb(msg, language, msg.content[2:])
             if type(fmc) == list:
                 SCfst = '\n'.join(fmc[0])
                 pfp = msg.author.avatar_url
                 embed=discord.Embed()
                 embed.set_thumbnail(url=pfp)
                 embed.add_field(name='Code', value=f"""By {getNick(msg.author)}```{language}\n{SCfst}\n```""")
-                await msg.channel.send(embed=embed)
                 for count, code in enumerate(fmc[1:],start=1):
                     SCrest = '\n'.join(code)
-                    embed=discord.Embed()
-                    embed.add_field(name = f'#continue {count}', value=f"""```{language}\n{SCrest}\n```""")
-                    await msg.channel.send(embed=embed)
+                    embed.add_field(name = f'#continue {count}', value=f"""```{language}\n{SCrest}\n```""", inline=False)
+                await msg.channel.send(embed=embed)
             else:
                 await msg.channel.send(embed=fmc)
+        else :
+            fmc = formatCode(msg, language, msg.content)
+            if type(fmc) == list:
+                SCfst = '\n'.join(fmc[0])
+                await msg.channel.send(f"""By {getNick(msg.author)}```{language}\n{SCfst}\n```""")
+                for code in fmc[1:]:
+                    SCline = '\n'.join(code)
+                    await msg.channel.send(f"""By {getNick(msg.author)}```{language}\n{SCline}\n```""")
+            else:
+                await msg.channel.send(formatCode(msg, language, msg.content))
         await msg.delete()
         return
 
