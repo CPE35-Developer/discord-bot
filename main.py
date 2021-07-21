@@ -1,3 +1,4 @@
+#https://discord.com/api/oauth2/authorize?client_id=864797655443308564&permissions=8&scope=applications.commands%20bot
 import os
 from aiohttp.helpers import TimerNoop
 import discord
@@ -38,7 +39,9 @@ slash = SlashCommand(bot, sync_commands=True)
 
 ADMIN_ID = 186315352026644480
 GUILD_IDS = None    
+            
 
+            
 @bot.event
 async def on_ready():
     global GUILD_IDS
@@ -50,21 +53,15 @@ async def on_ready():
     await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
 
 @bot.event
-async def on_message(msg:discord.Message):
-    if msg.author.bot or msg.content[0] in ['_', '*','`']:
-        return
-    
-    if msg.guild.id not in GuildIDs:
-        global GUILD_IDS
-        GUILD_IDS.append(msg.guild.id)
-        addGuild(msg.guild.id)
-        
-    channel = msg.channel
-    guilddata = GuildData(msg.guild.id)
-    
-    if channel.id in guilddata.codechannel_ids:
-        language = GuildData(msg.guild.id).channeldata(channel.id)['lang']
+async def on_guild_join(guild):
+    global GuildData
+    global GuildIDs
+    if guild.id not in GuildIDs:
+        addGuild(guild.id)
+        print(f'added {guild.id} to guild db')
+        from src.utils.codechannel import GuildData, GuildIDs
 
+async def send_fmc(msg:discord.Message, language:str):
         if msg.content[:2] in '-e':
             fmc = formatCode_emb(msg, language, msg.content[2:])
             if type(fmc) == list:
@@ -89,6 +86,27 @@ async def on_message(msg:discord.Message):
                     await msg.channel.send(f"""```{language}\n{SCline}\n```""")
             else:
                 await msg.channel.send(formatCode(msg, language, msg.content))
+
+
+@bot.event
+async def on_message(msg:discord.Message):
+    global GuildData, GuildIDs
+    if msg.author.bot or msg.content[0] in ['_', '*','`']:
+        return
+    
+    if msg.guild.id not in GuildIDs:
+        addGuild(msg.guild.id)
+        print(f'added {msg.guild.id} to guild db')
+        from src.utils.codechannel import GuildData, GuildIDs
+
+    channel = msg.channel
+    guilddata = GuildData(msg.guild.id)
+    
+    if channel.id in guilddata.codechannel_ids:
+        language = guilddata.channeldata(channel.id)['lang']
+        
+        await send_fmc(msg, language)
+
         await msg.delete()
         return
 
