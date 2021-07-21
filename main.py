@@ -16,8 +16,9 @@ from src.utils.command import SlashChoice
 from src.help.help import SlashHelp
 from src.poker.poker import poker_play
 from src.pog.pog import pog_play
+from src.maths.maths import solve_eq
 from src.audio.audio import voice, say, play, disconnect
-from discord_slash.utils.manage_commands import create_option
+from discord_slash.utils.manage_commands import create_option, create_choice
 from src.format.code import formatCode, formatCode_emb
 from src.utils.member import getNick
 from dotenv import load_dotenv
@@ -275,6 +276,17 @@ async def _codechannel_permission_managemessage(ctx: discord_slash.SlashContext,
 @slash.subcommand(base='help', name='codechannel', description='Shows information about the code channel.', guild_ids=GUILD_IDS)
 async def _help_codechannel(ctx: discord_slash.SlashContext):
     await SlashHelp.codechannel(ctx)
+
+@slash.subcommand(base='math', name='solve', description='Solve an equation.', guild_ids=GUILD_IDS,
+                    options=[create_option(name='equation', description='The equation you want to solve. (If possible, move the data after (=) aside)',
+                                         option_type=SlashCommandOptionType.STRING, required=True),
+                            create_option(name='variable', description='The variable you want to solve for.',
+                                         option_type=SlashCommandOptionType.STRING, required=False),
+                            create_option(name='foregroundcolor', description='Foreground Color.',
+                                         option_type=SlashCommandOptionType.STRING, required=False,
+                                         choices=[create_choice("White","White"),create_choice("Black","Black")])])
+async def _math_solve(ctx:discord_slash.SlashContext, equation:str, variable:str=None, color:str="White"):
+    await solve_eq(ctx, equation, variable, color)
 
 
 bot.run(TOKEN)
