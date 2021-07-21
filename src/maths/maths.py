@@ -32,5 +32,7 @@ async def solve_eq(ctx:discord_slash.SlashContext, equation:str, variable:str=No
     else:
         ans = solve(expr,Symbol(variable))
         
+    if str(ans) == '[]': return None
+        
     await send_ans(ctx, equation, ans, color)
 
