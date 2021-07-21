@@ -22,54 +22,58 @@ GuildIDs = [guild['guildID'] for guild in GuildsData]
 
 isUpdated = False
 
-def updateTable(table_name:table, item:dict):
+
+def updateTable(table_name: table, item: dict):
     global isUpdated
     isUpdated = True
     table_name.put_item(Item=item)
-    
 
-def addGuild(GUILD_ID:int):
+
+def addGuild(GUILD_ID: int):
     global GuildsData
     global GuildIDs
-    table.Guilds.put_item(Item={"guildID":GUILD_ID,
-                                "codechannels":[]})
+    table.Guilds.put_item(Item={"guildID": GUILD_ID,
+                                "codechannels": []})
     GuildsData = table.Guilds.scan()['Items']
     GuildIDs = [guild['guildID'] for guild in GuildsData]
-    
+
 
 class GuildData:
-    def __init__(self, GUILD_ID:int):
-        
+    def __init__(self, GUILD_ID: int):
+
         global isUpdated
         global GuildsData
-        
+
         if isUpdated:
             isUpdated = False
             GuildsData = table.Guilds.scan()['Items']
-        GUILD_DATA = next((item for item in GuildsData if item['guildID'] == GUILD_ID), None)
-        self.data =  GUILD_DATA
-        try:      
+        GUILD_DATA = next(
+            (item for item in GuildsData if item['guildID'] == GUILD_ID), None)
+        self.data = GUILD_DATA
+        try:
             self.id = int(self.data['guildID'])
             self.codechannels = self.data['codechannels']
-            self.codechannel_ids = [channel['channelID'] for channel in self.data['codechannels']]
+            self.codechannel_ids = [channel['channelID']
+                                    for channel in self.data['codechannels']]
         except:
             self.id = None
             self.codechannels = None
             self.codechannel_ids = None
-        
-        
-    def channeldata(self,CHANNEL_ID):
+
+    def channeldata(self, CHANNEL_ID):
         return [channel for channel in self.codechannels if channel['channelID'] == CHANNEL_ID][0]
-            
+
     def updatecodechannels(self, newChannelData):
         channelID = newChannelData['channelID']
         for channel in self.codechannels:
             if channel['channelID'] == channelID:
                 channel = newChannelData
 
+
 async def Check(ctx: discord_slash.SlashContext):
     if ctx.guild_id not in GuildIDs:
-        ctx.send('Server นี้ยังไม่มี Code Channel กรุณาใช้คำสั่ง `/codechannel add [channel] [language] ก่อน`')
+        ctx.send(
+            'Server นี้ยังไม่มี Code Channel กรุณาใช้คำสั่ง `/codechannel add [channel] [language] ก่อน`')
 
     guilddata = GuildData(ctx.guild_id)
 
@@ -92,7 +96,7 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
     if ctx.guild_id not in GuildIDs:
         addGuild(ctx.guild_id)
         print(f'Added {ctx.guild.name} to guild table')
-    
+
     guilddata = GuildData(ctx.guild_id)
 
     CHANNEL_ID = channel.id
@@ -105,16 +109,17 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
             try:
                 botmsg = await channel.fetch_message(codeChannel['botmsgID'])
                 await botmsg.delete()
-            except: print("Bot couldn't find the Bot's pinned message")
-
+            except:
+                print("Bot couldn't find the Bot's pinned message")
 
             em = discord.Embed(title=f'{channel.name}')
             em.add_field(name="Programming Language:", value=f"{language}")
             botmsg = await channel.send(embed=em)
             await botmsg.pin()
 
-            guilddata.channeldata(CHANNEL_ID)['lang'], guilddata.channeldata(CHANNEL_ID)['botmsgID'] = language, botmsg.id            
-            
+            guilddata.channeldata(CHANNEL_ID)['lang'], guilddata.channeldata(
+                CHANNEL_ID)['botmsgID'] = language, botmsg.id
+
             await ctx.send(f"แก้ไขให้ {channel.mention} เป็น Code Channel ภาษา {language} แล้ว")
 
     else:
@@ -123,9 +128,9 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
         botmsg = await channel.send(embed=em)
         await botmsg.pin()
         guilddata.codechannels.append({'lang': language,
-                                        'channelID': channel.id,
-                                        'botmsgID': botmsg.id})
-        
+                                       'channelID': channel.id,
+                                       'botmsgID': botmsg.id})
+
         guilddata.data['codechannels'] = guilddata.codechannels
 
         await channel.set_permissions(ctx.guild.default_role, manage_messages=True)
@@ -137,23 +142,24 @@ async def Add(ctx: discord_slash.SlashContext, channel: discord.TextChannel, lan
 
 async def Remove(ctx: discord_slash.SlashContext, channel: discord.TextChannel):
     if ctx.guild_id not in GuildIDs:
-        ctx.send('Server นี้ยังไม่มี Code Channel กรุณาใช้คำสั่ง `/codechannel add [channel] [language] ก่อน`')
-    
+        ctx.send(
+            'Server นี้ยังไม่มี Code Channel กรุณาใช้คำสั่ง `/codechannel add [channel] [language] ก่อน`')
+
     guilddata = GuildData(ctx.guild_id)
 
     CHANNEL_ID = channel.id
 
-
     if CHANNEL_ID in guilddata.codechannel_ids:
-        
+
         try:
             botmsg = await channel.fetch_message(guilddata.channeldata(CHANNEL_ID)['botmsgID'])
             await botmsg.delete()
-        except: print("Bot couldn't find the Bot's pinned message")
-        
-        guilddata.codechannels = [x for x in guilddata.codechannels if not (CHANNEL_ID == x.get('channelID'))]
+        except:
+            print("Bot couldn't find the Bot's pinned message")
+
+        guilddata.codechannels = [x for x in guilddata.codechannels if not (
+            CHANNEL_ID == x.get('channelID'))]
         guilddata.data['codechannels'] = guilddata.codechannels
-        
 
         await channel.set_permissions(ctx.guild.default_role, manage_messages=False)
         await ctx.send(f"ลบ {channel.mention} จาก Code Channels แล้ว")
@@ -167,7 +173,7 @@ async def Remove(ctx: discord_slash.SlashContext, channel: discord.TextChannel):
 class Permission:
     async def ManageMessage(ctx: discord_slash.SlashContext, manageable: bool, channel: discord.TextChannel = None):
         guilddata = GuildData(ctx.guild_id)
-        
+
         if channel is not None and channel.id not in guilddata.codechannel_ids:
             return ctx.send(f"{channel.mention} ไม่ใช่ Code Channel")
         if channel is None:

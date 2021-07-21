@@ -37,7 +37,7 @@ async def get_players(bot, ctx):
 
         elif (msg.content.lower() == "done") and (len(players) == 1):
             await ctx.channel.send(f"ผมไม่ให้คุณเล่นคนเดียวหรอก")
-        
+
         elif (msg.content.lower() == "done") or (len(players) == 9):
             await ctx.channel.send(f"ผู้เล่นทั้งหมดคือ {' '.join([str(member) for member in players])} ถูกมั้ย (y=ใช่,n=แก้ไขจำนวนคนต่อ)")
 

@@ -16,5 +16,3 @@ DECKS_OF_CARDS = [
     ':regional_indicator_k: :clubs:', ':regional_indicator_k: :diamonds:', ':regional_indicator_k: :heart:', ':regional_indicator_k: :spades:',
     ':a: :clubs:', ':a: :diamonds:', ':a: :heart:', ':a: :spades:'
 ]
-
-

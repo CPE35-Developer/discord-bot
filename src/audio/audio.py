@@ -8,7 +8,7 @@ PATH_ffmpeg = get_PATH_ffmpeg()
 
 
 async def voice(bot, ctx, msg, language=None, ):
-    
+
     if not language:
         msg, args = fetchArguments(msg)
         ttsLang = None
@@ -34,9 +34,11 @@ async def voice(bot, ctx, msg, language=None, ):
 
 
 async def say(bot, ctx, msg, language=None, travel=False):
-    
-    try: isBotCommand = ctx.message.startswith('$')
-    except: isBotCommand = False
+
+    try:
+        isBotCommand = ctx.message.startswith('$')
+    except:
+        isBotCommand = False
 
     if (language is None) & (isBotCommand):
         msg, args = fetchArguments(msg)
@@ -49,12 +51,12 @@ async def say(bot, ctx, msg, language=None, travel=False):
 
     if vc == None:
         return
- 
+
     await repeat(vc, text=msg, lang=language)
-    
+
     if travel is True:
-        return 
-    
+        return
+
     returnMessage = f'{getNick(ctx.author)}: {msg}'
 
     return await ctx.send(returnMessage)
@@ -66,10 +68,10 @@ async def play(bot, ctx, sound, political=False):
 
     if vc == None:
         return
-    
+
     vc.play(FFmpegPCMAudio(executable=PATH_ffmpeg,
             source=f"{CONFIG.audio.PATH_mp3}{sound}.mp3"))
-        
+
     if not political:
         returnMessage = f'{getNick(ctx.author)} เล่น **{sound}**.mp3'
         return await ctx.send(returnMessage)
@@ -77,7 +79,6 @@ async def play(bot, ctx, sound, political=False):
         returnMessage = f'||`ข้อความนี้ถูกลบโดยรัฐบาลไทย`||'
         return await ctx.send(returnMessage, delete_after=5)
 
-    
 
 async def disconnect(bot, ctx):
     await leaveVoiceChannel(bot, ctx)

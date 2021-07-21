@@ -27,59 +27,71 @@ class SlashChoice:
         {"value": "intro",  "name": "Intro"},
         {"value": "blessing", "name": "Blessing"},
         {"value": "letitbe",    "name": "Let it be"}
-        ]
-    
-    choiceOVoice =[
-        {"value": "o1",     "name": "o1 ข้าพเจ้ารู้สึกตื้นตัน (I am impressed.)"},
-        {"value": "o2",     "name": "o2 ข้าพเจ้าขอส่งความปราถณาดี (I wish you best wishes.)"},
+    ]
+
+    choiceOVoice = [
+        {"value": "o1",
+            "name": "o1 ข้าพเจ้ารู้สึกตื้นตัน (I am impressed.)"},
+        {"value": "o2",
+            "name": "o2 ข้าพเจ้าขอส่งความปราถณาดี (I wish you best wishes.)"},
         {"value": "o3",     "name": "o3 *ไอ* (*cough*)"},
         {"value": "o4",     "name": "o4 กล้ามาก (So brave.)"},
         {"value": "o5",     "name": "o5 เก่งมาก (Very good.)"},
         {"value": "o6",     "name": "o6 ขอบใจ (Thanks.)"},
         {"value": "o7",     "name": "o7 ขอบใจมาก (Thank you so much.)"},
         {"value": "o8",     "name": "o8 ใช่มั้ย (Is it?)"},
-        ]
-    
-    choiceNuiVoice=[
+    ]
+
+    choiceNuiVoice = [
         {"value": "nui1",     "name": "nui1 ขอบคุณมาก (Thank you so much.)"},
-        {"value": "nui2",     "name": "nui2 เป็นกำลังใจให้ (I'm cheering you up)"},
+        {"value": "nui2",
+            "name": "nui2 เป็นกำลังใจให้ (I'm cheering you up)"},
         {"value": "nui3",     "name": "nui3 เราจำได้ (I remember.)"},
 
     ]
-    
-    choiceTuVoice=[
+
+    choiceTuVoice = [
         {"value": "tu1",    "name": "tu1 ฮ้ะ (Huh?)"},
         {"value": "tu2",    "name": "tu2 อื่อฮึ (Uh-huh)"},
         {"value": "tu3",    "name": "tu3 ทำไม (Why?)"},
         {"value": "tu4",    "name": "tu4 อะไร อะไร (Whatx2)"},
-        {"value": "tu5",    "name": "tu5 จะเอาอะไรจากผมอ้ะ (What do you want from me?)"},
+        {"value": "tu5",
+            "name": "tu5 จะเอาอะไรจากผมอ้ะ (What do you want from me?)"},
         {"value": "tu6",    "name": "tu6 Okay"},
-        {"value": "tu7",    "name": "tu7 ชักไม่เข้าท่าแล้วนะ 1(It's getting inappropriate1)"},
+        {"value": "tu7",
+            "name": "tu7 ชักไม่เข้าท่าแล้วนะ 1(It's getting inappropriate1)"},
         {"value": "tu8",    "name": "tu8 จบยัง (Done?)"},
-        {"value": "tu9",    "name": "tu9 จะเอาอะไรจากผมอ้ะ (What do you want from me?)"},
+        {"value": "tu9",
+            "name": "tu9 จะเอาอะไรจากผมอ้ะ (What do you want from me?)"},
         {"value": "tu10",   "name": "tu10 โธ่วววววว์ (Interjection1)"},
-        {"value": "tu11",   "name": "tu11 อะไร เอาใหม่ดิ๊ (What? Say it again.)"},
+        {"value": "tu11",
+            "name": "tu11 อะไร เอาใหม่ดิ๊ (What? Say it again.)"},
         {"value": "tu12",   "name": "tu12 อ่า (Ah.)"},
         {"value": "tu13",   "name": "tu13 ฮ้ะ (Huh?)"},
         {"value": "tu14",   "name": "tu14 ทำไมเล่า (Just why?)"},
         {"value": "tu15",   "name": "tu15 มีอะไร (What do you want?)"},
         {"value": "tu16",   "name": "tu16 อ่าแล้วอะไรอีก (Ah, what's next?)"},
-        {"value": "tu17",   "name": "tu17 ชักไม่เข้าท่าแล้วนะ2 (It's getting inappropriate2"},
+        {"value": "tu17",
+            "name": "tu17 ชักไม่เข้าท่าแล้วนะ2 (It's getting inappropriate2"},
         {"value": "tu18",   "name": "tu18 เดี๋ยวเหอะ (Interjection2)"},
         {"value": "tu19",   "name": "tu19 ไร้สาระ (Nonsense.)"},
         {"value": "tu20",   "name": "tu20 อะไรนะ  (What??)"},
         {"value": "tu21",   "name": "tu21 เข้าใจมั้ย (Got it?)"},
         {"value": "tu22",   "name": "tu22 หัวเราะ หัวเราะ (Laughx2)"},
-        {"value": "tu23",   "name": "tu23 ไม่ได้โมโหเลย! (I'm not even angry!)"}
-        ]
-    
-    choicePomVoice   =  [
-        {"value": "pom1",  "name": "pom1 ไม่รู้ ยังไม่รู้เรื่องอะไรเลย (I don't know, I don't know anything yet.)"},
-        {"value": "pom2",  "name": "pom2 ไม่รู้ ยังไม่รู้ยังไม่รู้ยังไม่รู้ (I don't know, I don't know anything yet. x3)"},
-        {"value": "pom3",  "name": "pom3 ก็ยังไม่เห็นเลยไอ้ห่า (I still haven't seen it, bastard.)"}
-        ]
-    
-    choiceVoiceLang  =  [
+        {"value": "tu23",
+            "name": "tu23 ไม่ได้โมโหเลย! (I'm not even angry!)"}
+    ]
+
+    choicePomVoice = [
+        {"value": "pom1",
+            "name": "pom1 ไม่รู้ ยังไม่รู้เรื่องอะไรเลย (I don't know, I don't know anything yet.)"},
+        {"value": "pom2",
+            "name": "pom2 ไม่รู้ ยังไม่รู้ยังไม่รู้ยังไม่รู้ (I don't know, I don't know anything yet. x3)"},
+        {"value": "pom3",
+            "name": "pom3 ก็ยังไม่เห็นเลยไอ้ห่า (I still haven't seen it, bastard.)"}
+    ]
+
+    choiceVoiceLang = [
         {"value": "af",      "name": "Afrikaans"},
         {"value": "ar",      "name": "Arabic"},
         {"value": "de",      "name": "German"},
@@ -105,8 +117,8 @@ class SlashChoice:
         {"value": "tr",      "name": "Turkish"},
         {"value": "vi",      "name": "Vietnamese"},
         {"value": "zh-CN",   "name": "Chinese"}
-        ]
-    
+    ]
+
     programmingLanguageChoice = [
         {"value": "html",       "name": "HTML, XML"},
         {"value": "bash",       "name": "Bash"},
@@ -133,4 +145,4 @@ class SlashChoice:
         {"value": "yaml",       "name": "YAML"},
         {"value": "typescript", "name": "TypeScript"},
         {"value": "vbnet",      "name": "Visual Basic .NET"}
-        ]
+    ]
