@@ -178,7 +178,7 @@ class Permission:
             return ctx.send(f"{channel.mention} ไม่ใช่ Code Channel")
         if channel is None:
             for codechannelID in guilddata.codechannel_ids:
-                channel = discord.utils.get(
+                channel = await discord.utils.get(
                     ctx.guild.channels, id=int(codechannelID))
                 if manageable:
                     await channel.set_permissions(ctx.guild.default_role, manage_messages=True)

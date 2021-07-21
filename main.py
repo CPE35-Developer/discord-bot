@@ -263,11 +263,12 @@ async def _codechannel_check(ctx: discord_slash.SlashContext):
 
 
 @slash.subcommand(base='codechannel', subcommand_group='permission', name='managemessage', description='Set Manage Messages permission of a/all code channel(s).', guild_ids=GUILD_IDS,
-                  options=[create_option(name='manageable', description='manageable or not.',
-                                         option_type=SlashCommandOptionType.BOOLEAN, required=True),
-                           create_option(name='channel', description='Choose a code channel| All code channels.',
-                                         option_type=SlashCommandOptionType.CHANNEL, required=False)])
-async def _codechannel_permission_managemessage(ctx: discord_slash.SlashContext, manageable: bool, channel: discord.TextChannel = None):
+                  options=[create_option(name='channel', description='Choose a code channel| All code channels.',
+                                         option_type=SlashCommandOptionType.CHANNEL, required=True),
+                            create_option(name='manageable', description='manageable or not.',
+                                         option_type=SlashCommandOptionType.BOOLEAN, required=True)])
+                           
+async def _codechannel_permission_managemessage(ctx: discord_slash.SlashContext, channel: discord.TextChannel, manageable: bool):
     await Permission.ManageMessage(ctx, manageable, channel)
 
 

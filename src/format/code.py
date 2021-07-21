@@ -15,7 +15,7 @@ def formatCode_emb(msg: discord.Message, language: str, sourcecode: str):
 
     else:
         pfp = msg.author.avatar_url
-        embed = discord.Embed()
+        embed = discord.Embed('')
         embed.set_thumbnail(url=pfp)
         embed.add_field(
             name='Code', value=f"""By {getNick(msg.author)}```{language}\n{sourcecode}\n```""")

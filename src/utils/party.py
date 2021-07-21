@@ -35,6 +35,9 @@ async def get_players(bot, ctx):
             await ctx.channel.send('k**y เสียเวลาฉิบหาย')
             return None
 
+        elif (msg.content.lower() == "done") and (len(players) == 0):
+            await ctx.channel.send(f"ยังไม่มีใครอยู่ในปาร์ตี้เลยนิ")
+
         elif (msg.content.lower() == "done") and (len(players) == 1):
             await ctx.channel.send(f"ผมไม่ให้คุณเล่นคนเดียวหรอก")
 
