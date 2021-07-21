@@ -9,7 +9,7 @@ from discord_slash.model import SlashCommandOptionType
 from discord.ext import commands
 from src.utils.codechannel import *
 from src.utils.kick import random_kick
-from src.utils.travel import random_travel, random_travel_all
+from src.utils.travel import random_travel
 from src.utils.change import change_last_message
 from src.utils.config import Prefix
 from src.utils.command import SlashChoice
