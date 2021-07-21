@@ -13,6 +13,7 @@ from src.utils.travel import random_travel, random_travel_all
 from src.utils.change import change_last_message
 from src.utils.config import Prefix
 from src.utils.command import SlashChoice
+from src.help.help import SlashHelp
 from src.poker.poker import poker_play
 from src.pog.pog import pog_play
 from src.audio.audio import voice, say, play, disconnect
@@ -227,16 +228,10 @@ async def snap_kick(ctx: discord_slash.SlashContext, user: discord.Member = None
     await random_kick(bot, ctx, user)
 
 
-@slash.subcommand(base="travel", name='user', description="Travel to all of the Voice Channel.", guild_ids=GUILD_IDS)
+@slash.slash(name='travel', description="Travel to all of the Voice Channel.", guild_ids=GUILD_IDS)
 async def travel_chanel(ctx: discord_slash.SlashContext, user: discord.Member = None):
     print(f'{str(ctx.author)} used {ctx.name}')
     await random_travel(bot, ctx, user)
-
-
-@slash.subcommand(base='travel', name='all', description='Just try it.', guild_ids=GUILD_IDS)
-async def _travel_all(ctx: discord_slash.SlashContext):
-    print(f'{str(ctx.author)} used {ctx.name}')
-    await random_travel_all(bot, ctx)
 
 
 @slash.slash(name="change", description="Convert the keyboard layout of your last message between en-th.", guild_ids=GUILD_IDS)
@@ -274,5 +269,11 @@ async def _codechannel_check(ctx: discord_slash.SlashContext):
                                          option_type=SlashCommandOptionType.CHANNEL, required=False)])
 async def _codechannel_permission_managemessage(ctx: discord_slash.SlashContext, manageable: bool, channel: discord.TextChannel = None):
     await Permission.ManageMessage(ctx, manageable, channel)
+
+
+@slash.subcommand(base='help', name='codechannel', description='Shows information about the code channel.', guild_ids=GUILD_IDS)
+async def _help_codechannel(ctx: discord_slash.SlashContext):
+    await SlashHelp.codechannel(ctx)
+
 
 bot.run(TOKEN)
