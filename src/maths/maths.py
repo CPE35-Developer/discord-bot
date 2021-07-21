@@ -12,10 +12,13 @@ def string_to_expr(s: str) -> Expr:
     expr = parse_expr(s, transformations=transformations)
     return expr
 
-async def send_ans(ctx:discord_slash.SlashContext, ans:sympy.Expr, color:str="White"):
+async def send_ans(ctx:discord_slash.SlashContext, equation:str, ans:sympy.Expr, color:str="White"):
     sympy.preview(ans,viewer='file', filename='solve.png',dvioptions=['-D','200',"-bg", "Transparent","-fg",color])
-    await ctx.send(file=discord.File('solve.png'))
-    await ctx.channel.send(f'`{str(ans)}`')
+    file = discord.File("solve.png")
+    e = discord.Embed(title='Equation:', description=str(equation))
+    e.add_field(name="Answer:", value=f'`{str(ans)}`')
+    e.set_image(url="attachment://solve.png")
+    await ctx.send(file = file, embed=e)
 
 async def solve_eq(ctx:discord_slash.SlashContext, equation:str, variable:str=None, color:str="White"):
     if '=' in equation:
@@ -29,5 +32,5 @@ async def solve_eq(ctx:discord_slash.SlashContext, equation:str, variable:str=No
     else:
         ans = solve(expr,Symbol(variable))
         
-    await send_ans(ctx, ans, color)
+    await send_ans(ctx, equation, ans, color)
 
