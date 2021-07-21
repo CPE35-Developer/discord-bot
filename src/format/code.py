@@ -9,13 +9,12 @@ def formatCode_emb(msg: discord.Message, language: str, sourcecode: str):
         SCsplitind = len(SCsplit)//SCsplitratio
         SClist = []
         for i in range(1, SCsplitratio+1):
-            print(i-1, i)
             SClist.append(SCsplit[SCsplitind*(i-1):SCsplitind*(i)])
         return SClist
 
     else:
         pfp = msg.author.avatar_url
-        embed = discord.Embed('')
+        embed = discord.Embed()
         embed.set_thumbnail(url=pfp)
         embed.add_field(
             name='Code', value=f"""By {getNick(msg.author)}```{language}\n{sourcecode}\n```""")
