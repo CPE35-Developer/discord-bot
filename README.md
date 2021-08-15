@@ -31,7 +31,7 @@ Every command is called by / (slash).
 |codechannel permission|Change a code channel's permission|
 |math solve|Solve an equation|
 |say|Text to speech|
-|play|play a sound|
+|play|Play a sound|
 |disconnect|Disconnect for the voice channel|
 |travel|Randomly moves the command user across multiple voice channel|
 |travel user|Randomly moves the assigned user across multiple voice channel|
@@ -48,7 +48,7 @@ Every command is called by / (slash).
 
 |Command  | Description |
 |--|--|
-|change|Change keyboard layout between TH/EN of the lastest message|
+|change|Change keyboard layout between TH/EN for the lastest message|
 
 
 
