@@ -33,8 +33,7 @@ load_dotenv()
 
 TOKEN = os.getenv("TOKEN")
 
-activity = discord.Activity(
-    type=discord.ActivityType.competing, name='the universe')
+activity = discord.Activity(type=discord.ActivityType.competing, name='the universe')
 bot = commands.Bot(command_prefix=Prefix,
                    intents=discord.Intents.all(),
                    case_insensitive=True,
@@ -55,12 +54,7 @@ async def on_ready():
     GUILD_NAMES = [guild.name for guild in bot.guilds]
     print(GUILD_NAMES)
     me = await bot.fetch_user(ADMIN_ID)
-    await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
-
-    all_member = set((bot.get_all_members()))
-    all_member_name = list(map(lambda x: str(x), all_member))
-    all_member_id = list(map(lambda x: x.id, all_member))
-
+    await me.send(f"Running {bot.user.name} on\n{platform.uname()}")
 
 @bot.event
 async def on_guild_join(guild):
