@@ -18,7 +18,7 @@ from src.server.Server import ku_verify, ku_info
 from src.poker.poker import poker_play
 from src.pog.pog import pog_play
 from src.maths.maths import solve_eq
-from src.audio.audio import voice, say, play, disconnect
+from src.audio.audio import say, play, disconnect
 from discord_slash.utils.manage_commands import create_option, create_choice
 from src.format.code import formatCode, formatCode_emb
 from src.utils.member import getNick
@@ -56,11 +56,10 @@ async def on_ready():
     print(GUILD_NAMES)
     me = await bot.fetch_user(ADMIN_ID)
     await me.send(f'Running {bot.user.name} on\n{platform.uname()}')
-    
+
     all_member = set((bot.get_all_members()))
-    all_member_name = list(map(lambda x: str(x),all_member))
-    all_member_id = list(map(lambda x: x.id,all_member))
-    
+    all_member_name = list(map(lambda x: str(x), all_member))
+    all_member_id = list(map(lambda x: x.id, all_member))
 
 
 @bot.event
@@ -146,19 +145,6 @@ async def poker(ctx: discord_slash.SlashContext):
 async def pog(ctx: discord_slash.SlashContext):
     print(f'{str(ctx.author)} used {ctx.name}')
     await pog_play(bot, ctx)
-
-
-@slash.slash(name="voice", description="Play an audio or say some thing(Text to speech)", guild_ids=GUILD_IDS,
-             options=[create_option(name='message', description='The sound to play or the text for TTS',
-                                    option_type=SlashCommandOptionType.STRING,
-                                    required=True),
-
-                      create_option(name='language', description='The language you want TTS to speak',
-                                    option_type=SlashCommandOptionType.STRING, required=False,
-                                    choices=SlashChoice.choiceVoiceLang)])
-async def audio_voice(ctx: discord_slash.SlashContext, message, language=None):
-    print(f'{str(ctx.author)} used {ctx.name}')
-    await voice(bot, ctx, message, language)
 
 
 @slash.slash(name="say", description="Say some thing(Text to speech)", guild_ids=GUILD_IDS,
@@ -294,11 +280,13 @@ async def _codechannel_permission_managemessage(ctx: discord_slash.SlashContext,
 async def _verify(ctx: discord_slash.SlashContext):
     await ku_verify(ctx)
 
+
 @slash.slash(name='info', description='Shows info of a user.', guild_ids=GUILD_IDS)
 async def _info(ctx: discord_slash.SlashContext, user: discord.Member = None):
     msg = await ctx.send('Processing..')
-    await msg.edit(content = "", embed = ku_info(ctx, user))
-    
+    await msg.edit(content="", embed=ku_info(ctx, user))
+
+
 @slash.subcommand(base='math', name='solve', description='Solve an equation.', guild_ids=GUILD_IDS,
                   options=[create_option(name='equation', description='The equation you want to solve. (If possible, move the data after (=) aside)',
                                          option_type=SlashCommandOptionType.STRING, required=True),
