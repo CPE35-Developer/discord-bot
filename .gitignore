@@ -1,0 +1,10 @@
+__pycache__/
+src/audio/ffmpeg.exe
+text.mp3
+test.ipynb
+.env
+cpe35discordbot.pem
+nohup.out
+awstest.ipynb
+solve.png
+gcp_client.json
