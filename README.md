@@ -32,7 +32,7 @@ Every command is called by / (slash).
 |math solve|Solve an equation|
 |say|Text to speech|
 |play|Play a sound|
-|disconnect|Disconnect for the voice channel|
+|disconnect|Disconnect from the voice channel|
 |travel|Randomly moves the command user across multiple voice channel|
 |travel user|Randomly moves the assigned user across multiple voice channel|
 |snap|Disconnect half of the users that are in the voice channel|
