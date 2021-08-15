@@ -10,14 +10,21 @@ Every command is called by `/` (slash).
 
 
 <h2>Commands</h2>
-<h3>Usable</h3>
+
+<h3>CPE35 Server Only</h3>
+
+|Command  | Description |
+|--|--|
+|verify|Verifies that you are a true KU student|
+|info|Show KU info of a verified discord user|
+
+
+<h3>All server</h3>
 
 |Command  | Description |
 |--|--|
 | hello | Says Hi :flushed: |
 |invitebot|PM you the bot's authorization link|
-|verify|Verifies that you are a true KU student|
-|info|Show KU info of a verified discord user|
 |codechannel add|Adds a code channel|
 |codechannel remove|Remove a code channel|
 |codechannel check|Show all server's code channel|
@@ -35,6 +42,7 @@ Every command is called by `/` (slash).
 |oneonetwo|[รายละเอียดถูกลบโดยรัฐบาลไทย]|
 |poker|Plays poker|
 |pog|Plays pog|
+
 
 <h3>Buggy</h3>
 
