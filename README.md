@@ -2,7 +2,7 @@
 <h2>Introduction</h2>
 This bot is called ตัวอะไรไม่รู้ (Tạw xarị mị̀rū̂). It is originally created for KU CPE35 Server.
 <h2>Instructions</h2>
-Every command is called by `/` (slash).
+Every command is called by **/** (slash).
 
 <h3>Example</h3>
 
