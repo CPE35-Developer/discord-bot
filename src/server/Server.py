@@ -2,6 +2,7 @@ import discord
 from discord_slash import SlashContext
 from discord.utils import get
 from discord import  Embed
+from google.auth.transport import Response
 from pandas import DataFrame
 from bs4 import BeautifulSoup
 import requests
@@ -151,9 +152,10 @@ async def ku_verify(ctx: SlashContext):
         
     form_data = await get_discorduser_cpe35_form(ctx,verify_msg)
 
+    pirun_data = get_pirun_data(form_data['id'])
     email = form_data['email']
     
-    if email != get_pirun_data(form_data['id'])['google_email']:
+    if email != pirun_data['google_email']:
         await verify_msg.edit(embed=verify_embed(ctx,color=colors['fail'],email_emb="Failed"))
         return
     else:
@@ -202,42 +204,45 @@ async def ku_verify(ctx: SlashContext):
         await ctx.author.add_roles(get(ctx.guild.roles, name=rolename))
         await ctx.author.add_roles(get(ctx.guild.roles, name="Verified"))
         await ctx.author.send(f"You have been assigned as {rolename}")
-        cpe35_server_user.put_item(Item = {'id':ctx.author_id,'verified_name':str(ctx.author)})
+        cpe35_server_user.put_item(Item = {'id':ctx.author_id,
+                                           'verified_name':str(ctx.author),
+                                           'email_ku':email, 
+                                           'email_other':pirun_data['other_email'],
+                                           'id_ku':pirun_data['idcode'],
+                                           'thainame':" ".join(pirun_data['thainame'].split()[1:]),
+                                           'engname':(lambda engname: engname[:engname.find(' ')+2] + engname[engname.find(' ')+2:].lower())(pirun_data['engname']),
+                                           'nickname':form_data['nick'], 
+                                           'gender':pirun_data['gender'],
+                                           'faculty':nisit_data['faculty'],
+                                           'department':nisit_data['department'],
+                                           'advisor-id': pirun_data['advisor-id'],
+                                           'faculty-id': pirun_data['faculty-id'],
+                                           'major-id': pirun_data['major-id'],})
         
     
     
 def ku_info(ctx: SlashContext, user:discord.Member=None):
     if user is None:
         user = ctx.author
-        
-    try :
-        verified_name = { int(d['id']):d['verified_name'] for d in cpe35_server_user.scan()['Items']}[user.id]
-    except KeyError :
+    
+    response = cpe35_server_user.get_item(Key = {"id":user.id}) 
+    
+    if "Item" not in response:
         em=discord.Embed(title=f"About {str(user)}",description="Unable to fetch user info from KU database.", color=user.color)
         em.set_thumbnail(url=user.avatar_url)
+        return em
+    else: 
+        user_data = response['Item']
+    
+        em=discord.Embed(title=f"About {str(user)}", color=user.color)
+        em.set_thumbnail(url=user.avatar_url)
+        em.add_field(name="ชื่อ นามสกุล", value=user_data['thainame'], inline=False)
+        em.add_field(name="Forename Surname", value=user_data['engname'], inline=False)
+        em.add_field(name="Nickname", value=user_data['nickname'], inline=True)
+        em.add_field(name="Gender", value= "ชาย" if user_data['gender'] == "M" else "หญิง", inline=True)
+        em.add_field(name="\u200b", value="\u200b", inline=True)
+        em.add_field(name="Faculty", value=user_data['faculty'], inline=True)
+        em.add_field(name="Department", value=user_data['department'], inline=True)
         
         return em
-
-
-    
-    cpe35_form = scan_cpe35_sheet()
-    
-    form_data = cpe35_form[cpe35_form.discord_usr == verified_name].to_dict('records')[0]
-    pirun_data = get_pirun_data(form_data['id'])
-    nisit_data = get_nisit_data(form_data['id'])
-    
-    engname, engsurname = get_pirun_data(form_data['id'])['engname'].split()
-    engsurname = engsurname[0] + engsurname[1:].lower()
-    
-    em=discord.Embed(title=f"About {str(user)}", color=user.color)
-    em.set_thumbnail(url=user.avatar_url)
-    em.add_field(name="ชื่อ นามสกุล", value= " ".join(pirun_data['thainame'].split()[1:]), inline=False)
-    em.add_field(name="Family name", value=" ".join([engname,engsurname]), inline=False)
-    em.add_field(name="Nickname", value=form_data['nick'], inline=True)
-    em.add_field(name="Gender", value="Male" if pirun_data['gender'] == "M" else "Female", inline=True)
-    em.add_field(name="\u200b", value="\u200b", inline=True)
-    em.add_field(name="Faculty", value=nisit_data['faculty'], inline=True)
-    em.add_field(name="Department", value=nisit_data['department'], inline=True)
-    
-    return em
     

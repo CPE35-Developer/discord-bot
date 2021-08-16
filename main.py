@@ -270,12 +270,12 @@ async def _codechannel_permission_managemessage(ctx: discord_slash.SlashContext,
     await Permission.ManageMessage(ctx, manageable, channel)
 
 
-@slash.slash(name='verify', description='Verifies that you are a true KU student', guild_ids=GUILD_IDS)
+@slash.slash(name='verify', description='Verifies that you are a true KU student', guild_ids=[847172394316464178, 440532168389689345])
 async def _verify(ctx: discord_slash.SlashContext):
     await ku_verify(ctx)
 
 
-@slash.slash(name='info', description='Shows info of a user.', guild_ids=GUILD_IDS)
+@slash.slash(name='info', description='Shows KU info of a user.', guild_ids=GUILD_IDS)
 async def _info(ctx: discord_slash.SlashContext, user: discord.Member = None):
     msg = await ctx.send('Processing..')
     await msg.edit(content="", embed=ku_info(ctx, user))
