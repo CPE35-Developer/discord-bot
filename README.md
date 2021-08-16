@@ -1,4 +1,12 @@
-![ตัวอะไรไม่รู้](https://cdn.discordapp.com/avatars/570544162555035658/54af40f5b4815fa1961836f280b72452.png?size=128)
+<img width="150" height="150" align="left" style="float: left; margin: 0 10px 0 0;" alt="Atlanta" src="https://cdn.discordapp.com/avatars/570544162555035658/54af40f5b4815fa1961836f280b72452.png">  
+
+# ตัวอะไรไม่รู้
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge&logo=GNU)](https://www.gnu.org/licenses/gpl-3.0)  
+[![AWS EC2](https://img.shields.io/badge/-ec2-orange?style=flat-square&logo=amazonaws)](https://aws.amazon.com/ec2/)
+[![AWS DynamoDB](https://img.shields.io/badge/-dynamodb-orange?style=flat-square&logo=amazonaws)](https://aws.amazon.com/dynamodb/)  
+[![AWS CodePipeline](https://img.shields.io/badge/-codepipeline-orange?style=flat-square&logo=amazonaws)](https://aws.amazon.com/codepipeline/)  
+[![discord.py](https://img.shields.io/badge/discord.py-1.7.3-white?style=flat-square&logo=python&logoColor=white&labelColor=376F9E&color=FDD043)](https://github.com/Rapptz/discord.py)  
 
 
 This bot is called ตัวอะไรไม่รู้ (Tạw xarị mị̀rū̂). It is originally created for KU CPE35 Server.
