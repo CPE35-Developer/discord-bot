@@ -1,15 +1,20 @@
+![ตัวอะไรไม่รู้](https://cdn.discordapp.com/avatars/570544162555035658/54af40f5b4815fa1961836f280b72452.png?size=128)
 
-<h2>Introduction</h2>
+
 This bot is called ตัวอะไรไม่รู้ (Tạw xarị mị̀rū̂). It is originally created for KU CPE35 Server.
-<h2>Instructions</h2>
+
+
+
+<h2>Commands</h2>
+
+
 Every command is called by / (slash).
 
 <h3>Example</h3>
 
+
 > /hello
 
-
-<h2>Commands</h2>
 
 <h3>CPE35 Server Only</h3>
 
@@ -50,6 +55,8 @@ Every command is called by / (slash).
 |--|--|
 |change|Change keyboard layout between TH/EN for the lastest message|
 
+## License
 
+ตัวอะไรไม่รู้ is licensed under the GPL 3.0 license. See the file `LICENSE` for more information. If you plan to use any part of this source code in your own bot, I would be grateful if you would include some form of credit somewhere.
 
 
