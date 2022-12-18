@@ -8,9 +8,7 @@ from discord_slash.model import SlashCommandOptionType
 from src.utils.guilddata import *
 from src.utils.kick import random_kick
 from src.utils.travel import random_travel
-from src.utils.command import SlashChoice
-from src.format.code import send_fmc
-# from src.server.Server import ku_verify, ku_info
+from src.utils.command import SlashChoice from src.format.code import send_fmc # from src.server.Server import ku_verify, ku_info
 from src.poker.poker import poker_play
 from src.pog.pog import pog_play
 from src.games import rockpaperscissors
@@ -280,7 +278,7 @@ async def _returnmsg_add(ctx: discord_slash.SlashContext, message: str):
 
 # @slash.slash(name='verify', description='Verifies that you are a true KU student', guild_ids=[847172394316464178, 440532168389689345])
 # async def _verify(ctx: discord_slash.SlashContext):
-#     await ctx.send(f"Verify is dead. It's Nath Prachayakul's fault")
+#     await ctx.send(f"Verify is dead.")
 
 
 # @slash.slash(name='info', description='Shows KU info of a user.', guild_ids=GUILD_IDS)
