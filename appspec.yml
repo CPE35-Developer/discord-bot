@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /deploy/discord-bot
+hooks:
+  BeforeInstall:
+    - location: scripts/start_bot.sh
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_bot.sh
+      timeout: 300
+      runas: root
