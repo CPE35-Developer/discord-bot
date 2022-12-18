@@ -1,31 +1,35 @@
-from discord.ext.commands import MemberConverter
 from random import randint
+from src.audio.audio import say
+from src.utils.member import getNick
+import time
+import discord
 
-# i try but sometime we can't send user=bot but sometime we can i don't know why ;-;
-# I fixed it |  @phusitsom
-async def random_travel(ctx, user):
 
-    if (user == ctx.message.author) | (not user):
-        user = ctx.message.author
+async def random_travel(bot, ctx, user):
+
+    if (not user) | (user == ctx.author):
+        user = ctx.author
         if not user.voice:
-            return await ctx.send(f'คุณ {str(ctx.message.author)} จะไปเที่ยวก็เข้ามาก่อนสิครับ')
-            
+            return await ctx.send(f'คุณ {getNick(ctx.author)} จะไปเที่ยวก็เข้ามาก่อนสิครับ')
+
     else:
-        if user.bot: #bot check
+        if user.bot:
             await ctx.send("ไม่ไปอ่ะ")
             return
 
         if not user.voice:
-            await ctx.send(f'คุณ {str(ctx.message.author)} ต้องใช้กับคนที่อยู่ใน Voice Channel นะไอเวน')
+            await ctx.send(f'คุณ {getNick(ctx.author)} ต้องใช้กับคนที่อยู่ใน Voice Channel นะไอเวน')
             return
 
     voice_channel_list = ctx.guild.voice_channels
-    
+
     first_channel = user.voice.channel
-    await ctx.send(f'ไปเที่ยวกันเถอะคุณ {str(user)} ')
+    await ctx.send(f'ไปเที่ยวกันเถอะคุณ {getNick(user)} ')
     for i in range(10):
-        if(i==9):
+        if(i == 9):
             await user.move_to(first_channel)
         else:
-            rand=randint(0,len(voice_channel_list)-1)
+            rand = randint(0, len(voice_channel_list)-1)
             await user.move_to(voice_channel_list[rand])
+    time.sleep(1)
+    await say(bot, ctx, f'Welcome back {getNick(user).lower()}', 'en', travel=True)

@@ -1,0 +1,163 @@
+{
+  "content": null,
+  "embeds": [{
+      "title": "About ตัวอะไรไม่รู้",
+      "description": "ตัวอะไรไม่รู้ is a discord bot that is created by [CPE35 Developer](https://github.com/CPE35-Developer).\nIt is originally created for CPE35 KU81 Discord server.\n\nYou can also [invite ตัวอะไรไม่รู้ to your server](https://tinyurl.com/blackhole112) .\n\nFeel free to checkout [ตัวอะไรไม่รู้'s GitHub repository](https://github.com/CPE35-Developer/discord-bot-aws).",
+      "color": 14317128,
+      "fields": [{
+          "name": "Dependencies",
+          "value": "Python\ndiscord.py\ndiscord-py-slash-command\n[Others](https://github.com/CPE35-Developer/discord-bot-aws/blob/main/requirements.txt)",
+          "inline": true
+        },
+        {
+          "name": "AWS",
+          "value": "EC2 (5.8.0-1041-aws)\nDynamoDB\nCodePipeline\nCodeBuild\nCodeDeploy",
+          "inline": true
+        },
+        {
+          "name": "GCP",
+          "value": "Google Sheet API"
+        },
+        {
+          "name": "Commands",
+          "value": "ตัวอะไรไม่รู้ uses slash command. ( / )"
+        },
+        {
+          "name": "Example",
+          "value": "/hello"
+        },
+        {
+          "name": "License",
+          "value": "ตัวอะไรไม่รู้ is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) license."
+        }
+      ],
+      "image": {
+        "url": "https://cdn.discordapp.com/attachments/876459265253064734/876808729998266398/unknown.png"
+      },
+      "thumbnail": {
+        "url": "https://cdn.discordapp.com/avatars/570544162555035658/54af40f5b4815fa1961836f280b72452.png?size=4096"
+      }
+    },
+    {
+      "title": "Bot status",
+      "description": "**Offline**",
+      "color": 13251342,
+      "thumbnail": {
+        "url": "https://images.emojiterra.com/twitter/v13.0/128px/1f62d.png"
+      }
+    },
+    {
+      "title": "CPE35 KU81 server only",
+      "description": "Commands that will only work in KU81 CPE35 Discord Server",
+      "color": null,
+      "fields": [{
+          "name": "verify",
+          "value": "Verifies that you are a true KU student"
+        },
+        {
+          "name": "info",
+          "value": "Shows KU info of a verified discord user"
+        }
+      ],
+      "thumbnail": {
+        "url": "https://cdn.discordapp.com/attachments/876459265253064734/876805610497257492/ghast_face_aws3_sq.png"
+      }
+    },
+    {
+      "title": "All server",
+      "color": null,
+      "fields": [{
+          "name": "hello",
+          "value": "Says Hi :flushed:"
+        },
+        {
+          "name": "invitebot",
+          "value": "Sends ตัวอะไรไม่รู้'s invitation link"
+        },
+        {
+          "name": "codechannel add",
+          "value": "Add a code channel"
+        },
+        {
+          "name": "codechannel remove",
+          "value": "Remove a code channel"
+        },
+        {
+          "name": "codechannel check",
+          "value": "Show all server's code channel"
+        },
+        {
+          "name": "codechannel permission",
+          "value": "Change a code channel's permission"
+        },
+        {
+          "name": "math solve",
+          "value": "Solve an equation"
+        },
+        {
+          "name": "say",
+          "value": "Text to speech"
+        },
+        {
+          "name": "play",
+          "value": "Play a sound"
+        },
+        {
+          "name": "disconnect",
+          "value": "Disconnects bot from the voice channel"
+        },
+        {
+          "name": "travel",
+          "value": "Randomly moves the command user across multiple voice channels"
+        },
+        {
+          "name": "travel user",
+          "value": "Randomly moves the assigned user across multiple voice channels"
+        },
+        {
+          "name": "snap",
+          "value": "Disconnect half of the users that are in the voice channel"
+        },
+        {
+          "name": "snap user",
+          "value": "50% chance for disconnecting the assigned user or the command user"
+        },
+        {
+          "name": "tu",
+          "value": "[รายละเอียดถูกลบโดยรัฐบาลไทย]"
+        },
+        {
+          "name": "pom",
+          "value": "[รายละเอียดถูกลบโดยรัฐบาลไทย]"
+        },
+        {
+          "name": "oneonetwo",
+          "value": "[รายละเอียดถูกลบโดยรัฐบาลไทย]"
+        },
+        {
+          "name": "slap",
+          "value": "Play slap sound"
+        },
+        {
+          "name": "poker",
+          "value": "Plays Poker"
+        },
+        {
+          "name": "pokdeng",
+          "value": "Plays Pok Deng"
+        },
+        {
+          "name": "return add",
+          "value": "Teach the bot to say what you taught in return if you say a word"
+        },
+        {
+          "name": "return remove",
+          "value": "Remove a return message"
+        }
+      ],
+      "thumbnail": {
+        "url": "https://cdn.discordapp.com/attachments/876459265253064734/876804490303516713/ghast_face_aws2__sq.png"
+      }
+    }
+  ]
+}
