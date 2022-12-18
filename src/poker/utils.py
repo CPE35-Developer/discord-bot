@@ -32,4 +32,4 @@ async def show_middle_card(middle_cards: List[int], ctx, show_four: bool, show_f
         five_card_msg = DECKS_OF_CARDS[middle_cards[4]]
         msg += '   ' + five_card_msg
 
-    await ctx.channel.send(msg)
+    await ctx.send(msg)

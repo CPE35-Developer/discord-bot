@@ -3,7 +3,7 @@ from random import sample, shuffle
 from .CheckPriority import winner
 
 from src.poker.user_action import loop_pass_bet_fold
-from src.poker.utils import show_middle_card
+
 from src.utils.party import get_players
 
 from .utils import DECKS_OF_CARDS

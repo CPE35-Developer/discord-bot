@@ -33,7 +33,8 @@ async def pass_bet_fold(players, players_status, count_fold, max_current_bet, ct
             if players_status[idx_player] == 'f':
                 continue
 
-            await ctx.channel.send(f'คุณ {str(player)} โปรดเลือก P/B/F')
+
+            await ctx.send(f'คุณ {str(player)} โปรดเลือก P/B/F')
             msg = await bot.wait_for('message', check=check_pbf)
             msg_content = msg.content.lower()
             msg_author = msg.author
